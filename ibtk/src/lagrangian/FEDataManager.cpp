@@ -2401,7 +2401,7 @@ bool
 FEDataManager::computeL2Projection(NumericVector<double>& U_vec,
                                    NumericVector<double>& F_vec,
                                    const std::string& system_name,
-                                   const bool consistent_mass_matrix,
+                                   const bool consistent_mass_matrix, const double epsilon,
                                    const bool close_U,
                                    const bool close_F,
                                    const double tol,
@@ -2414,7 +2414,7 @@ FEDataManager::computeL2Projection(NumericVector<double>& U_vec,
                                                close_U,
                                                close_F,
                                                tol,
-                                               max_its);
+                                               max_its, epsilon);
 } // computeL2Projection
 
 bool
@@ -2493,8 +2493,8 @@ FEDataManager::addWorkloadEstimate(Pointer<PatchHierarchy<NDIM> > hierarchy,
 {
     IBTK_TIMER_START(t_update_workload_estimates);
 
-    const int coarsest_ln = (coarsest_ln_in == invalid_level_number) ? getCoarsestPatchLevelNumber() : coarsest_ln_in;
-    const int finest_ln = (finest_ln_in == invalid_level_number) ? getFinestPatchLevelNumber() : finest_ln_in;
+    const int coarsest_ln = (coarsest_ln_in == -1) ? getCoarsestPatchLevelNumber() : coarsest_ln_in;
+    const int finest_ln = (finest_ln_in == -1) ? getFinestPatchLevelNumber() : finest_ln_in;
     TBOX_ASSERT(coarsest_ln >= getCoarsestPatchLevelNumber() && coarsest_ln <= getFinestPatchLevelNumber());
     TBOX_ASSERT(finest_ln >= getCoarsestPatchLevelNumber() && finest_ln <= getFinestPatchLevelNumber());
 

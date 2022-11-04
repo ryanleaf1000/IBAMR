@@ -2743,7 +2743,6 @@ IIMethod::computeLagrangianForce(const double data_time)
         }
 
         SAMRAI_MPI::sumReduction(&F_integral(0), NDIM);
-
         // Solve for F.
         F_rhs_vec->close();
         d_fe_data_managers[part]->computeL2Projection(
@@ -2755,7 +2754,7 @@ IIMethod::computeLagrangianForce(const double data_time)
             d_fe_data_managers[part]->computeL2Projection(*P_jump_vec,
                                                           *P_jump_rhs_vec,
                                                           PRESSURE_JUMP_SYSTEM_NAME,
-                                                          d_default_interp_spec.use_consistent_mass_matrix);
+                                                          d_default_interp_spec.use_consistent_mass_matrix,d_smoothing_eps);
             P_jump_rhs_integral = SAMRAI_MPI::sumReduction(P_jump_rhs_integral);
             surface_area = SAMRAI_MPI::sumReduction(surface_area);
             if (d_normalize_pressure_jump[part]) P_jump_vec->add(-P_jump_rhs_integral / surface_area);
@@ -2769,7 +2768,7 @@ IIMethod::computeLagrangianForce(const double data_time)
                 d_fe_data_managers[part]->computeL2Projection(*DU_jump_vec[d],
                                                               *DU_jump_rhs_vec[d],
                                                               VELOCITY_JUMP_SYSTEM_NAME[d],
-                                                              d_default_interp_spec.use_consistent_mass_matrix);
+                                                              d_default_interp_spec.use_consistent_mass_matrix,d_smoothing_eps);
                 DU_jump_vec[d]->close();
             }
         }
@@ -4328,6 +4327,11 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
         d_do_log = db->getBool("do_log");
     else if (db->keyExists("enable_logging"))
         d_do_log = db->getBool("enable_logging");
+    if (db->isDouble("smoothing_eps"))
+    {
+        d_smoothing_eps = db->getDouble("smoothing_eps");
+        pout << " smoothing eps: " << d_smoothing_eps;
+    }
     return;
 } // getFromInput
 

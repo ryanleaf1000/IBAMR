@@ -982,7 +982,7 @@ public:
     bool computeL2Projection(libMesh::NumericVector<double>& U,
                              libMesh::NumericVector<double>& F,
                              const std::string& system_name,
-                             bool consistent_mass_matrix = true,
+                             bool consistent_mass_matrix = true, double epsilon=0,
                              bool close_U = true,
                              bool close_F = true,
                              double tol = 1.0e-6,
@@ -1043,8 +1043,8 @@ public:
      */
     void addWorkloadEstimate(SAMRAI::tbox::Pointer<SAMRAI::hier::PatchHierarchy<NDIM> > hierarchy,
                              const int workload_data_idx,
-                             const int coarsest_ln = invalid_level_number,
-                             const int finest_ln = invalid_level_number);
+                             const int coarsest_ln = -1,
+                             const int finest_ln = -1);
 
     /*!
      * Set integer tags to "one" in cells where refinement of the given level

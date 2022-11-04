@@ -86,7 +86,7 @@ public:
      * L2 projection operator.
      */
     std::pair<libMesh::PetscLinearSolver<double>*, libMesh::PetscMatrix<double>*>
-    buildL2ProjectionSolver(const std::string& system_name);
+    buildL2ProjectionSolver(const std::string& system_name, double epsilon=0);
 
     /*!
      * \return Pointers to a linear solver and sparse matrix corresponding to a
@@ -134,7 +134,7 @@ public:
                              bool close_U = true,
                              bool close_F = true,
                              double tol = 1.0e-6,
-                             unsigned int max_its = 100);
+                             unsigned int max_its = 100, double epsilon=0);
 
     /*!
      * \brief Set U to be the L2 projection of F with a local projection
