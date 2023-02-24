@@ -2448,6 +2448,7 @@ FEDataManager::computeSmoothedL2Projection(NumericVector<double>& U_vec,
                                            const double tol,
                                            const unsigned int max_its)
 {
+    std::cout << "smoothing is using with epsilon: " << epsilon << "\n";
     return d_fe_projector->computeSmoothedL2Projection(*static_cast<PetscVector<double>*>(&U_vec),
                                                        *static_cast<PetscVector<double>*>(&F_vec),
                                                        system_name,

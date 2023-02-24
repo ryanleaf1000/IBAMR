@@ -1843,12 +1843,12 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
     TAU_in_rhs_vec->close();
     TAU_out_rhs_vec->close();
 
-    d_fe_data_managers[part]->computeL2Projection(
-        *TAU_in_vec, *TAU_in_rhs_vec, TAU_IN_SYSTEM_NAME, d_default_interp_spec.use_consistent_mass_matrix);
+    d_fe_data_managers[part]->computeSmoothedL2Projection(
+        *TAU_in_vec, *TAU_in_rhs_vec, TAU_IN_SYSTEM_NAME, d_fluid_traction_stabilization_eps);
     TAU_in_vec->close();
 
-    d_fe_data_managers[part]->computeL2Projection(
-        *TAU_out_vec, *TAU_out_rhs_vec, TAU_OUT_SYSTEM_NAME, d_default_interp_spec.use_consistent_mass_matrix);
+    d_fe_data_managers[part]->computeSmoothedL2Projection(
+        *TAU_out_vec, *TAU_out_rhs_vec, TAU_OUT_SYSTEM_NAME, d_fluid_traction_stabilization_eps);
     TAU_out_vec->close();
 
     d_X_half_vecs[part]->close();
@@ -2239,12 +2239,12 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
     P_in_rhs_vec->close();
     P_out_rhs_vec->close();
 
-    d_fe_data_managers[part]->computeL2Projection(
-        *P_in_vec, *P_in_rhs_vec, PRESSURE_IN_SYSTEM_NAME, d_default_interp_spec.use_consistent_mass_matrix);
+    d_fe_data_managers[part]->computeSmoothedL2Projection(
+        *P_in_vec, *P_in_rhs_vec, PRESSURE_IN_SYSTEM_NAME,d_pressure_extrapolate_stabilization_eps);
     P_in_vec->close();
 
-    d_fe_data_managers[part]->computeL2Projection(
-        *P_out_vec, *P_out_rhs_vec, PRESSURE_OUT_SYSTEM_NAME, d_default_interp_spec.use_consistent_mass_matrix);
+    d_fe_data_managers[part]->computeSmoothedL2Projection(
+        *P_out_vec, *P_out_rhs_vec, PRESSURE_OUT_SYSTEM_NAME,d_pressure_extrapolate_stabilization_eps);
     P_out_vec->close();
 
     d_X_half_vecs[part]->close();
@@ -4316,6 +4316,10 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isDouble("velocity_stabilization_eps"))
         d_velocity_stabilization_eps = db->getDouble("velocity_stabilization_eps");
 
+    if (db->isDouble("fluid_traction_stabilization_eps"))
+        d_fluid_traction_stabilization_eps = db->getDouble("fluid_traction_stabilization_eps");
+    if (db->isDouble("pressure_extrapolate_stabilization_eps"))
+        d_pressure_extrapolate_stabilization_eps = db->getDouble("pressure_extrapolate_stabilization_eps");
     // Restart settings.
     if (db->isString("libmesh_restart_file_extension"))
         d_libmesh_restart_file_extension = db->getString("libmesh_restart_file_extension");

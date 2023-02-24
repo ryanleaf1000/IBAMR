@@ -122,7 +122,7 @@ public:
      * This augments the standard projection with a smoothing of the form (p, q) + epsilon (grad p, grad q) = (f, q).
      */
     std::pair<libMesh::PetscLinearSolver<double>*, libMesh::PetscMatrix<double>*>
-    buildSmoothedL2ProjectionSolver(const std::string& system_name, double epsilon);
+    buildSmoothedL2ProjectionSolver(const std::string& system_name,libMesh::PetscVector<double>& F, double epsilon);
 
     /*!
      * \return Pointer to vector representation of diagonal L2 mass matrix.

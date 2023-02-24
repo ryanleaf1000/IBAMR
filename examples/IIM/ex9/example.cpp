@@ -711,6 +711,7 @@ main(int argc, char* argv[])
                 fem_solver->postprocessIntegrateData(loop_time + (0.5 * static_cast<double>(ii)) * dt / n_cycles,
                                                      loop_time + (0.5 * static_cast<double>(ii + 1)) * dt / n_cycles,
                                                      /*num_cycles*/ 1);
+                //current_solution = &u_new_beam_system->current_solution();
             }
 
             time_integrator->advanceHierarchy(dt);

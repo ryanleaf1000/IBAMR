@@ -594,7 +594,7 @@ FEProjector::buildStabilizedL2ProjectionSolver(const std::string& system_name, c
 }
 
 std::pair<PetscLinearSolver<double>*, PetscMatrix<double>*>
-FEProjector::buildSmoothedL2ProjectionSolver(const std::string& system_name, const double epsilon)
+FEProjector::buildSmoothedL2ProjectionSolver(const std::string& system_name, PetscVector<double>& F_vec, const double epsilon)
 {
     IBTK_TIMER_START(t_build_smoothed_L2_projection_solver);
 
@@ -602,7 +602,7 @@ FEProjector::buildSmoothedL2ProjectionSolver(const std::string& system_name, con
         (!d_smoothed_L2_proj_solver[system_name].count(epsilon) ||
          !d_smoothed_L2_proj_matrix[system_name].count(epsilon)))
     {
-        if (d_enable_logging)
+        if (true)
         {
             plog << "FEProjector::buildSmoothedL2ProjectionSolver(): building smoothed L2 projection solver for "
                     "system: "
@@ -1003,7 +1003,7 @@ FEProjector::computeSmoothedL2Projection(PetscVector<double>& U_vec,
     const System& system = d_fe_data->getEquationSystems()->get_system(system_name);
 
     std::pair<PetscLinearSolver<double>*, PetscMatrix<double>*> proj_solver_components =
-        buildSmoothedL2ProjectionSolver(system_name, epsilon);
+        buildSmoothedL2ProjectionSolver(system_name, F_vec, epsilon);
     PetscLinearSolver<double>* solver = proj_solver_components.first;
     PetscMatrix<double>* M_mat = proj_solver_components.second;
     PetscBool rtol_set;
