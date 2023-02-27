@@ -1,0 +1,18 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/GravityForcing.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/LSLocateCircularInterface.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/LSLocateGasInterface.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/RigidBodyKinematics.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/SetFluidGasSolidDensity.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/SetFluidGasSolidViscosity.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/SetLSProperties.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/TagLSRefinementCells.cpp.o"
+  "CMakeFiles/multiphase_flow-ex8-2d.dir/example.cpp.o"
+  "main2d"
+  "main2d.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/multiphase_flow-ex8-2d.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

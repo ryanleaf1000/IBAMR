@@ -1,0 +1,92 @@
+/home/qi/clion-2020.3.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DBOOST_ROOT=/home/qi/sfw/linux/boost/1.66.0 "  " -DPETSC_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug "  " -DMPI_ROOT=/home/qi/sfw/linux/openmpi/4.0.2 "  " -DHYPRE_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug "  " -DSAMRAI_ROOT=/home/qi/sfw/samrai/2.4.4/linux-g++-debug "  " -DHDF5_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug "  " -DSILO_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug "  " -DLIBMESH_ROOT=/home/qi/sfw/linux/libmesh/1.6.2/1.6.2-debug "  " -DLIBMESH_METHOD=DBG \ -G "CodeBlocks - Unix Makefiles" /home/qi/sfw/ibamr/IBAMR
+-- This is CMake 3.17.5
+-- 
+-- Verifying Fortran/CXX Compiler Compatibility
+-- Verifying Fortran/CXX Compiler Compatibility - Success
+-- BOOST_ROOT=/home/qi/sfw/linux/boost/1.66.0
+-- EIGEN3_ROOT was not provided to CMake: default search paths will be used.
+-- HDF5_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug
+-- HYPRE_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug
+-- MUPARSER_ROOT was not provided to CMake: default search paths will be used.
+-- MPI_ROOT=/home/qi/sfw/linux/openmpi/4.0.2
+-- PETSC_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug
+-- SAMRAI_ROOT=/home/qi/sfw/samrai/2.4.4/linux-g++-debug
+-- LIBMESH_ROOT=/home/qi/sfw/linux/libmesh/1.6.2/1.6.2-debug
+-- NUMDIFF_ROOT was not provided to CMake: since this is an optional dependency IBAMR will be configured without this package.
+-- SILO_ROOT=/home/qi/sfw/petsc/3.13.4/linux-debug
+-- 
+-- Setting up MPI
+-- CMAKE_CXX_COMPILER=/usr/bin/c++ is not an MPI compiler wrapper - CMake will use the normal MPI detection sequence
+-- Setting up MPI at location /home/qi/sfw/linux/openmpi/4.0.2
+-- MPI_C_INCLUDE_DIRS: /home/qi/sfw/linux/openmpi/4.0.2/include
+-- MPI_C_LIBRARIES: /home/qi/sfw/linux/openmpi/4.0.2/lib/libmpi.so
+-- 
+-- Setting up Boost
+-- Found external boost 1.66.0 at /home/qi/sfw/linux/boost/1.66.0/include
+-- 
+-- Setting up Eigen3
+-- Setting up Eigen3 as a bundled dependency
+-- 
+-- Setting up muParser
+-- Setting up muParser as a bundled dependency
+-- 
+-- Setting up HDF5
+-- HDF5: Using hdf5 compiler wrapper to determine C configuration
+-- HDF5_DIR: HDF5_DIR-NOTFOUND
+-- HDF5_DEFINITIONS: 
+-- HDF5_INCLUDE_DIRS: /home/qi/sfw/petsc/3.13.4/linux-debug/include
+-- HDF5_LIBRARIES: /home/qi/sfw/petsc/3.13.4/linux-debug/lib/libhdf5.so;/usr/lib/x86_64-linux-gnu/libdl.so;/usr/lib/x86_64-linux-gnu/libm.so
+-- HDF5_HL_LIBRARIES: 
+-- HDF5_C_DEFINITIONS: 
+-- HDF5_C_INCLUDE_DIR: 
+-- HDF5_C_INCLUDE_DIRS: /home/qi/sfw/petsc/3.13.4/linux-debug/include
+-- HDF5_C_LIBRARY: 
+-- HDF5_C_LIBRARIES: /home/qi/sfw/petsc/3.13.4/linux-debug/lib/libhdf5.so;/usr/lib/x86_64-linux-gnu/libdl.so;/usr/lib/x86_64-linux-gnu/libm.so
+-- HDF5_C_HL_LIBRARY: 
+-- HDF5_C_HL_LIBRARIES: 
+-- 
+-- Setting up HYPRE
+-- HYPRE_INCLUDE_DIRS: /home/qi/sfw/petsc/3.13.4/linux-debug/include
+-- HYPRE_LIBRARIES: /home/qi/sfw/petsc/3.13.4/linux-debug/lib/libHYPRE.so
+-- 
+-- Setting up SAMRAI
+-- Found SAMRAI 2.4.4 at /home/qi/sfw/samrai/2.4.4/linux-g++-debug
+-- 
+-- Setting up PETSc
+-- Detected PETSc with HYPRE
+-- PETSC LIBRARIES: /home/qi/sfw/petsc/3.13.4/linux-debug/lib/libpetsc.so;;-L/home/qi/sfw/petsc/3.13.4/linux-debug/lib;-Wl,-rpath,/home/qi/sfw/petsc/3.13.4/linux-debug/lib;-L/home/qi/sfw/petsc/3.13.4/linux-debug/lib;-Wl,-rpath,/home/qi/sfw/linux/openmpi/4.0.2/lib;-L/home/qi/sfw/linux/openmpi/4.0.2/lib;-Wl,-rpath,/usr/lib/gcc/x86_64-linux-gnu/9;-L/usr/lib/gcc/x86_64-linux-gnu/9;-Wl,-rpath,/usr/lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu;-Wl,-rpath,/lib/x86_64-linux-gnu;-L/lib/x86_64-linux-gnu;-lpetsc;-lHYPRE;-llapack;-lblas;-lhdf5hl_fortran;-lhdf5_fortran;-lhdf5_hl;-lhdf5;-lm;-lsilo;-lstdc++;-ldl;-lmpi_usempif08;-lmpi_usempi_ignore_tkr;-lmpi_mpifh;-lmpi;-lgfortran;-lm;-lgfortran;-lm;-lgcc_s;-lquadmath;-lpthread;-lquadmath;-lstdc++;-ldl
+-- 
+-- Setting up libMesh
+-- LIBMESH_LIBRARIES: /home/qi/sfw/linux/libmesh/1.6.2/1.6.2-debug/lib/libmesh_dbg.so;-Wl,-rpath,/home/qi/sfw/linux/libmesh/1.6.2/1.6.2-debug/lib;-L/home/qi/sfw/linux/libmesh/1.6.2/1.6.2-debug/lib;-lmesh_dbg;-ltimpi_dbg;-Wl,-rpath,/home/qi/sfw/petsc/3.13.4/linux-debug/lib;-L/home/qi/sfw/petsc/3.13.4/linux-debug/lib;-Wl,-rpath,/home/qi/sfw/linux/openmpi/4.0.2/lib;-L/home/qi/sfw/linux/openmpi/4.0.2/lib;-Wl,-rpath,/usr/lib/gcc/x86_64-linux-gnu/9;-L/usr/lib/gcc/x86_64-linux-gnu/9;-Wl,-rpath,/usr/lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu;-Wl,-rpath,/lib/x86_64-linux-gnu;-L/lib/x86_64-linux-gnu;-lz;-lpetsc;-lHYPRE;-llapack;-lblas;-lhdf5hl_fortran;-lhdf5_fortran;-lhdf5_hl;-lhdf5;-lsilo;-lmpi_usempif08;-lmpi_usempi_ignore_tkr;-lmpi_mpifh;-lmpi;-lgfortran;-lm;-lgcc_s;-lpthread;-lquadmath;-lstdc++;-ldl
+-- LIBMESH_INCLUDE_DIRS: /home/qi/sfw/linux/libmesh/1.6.2/1.6.2-debug/include;/home/qi/sfw/petsc/3.13.4/include;/home/qi/sfw/petsc/3.13.4/linux-debug/include
+-- 
+-- Setting up Silo
+-- SILO_INCLUDE_DIRS: /home/qi/sfw/petsc/3.13.4/linux-debug/include
+-- SILO_LIBRARIES: /home/qi/sfw/petsc/3.13.4/linux-debug/lib/libsilo.so
+-- 
+-- Verifying that PETSC and IBAMR use the same MPI implementation
+-- Verifying that PETSC and IBAMR use the same MPI implementation - Success
+-- Verifying that HDF5 and IBAMR use the same MPI implementation
+-- Verifying that HDF5 and IBAMR use the same MPI implementation - Success
+-- Verifying that HYPRE and IBAMR use the same MPI implementation
+-- Verifying that HYPRE and IBAMR use the same MPI implementation - Success
+-- Verifying that LIBMESH and IBAMR use the same MPI implementation
+-- Verifying that LIBMESH and IBAMR use the same MPI implementation - Success
+-- 
+-- IBAMR dependencies have been successfully set up.
+-- setting up target IBTK2d
+-- Adding flag -DNDIM=2 to target IBTK2d
+-- libMesh expects C++14, so IBTK2d will be built with C++14 as a requirement.
+-- setting up target IBTK3d
+-- Adding flag -DNDIM=3 to target IBTK3d
+-- libMesh expects C++14, so IBTK3d will be built with C++14 as a requirement.
+CMake Warning at tests/CMakeLists.txt:311 (MESSAGE):
+  The configuration script was not able to locate numdiff.  If you want to
+  run the test suite you will need to either edit attest.conf, specify the
+  path to numdiff to attest, or rerun CMake with the argument NUMDIFF_ROOT
+  specifying numdiff's root installation directory.
+
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/qi/sfw/ibamr/IBAMR/cmake-build-debug

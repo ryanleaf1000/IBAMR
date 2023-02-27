@@ -1,0 +1,50 @@
+Performing C++ SOURCE FILE Test CXX_COMPILER_SUPPORTS_MPI failed with the following output:
+Change Dir: /home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_7a39b/fast && /usr/bin/make  -f CMakeFiles/cmTC_7a39b.dir/build.make CMakeFiles/cmTC_7a39b.dir/build
+make[1]: Entering directory '/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_7a39b.dir/src.cxx.o
+/usr/bin/c++    -DCXX_COMPILER_SUPPORTS_MPI -O3 -DNDEBUG -fPIE   -o CMakeFiles/cmTC_7a39b.dir/src.cxx.o -c /home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx:2:12: fatal error: mpi.h: No such file or directory
+    2 |   #include <mpi.h>
+      |            ^~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_7a39b.dir/build.make:86: CMakeFiles/cmTC_7a39b.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+make: *** [Makefile:141: cmTC_7a39b/fast] Error 2
+
+
+Source file was:
+
+  #include <mpi.h>
+  int main(int argc, char **argv)
+  {
+    MPI_Init(&argc, &argv);
+    MPI_Finalize();
+  }
+  
+Performing C++ SOURCE FILE Test LIBMESH_WITH_CXX17 failed with the following output:
+Change Dir: /home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_57777/fast && /usr/bin/make  -f CMakeFiles/cmTC_57777.dir/build.make CMakeFiles/cmTC_57777.dir/build
+make[1]: Entering directory '/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_57777.dir/src.cxx.o
+/usr/bin/c++   -I/home/qi/sfw/linux/libmesh/1.6.2/1.6.2-debug/include -I/home/qi/sfw/petsc/3.13.4/include -I/home/qi/sfw/petsc/3.13.4/linux-debug/include  -DLIBMESH_WITH_CXX17 -O3 -DNDEBUG -fPIE   -o CMakeFiles/cmTC_57777.dir/src.cxx.o -c /home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx:6:8: error: #error 
+    6 |       #error
+      |        ^~~~~
+make[1]: *** [CMakeFiles/cmTC_57777.dir/build.make:86: CMakeFiles/cmTC_57777.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+make: *** [Makefile:141: cmTC_57777/fast] Error 2
+
+
+Source file was:
+
+      #include <libmesh/libmesh_config.h>
+      #ifdef LIBMESH_HAVE_CXX17
+      // OK
+      #else
+      #error
+      #endif
+      int main() {}
+      

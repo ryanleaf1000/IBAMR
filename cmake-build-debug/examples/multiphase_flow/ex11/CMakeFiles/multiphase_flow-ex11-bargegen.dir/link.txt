@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/multiphase_flow-ex11-bargegen.dir/bargeGen.cpp.o  -o bargeGen  -Wl,-rpath,/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/lib/ 

@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/multiphase_flow-ex12-wedgegen.dir/wedgeGen.cpp.o  -o wedgeGen  -Wl,-rpath,/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/lib/ 

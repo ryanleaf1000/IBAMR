@@ -1,0 +1,10 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/tests-navier_stokes_navier_stokes_01_3d.dir/navier_stokes/navier_stokes_01.cpp.o"
+  "navier_stokes/navier_stokes_01_3d"
+  "navier_stokes/navier_stokes_01_3d.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/tests-navier_stokes_navier_stokes_01_3d.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

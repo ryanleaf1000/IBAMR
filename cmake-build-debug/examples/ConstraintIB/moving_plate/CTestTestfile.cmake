@@ -1,0 +1,6 @@
+# CMake generated Testfile for 
+# Source directory: /home/qi/sfw/ibamr/IBAMR/examples/ConstraintIB/moving_plate
+# Build directory: /home/qi/sfw/ibamr/IBAMR/cmake-build-debug/examples/ConstraintIB/moving_plate
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
