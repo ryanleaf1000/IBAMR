@@ -211,11 +211,11 @@ tether_force_function_beam(VectorValue<double>& F,
 
     for (unsigned int d = 0; d < NDIM; ++d)
     {
-        const MeshBase::const_element_iterator el_begin = mesh_bndry.active_local_elements_begin();
-        const MeshBase::const_element_iterator el_end = mesh_bndry.active_local_elements_end();
-        for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+        const auto el_begin = mesh_bndry.active_local_elements_begin();
+        const auto el_end = mesh_bndry.active_local_elements_end();
+        for (auto el_it = el_begin; el_it != el_end; ++el_it)
         {
-            Elem* const elem_bndry = *el_it;
+            const Elem* elem_bndry = *el_it;
 
             if ((elem_bndry->contains_point(X)) && !((vol_beam_bndry_info->has_boundary_id(elem, side, 0))))
             {
@@ -313,7 +313,10 @@ using namespace ModelData;
 
 // Function prototypes
 static ofstream x_stream, y_stream, z_stream;
-void record_position(EquationSystems* beam_systems, vector<libMesh::Point> evaluation_point, const double loop_time);
+void record_position(const FEMechanicsExplicitIntegrator* fem_solver,
+                     EquationSystems* beam_systems,
+                     vector<libMesh::Point> evaluation_point,
+                     const double loop_time);
 
 /*******************************************************************************
  * For each run, the input filename and restart information (if needed) must   *
@@ -416,19 +419,19 @@ main(int argc, char* argv[])
                                           length + offset,
                                           Utility::string_to_enum<ElemType>(beam_elem_type));
 
-        const MeshBase::const_element_iterator end_el = beam_mesh.elements_end();
-        for (MeshBase::const_element_iterator el = beam_mesh.elements_begin(); el != end_el; ++el)
+        const auto end_el = beam_mesh.elements_end();
+        for (auto el = beam_mesh.elements_begin(); el != end_el; ++el)
         {
-            Elem* const elem = *el;
+            const Elem* elem = *el;
             for (unsigned int side = 0; side < elem->n_sides(); ++side)
             {
                 const bool at_mesh_bdry = !elem->neighbor_ptr(side);
                 if (at_mesh_bdry)
                 {
-                    BoundaryInfo* boundary_info = beam_mesh.boundary_info.get();
-                    if (boundary_info->has_boundary_id(elem, side, 0))
+                    BoundaryInfo& boundary_info = beam_mesh.get_boundary_info();
+                    if (boundary_info.has_boundary_id(elem, side, 0))
                     {
-                        boundary_info->add_side(elem, side, FEDataManager::ZERO_DISPLACEMENT_XYZ_BDRY_ID);
+                        boundary_info.add_side(elem, side, FEDataManager::ZERO_DISPLACEMENT_XYZ_BDRY_ID);
                     }
                 }
             }
@@ -447,7 +450,7 @@ main(int argc, char* argv[])
 
         BoundaryMesh beam_bndry_mesh(beam_mesh.comm(), beam_mesh.mesh_dimension() - 1);
 
-        beam_mesh.boundary_info->sync(beam_bndry_mesh);
+        beam_mesh.get_boundary_info().sync(beam_bndry_mesh);
         beam_bndry_mesh.prepare_for_use();
         // to scale mesh from units in mm to cm
 
@@ -528,7 +531,7 @@ main(int argc, char* argv[])
         vector<SystemData> sys_data(1, SystemData(IIMethod::VELOCITY_SYSTEM_NAME, vars));
 
         vector<SystemData> velocity_data(1);
-        velocity_data[0] = SystemData(FEMechanicsBase::VELOCITY_SYSTEM_NAME, vars);
+        velocity_data[0] = SystemData(fem_solver->getVelocitySystemName(), vars);
 
         const bool USE_DISCON_ELEMS = input_db->getBool("USE_DISCON_ELEMS");
         const bool USE_NORMALIZED_PRESSURE_JUMP = input_db->getBool("USE_NORMALIZED_PRESSURE_JUMP");
@@ -694,9 +697,9 @@ main(int argc, char* argv[])
             Tau_new_beam_surface_system = &bndry_beam_systems->get_system<System>(IIMethod::TAU_OUT_SYSTEM_NAME);
             x_new_beam_surface_system = &bndry_beam_systems->get_system<System>(IIMethod::COORDS_SYSTEM_NAME);
 
-            x_new_beam_system = &beam_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+            x_new_beam_system = &beam_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
 
-            u_new_beam_system = &beam_systems->get_system<System>(FEMechanicsBase::VELOCITY_SYSTEM_NAME);
+            u_new_beam_system = &beam_systems->get_system<System>(fem_solver->getVelocitySystemName());
 
             for (int ii = 0; ii < static_cast<int>(n_cycles); ii++)
             {
@@ -708,6 +711,7 @@ main(int argc, char* argv[])
                 fem_solver->postprocessIntegrateData(loop_time + (0.5 * static_cast<double>(ii)) * dt / n_cycles,
                                                      loop_time + (0.5 * static_cast<double>(ii + 1)) * dt / n_cycles,
                                                      /*num_cycles*/ 1);
+                //current_solution = &u_new_beam_system->current_solution();
             }
 
             time_integrator->advanceHierarchy(dt);
@@ -767,7 +771,7 @@ main(int argc, char* argv[])
                         bndry_beam_filename, *bndry_beam_systems, iteration_num / viz_dump_interval + 1, loop_time);
                 }
 
-                record_position(beam_systems, points, loop_time);
+                record_position(fem_solver, beam_systems, points, loop_time);
             }
 
             if (dump_timer_data && (iteration_num % timer_dump_interval == 0 || last_step))
@@ -805,9 +809,12 @@ main(int argc, char* argv[])
 } // main
 
 void
-record_position(EquationSystems* beam_systems, vector<libMesh::Point> evaluation_points, const double loop_time)
+record_position(const FEMechanicsExplicitIntegrator* const fem_solver,
+                EquationSystems* beam_systems,
+                vector<libMesh::Point> evaluation_points,
+                const double loop_time)
 {
-    System& x_system = beam_systems->get_system(FEMechanicsBase::COORDS_SYSTEM_NAME);
+    System& x_system = beam_systems->get_system(fem_solver->getCurrentCoordinatesSystemName());
     DofMap& x_dof_map = x_system.get_dof_map();
     std::vector<unsigned int> vars;
     x_system.get_all_variable_numbers(vars);

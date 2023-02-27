@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2018 - 2021 by the IBAMR developers
+// Copyright (c) 2018 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -171,7 +171,8 @@ private:
                                     std::vector<std::map<int, std::vector<IBTK::Vector> > >& meter_u_corr_map,
                                     std::vector<std::map<int, std::vector<IBTK::Vector> > >& meter_normal_map,
                                     std::vector<std::map<int, std::vector<double> > >& meter_JxW_map,
-                                    SAMRAI::tbox::Pointer<SAMRAI::hier::PatchHierarchy<NDIM> > hierarchy);
+                                    SAMRAI::tbox::Pointer<SAMRAI::hier::PatchHierarchy<NDIM> > hierarchy,
+                                    const IBFEMethod* ib_method_ops);
 
     /*!
      * \brief Write out data to file.

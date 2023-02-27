@@ -1155,7 +1155,7 @@ IBFESurfaceMethod::initializeFEEquationSystems()
                                                              d_default_workload_spec,
                                                              min_ghost_width,
                                                              d_eulerian_data_cache);
-        d_fe_data_managers[part]->COORDINATES_SYSTEM_NAME = COORDS_SYSTEM_NAME;
+        d_fe_data_managers[part]->setCurrentCoordinatesSystemName(COORDS_SYSTEM_NAME);
         d_ghosts = IntVector<NDIM>::max(d_ghosts, d_fe_data_managers[part]->getGhostCellWidth());
     }
     d_fe_equation_systems_initialized = true;
@@ -1584,7 +1584,8 @@ IBFESurfaceMethod::imposeJumpConditions(const int f_data_idx,
                         const libMesh::Point x = r + intersection.first * q;
                         const libMesh::Point& xi = intersection.second;
                         SideIndex<NDIM> i_s(i_c, axis, 0);
-                        i_s(axis) = static_cast<int>(std::round((x(axis) - x_lower[axis]) / dx[axis])) + patch_lower[axis];
+                        i_s(axis) =
+                            static_cast<int>(std::round((x(axis) - x_lower[axis]) / dx[axis])) + patch_lower[axis];
                         if (extended_box.contains(i_s))
                         {
                             std::vector<libMesh::Point> ref_coords(1, xi);

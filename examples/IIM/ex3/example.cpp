@@ -122,9 +122,9 @@ calculateGeomQuantitiesOfStructure(double& vol,                             // v
 
     // double X_qp_new[NDIM], X_qp_current[NDIM], R_qp_current[NDIM], R_qp_new[NDIM];
     VectorValue<double> X_qp, R_qp;
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    const auto el_begin = mesh.active_local_elements_begin();
+    const auto el_end = mesh.active_local_elements_end();
+    for (auto el_it = el_begin; el_it != el_end; ++el_it)
     {
         const Elem* const elem = *el_it;
         fe->reinit(elem);
@@ -181,11 +181,11 @@ UpdateSurfaceMeshCoordinates(Mesh& boundary_mesh,
             const libMesh::Point& X = *n;
             libMesh::Point x;
 
-            const MeshBase::const_element_iterator el_begin = mesh_solid.active_local_elements_begin();
-            const MeshBase::const_element_iterator el_end = mesh_solid.active_local_elements_end();
-            for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+            const auto el_begin = mesh_solid.active_local_elements_begin();
+            const auto el_end = mesh_solid.active_local_elements_end();
+            for (auto el_it = el_begin; el_it != el_end; ++el_it)
             {
-                Elem* const elem_c = *el_it;
+                const Elem* elem_c = *el_it;
                 if (elem_c->contains_point(X))
                 {
                     for (unsigned int d = 0; d < NDIM; ++d)
@@ -296,11 +296,11 @@ calculateFluidForceAndTorque(VectorValue<double>& F, // net force  acting on the
     boost::multi_array<double, 2> x_node, TAU_node;
     VectorValue<double> F_qp, x_qp, W_qp, TAU_qp, R_qp;
 
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    const auto el_begin = mesh.active_local_elements_begin();
+    const auto el_end = mesh.active_local_elements_end();
+    for (auto el_it = el_begin; el_it != el_end; ++el_it)
     {
-        Elem* const elem = *el_it;
+        const Elem* elem = *el_it;
         fe->reinit(elem);
         for (unsigned int d = 0; d < NDIM; ++d)
         {
@@ -396,7 +396,8 @@ update_solid_vel_pos(VectorValue<double>& Y,
     Omega.zero();
     Omega(2) = W_iter;
 
-    for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != mesh.local_nodes_end(); ++it)
+    const auto node_end = mesh.local_nodes_end();
+    for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != node_end; ++it)
     {
         Node* n = *it;
         if (n->n_vars(dY_sys_num))
@@ -517,7 +518,7 @@ main(int argc, char* argv[])
         // Create a simple FE mesh.
         Mesh solid_mesh(init.comm(), NDIM);
         solid_mesh.read(input_db->getString("MESH_FILENAME"));
-        solid_mesh.boundary_info->clear_boundary_node_ids();
+        solid_mesh.get_boundary_info().clear_boundary_node_ids();
 
         string elem_type = input_db->getString("ELEM_TYPE");
         R = 0.05;
@@ -528,7 +529,8 @@ main(int argc, char* argv[])
         double theta = input_db->getDouble("INITIAL_THETA") * M_PI / 180.0;
         TensorValue<double> Rz(
             std::cos(theta), -std::sin(theta), 0.0, std::sin(theta), std::cos(theta), 0.0, 0.0, 0.0, 1.0);
-        for (MeshBase::node_iterator it = solid_mesh.nodes_begin(); it != solid_mesh.nodes_end(); ++it)
+        const auto node_end = solid_mesh.nodes_end();
+        for (MeshBase::node_iterator it = solid_mesh.nodes_begin(); it != node_end; ++it)
         {
             Node* n = *it;
             libMesh::Point& X = *n;
@@ -541,7 +543,7 @@ main(int argc, char* argv[])
         solid_mesh.prepare_for_use();
 
         BoundaryMesh bndry_mesh(solid_mesh.comm(), solid_mesh.mesh_dimension() - 1);
-        solid_mesh.boundary_info->sync(bndry_mesh);
+        solid_mesh.get_boundary_info().sync(bndry_mesh);
         bndry_mesh.prepare_for_use();
 
         kappa_s = input_db->getDouble("KAPPA_S");
@@ -709,7 +711,8 @@ main(int argc, char* argv[])
         System& Y_init_solid_system = solid_equation_systems->get_system("RIGID_BODY_COORDS_SYSTEM");
         const unsigned int Y_init_solid_sys_num = Y_init_solid_system.number();
         NumericVector<double>& Y_init_solid_coords = *Y_init_solid_system.solution;
-        for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != mesh.local_nodes_end(); ++it)
+        const auto local_node_end = mesh.local_nodes_end();
+        for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != local_node_end; ++it)
         {
             Node* n = *it;
             if (n->n_vars(Y_init_solid_sys_num))
@@ -731,7 +734,7 @@ main(int argc, char* argv[])
         System& dY_init_solid_system = solid_equation_systems->get_system("RIGID_BODY_COORDS_MAPPING_SYSTEM");
         const unsigned int dY_init_solid_sys_num = dY_init_solid_system.number();
         NumericVector<double>& dY_init_solid_coords = *dY_init_solid_system.solution;
-        for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != mesh.local_nodes_end(); ++it)
+        for (auto it = mesh.local_nodes_begin(); it != local_node_end; ++it)
         {
             Node* n = *it;
             if (n->n_vars(dY_init_solid_sys_num))
@@ -1026,9 +1029,9 @@ postprocess_CL_CD(Pointer<PatchHierarchy<NDIM> > /*patch_hierarchy*/,
     boost::multi_array<double, 2> x_node, U_node, TAU_node, X0_node;
     VectorValue<double> F_qp, U_qp, x_qp, W_qp, TAU_qp, N, n, X;
 
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    const MeshBase::element_iterator el_begin = mesh.active_local_elements_begin();
+    const MeshBase::element_iterator el_end = mesh.active_local_elements_end();
+    for (MeshBase::element_iterator el_it = el_begin; el_it != el_end; ++el_it)
     {
         Elem* const elem = *el_it;
         fe->reinit(elem);

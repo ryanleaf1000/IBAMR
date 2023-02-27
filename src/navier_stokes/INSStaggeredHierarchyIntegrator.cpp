@@ -338,6 +338,9 @@ namespace IBAMR
 
 namespace
 {
+// Timers.
+static Timer* t_setup_plot_data_specialized;
+
 // Number of ghosts cells used for each variable quantity.
 static const int CELLG = 1;
 static const int SIDEG = 1;
@@ -421,6 +424,10 @@ INSStaggeredHierarchyIntegrator::INSStaggeredHierarchyIntegrator(std::string obj
                              "CONSTANT_REFINE",
                              register_for_restart)
 {
+    auto set_timer = [&](const char* name) { return tbox::TimerManager::getManager()->getTimer(name); };
+    IBTK_DO_ONCE(t_setup_plot_data_specialized =
+                     set_timer("IBTK::INSStaggeredHierarchyIntegrator::setupPlotDataSpecialized()"););
+
     // Check to see whether the solver types have been set.
     if (input_db->keyExists("stokes_solver_type")) d_stokes_solver_type = input_db->getString("stokes_solver_type");
     if (input_db->keyExists("stokes_precond_type")) d_stokes_precond_type = input_db->getString("stokes_precond_type");
@@ -551,30 +558,6 @@ INSStaggeredHierarchyIntegrator::INSStaggeredHierarchyIntegrator(std::string obj
     d_P_bc_coef = new INSStaggeredPressureBcCoef(this, d_bc_coefs, d_traction_bc_type);
     d_U_P_bdry_interp_type = input_db->getStringWithDefault("U_P_bdry_interp_type", d_U_P_bdry_interp_type);
 
-    // Check to see whether to track mean flow quantities and turbulent kinetic
-    // energy.
-    if (input_db->keyExists("flow_averaging_interval"))
-        d_flow_averaging_interval = input_db->getInteger("flow_averaging_interval");
-
-    // Get coarsen and refine operator types.
-    if (input_db->keyExists("N_coarsen_type")) d_N_coarsen_type = input_db->getString("N_coarsen_type");
-    if (input_db->keyExists("N_refine_type")) d_N_refine_type = input_db->getString("N_refine_type");
-
-    if (input_db->keyExists("U_mean_coarsen_type")) d_U_mean_coarsen_type = input_db->getString("U_mean_coarsen_type");
-    if (input_db->keyExists("U_mean_refine_type")) d_U_mean_refine_type = input_db->getString("U_mean_refine_type");
-
-    if (input_db->keyExists("UU_mean_coarsen_type"))
-        d_UU_mean_coarsen_type = input_db->getString("UU_mean_coarsen_type");
-    if (input_db->keyExists("UU_mean_refine_type")) d_UU_mean_refine_type = input_db->getString("UU_mean_refine_type");
-
-    if (input_db->keyExists("UU_fluct_coarsen_type"))
-        d_UU_fluct_coarsen_type = input_db->getString("UU_fluct_coarsen_type");
-    if (input_db->keyExists("UU_fluct_refine_type"))
-        d_UU_fluct_refine_type = input_db->getString("UU_fluct_refine_type");
-
-    if (input_db->keyExists("k_coarsen_type")) d_k_coarsen_type = input_db->getString("k_coarsen_type");
-    if (input_db->keyExists("k_refine_type")) d_k_refine_type = input_db->getString("k_refine_type");
-
     // Initialize all variables.  The velocity, pressure, body force, and fluid
     // source variables were created above in the constructor for the
     // INSHierarchyIntegrator base class.
@@ -584,11 +567,15 @@ INSStaggeredHierarchyIntegrator::INSStaggeredHierarchyIntegrator(std::string obj
     d_Q_var = INSHierarchyIntegrator::d_Q_var;
     d_N_old_var = new SideVariable<NDIM, double>(d_object_name + "::N_old");
 
-    d_U_cc_var = new CellVariable<NDIM, double>(d_object_name + "::U_cc", NDIM);
+    // with our convention fine_boundary_represents_var = false means that will
+    // use a conforming discretization (the solution, with bilinear/trilinear
+    // nodal data, will be continuous)
+    d_U_nc_var = new NodeVariable<NDIM, double>(d_object_name + "::U_nc", NDIM, /*fine_boundary_represents_var*/ false);
     d_F_cc_var = new CellVariable<NDIM, double>(d_object_name + "::F_cc", NDIM);
     d_Omega_var = new CellVariable<NDIM, double>(d_object_name + "::Omega", (NDIM == 2) ? 1 : NDIM);
     if (d_output_Omega)
-        d_Omega_nc_var = new NodeVariable<NDIM, double>(d_object_name + "::Omega_nc", (NDIM == 2) ? 1 : NDIM);
+        d_Omega_nc_var = new NodeVariable<NDIM, double>(
+            d_object_name + "::Omega_nc", (NDIM == 2) ? 1 : NDIM, /*fine_boundary_represents_var*/ false);
     d_Div_U_var = new CellVariable<NDIM, double>(d_object_name + "::Div_U");
 
     d_Omega_Norm_var = (NDIM == 2) ? nullptr : new CellVariable<NDIM, double>(d_object_name + "::|Omega|_2");
@@ -597,14 +584,6 @@ INSStaggeredHierarchyIntegrator::INSStaggeredHierarchyIntegrator(std::string obj
     d_indicator_var = new SideVariable<NDIM, double>(d_object_name + "::indicator");
     d_F_div_var = new SideVariable<NDIM, double>(d_object_name + "::F_div");
     d_EE_var = new CellVariable<NDIM, double>(d_object_name + "::EE", NDIM * NDIM);
-
-    if (d_flow_averaging_interval)
-    {
-        d_U_mean_var = new CellVariable<NDIM, double>(d_object_name + "::U_mean_cc", NDIM);
-        d_UU_mean_var = new CellVariable<NDIM, double>(d_object_name + "::UU_mean_cc", NDIM * NDIM);
-        d_UU_fluct_var = new CellVariable<NDIM, double>(d_object_name + "::UU_fluct_cc", NDIM * NDIM);
-        d_k_var = new CellVariable<NDIM, double>(d_object_name + "::k_cc");
-    }
     return;
 } // INSStaggeredHierarchyIntegrator
 
@@ -910,9 +889,9 @@ INSStaggeredHierarchyIntegrator::initializeHierarchyIntegrator(Pointer<PatchHier
                      d_N_coarsen_type,
                      d_N_refine_type);
 
+    registerVariable(d_U_nc_idx, d_U_nc_var, no_ghosts, getCurrentContext());
     // Register plot variables that are maintained by the
     // INSCollocatedHierarchyIntegrator.
-    registerVariable(d_U_cc_idx, d_U_cc_var, no_ghosts, getCurrentContext());
     if (d_F_fcn)
     {
         registerVariable(d_F_cc_idx, d_F_cc_var, no_ghosts, getCurrentContext());
@@ -943,57 +922,16 @@ INSStaggeredHierarchyIntegrator::initializeHierarchyIntegrator(Pointer<PatchHier
         d_F_div_idx = invalid_index;
     }
 
-    // Register variables for tracking mean flow quantities and turbulent kinetic
-    // energy.
-    if (d_U_mean_var)
-    {
-        registerVariable(d_U_mean_current_idx,
-                         d_U_mean_new_idx,
-                         d_U_mean_scratch_idx,
-                         d_U_mean_var,
-                         cell_ghosts,
-                         d_U_mean_coarsen_type,
-                         d_U_mean_refine_type);
-    }
-
-    if (d_UU_mean_var)
-    {
-        registerVariable(d_UU_mean_current_idx,
-                         d_UU_mean_new_idx,
-                         d_UU_mean_scratch_idx,
-                         d_UU_mean_var,
-                         cell_ghosts,
-                         d_UU_mean_coarsen_type,
-                         d_UU_mean_refine_type);
-    }
-
-    if (d_UU_fluct_var)
-    {
-        registerVariable(d_UU_fluct_current_idx,
-                         d_UU_fluct_new_idx,
-                         d_UU_fluct_scratch_idx,
-                         d_UU_fluct_var,
-                         cell_ghosts,
-                         d_UU_fluct_coarsen_type,
-                         d_UU_fluct_refine_type);
-    }
-
-    if (d_k_var)
-    {
-        registerVariable(
-            d_k_current_idx, d_k_new_idx, d_k_scratch_idx, d_k_var, cell_ghosts, d_k_coarsen_type, d_k_refine_type);
-    }
-
     // Register variables for plotting.
     if (d_visit_writer)
     {
         if (d_output_U)
         {
-            d_visit_writer->registerPlotQuantity("U", "VECTOR", d_U_cc_idx, 0, d_U_scale);
+            d_visit_writer->registerPlotQuantity("U", "VECTOR", d_U_nc_idx, 0, d_U_scale);
             for (unsigned int i = 0; i < NDIM; ++i)
             {
                 const std::string suffix = (i == 0 ? "x" : i == 1 ? "y" : "z");
-                d_visit_writer->registerPlotQuantity("U_" + suffix, "SCALAR", d_U_cc_idx, i, d_U_scale);
+                d_visit_writer->registerPlotQuantity("U_" + suffix, "SCALAR", d_U_nc_idx, i, d_U_scale);
             }
         }
 
@@ -1040,60 +978,6 @@ INSStaggeredHierarchyIntegrator::initializeHierarchyIntegrator(Pointer<PatchHier
         {
             registerVariable(d_EE_idx, d_EE_var, no_ghosts, getCurrentContext());
             d_visit_writer->registerPlotQuantity("EE", "TENSOR", d_EE_idx);
-        }
-
-        if (d_U_mean_var)
-        {
-            d_visit_writer->registerPlotQuantity("U_mean", "VECTOR", d_U_mean_current_idx, 0, d_U_scale);
-            for (unsigned int i = 0; i < NDIM; ++i)
-            {
-                const std::string suffix = (i == 0 ? "x" : i == 1 ? "y" : "z");
-                d_visit_writer->registerPlotQuantity("U_mean_" + suffix, "SCALAR", d_U_mean_current_idx, i, d_U_scale);
-            }
-        }
-
-        if (d_UU_mean_var)
-        {
-            d_visit_writer->registerPlotQuantity("UU_mean", "TENSOR", d_UU_mean_current_idx, 0, std::pow(d_U_scale, 2));
-            for (unsigned int i = 0; i < NDIM; ++i)
-            {
-                for (unsigned int j = 0; j < NDIM; ++j)
-                {
-                    const std::string suffix = std::string(i == 0 ? "x" :
-                                                           i == 1 ? "y" :
-                                                                    "z") +
-                                               std::string(j == 0 ? "x" :
-                                                           j == 1 ? "y" :
-                                                                    "z");
-                    d_visit_writer->registerPlotQuantity(
-                        "UU_mean_" + suffix, "SCALAR", d_UU_mean_current_idx, i * NDIM + j, std::pow(d_U_scale, 2));
-                }
-            }
-        }
-
-        if (d_UU_fluct_var)
-        {
-            d_visit_writer->registerPlotQuantity(
-                "UU_fluct", "TENSOR", d_UU_fluct_current_idx, 0, std::pow(d_U_scale, 2));
-            for (unsigned int i = 0; i < NDIM; ++i)
-            {
-                for (unsigned int j = 0; j < NDIM; ++j)
-                {
-                    const std::string suffix = std::string(i == 0 ? "x" :
-                                                           i == 1 ? "y" :
-                                                                    "z") +
-                                               std::string(j == 0 ? "x" :
-                                                           j == 1 ? "y" :
-                                                                    "z");
-                    d_visit_writer->registerPlotQuantity(
-                        "UU_fluct_" + suffix, "SCALAR", d_UU_fluct_current_idx, i * NDIM + j, std::pow(d_U_scale, 2));
-                }
-            }
-        }
-
-        if (d_k_var)
-        {
-            d_visit_writer->registerPlotQuantity("k", "SCALAR", d_k_current_idx);
         }
     }
 
@@ -1154,47 +1038,6 @@ INSStaggeredHierarchyIntegrator::initializePatchHierarchy(Pointer<PatchHierarchy
                                                           Pointer<GriddingAlgorithm<NDIM> > gridding_alg)
 {
     HierarchyIntegrator::initializePatchHierarchy(hierarchy, gridding_alg);
-
-    const bool initial_time = IBTK::abs_equal_eps(d_integrator_time, d_start_time);
-
-    // Initialize mean quantities.
-    if (d_flow_averaging_interval && initial_time)
-    {
-        for (int ln = 0; ln <= hierarchy->getFinestLevelNumber(); ++ln)
-        {
-            Pointer<PatchLevel<NDIM> > level = hierarchy->getPatchLevel(ln);
-            for (PatchLevel<NDIM>::Iterator p(level); p; p++)
-            {
-                Pointer<Patch<NDIM> > patch = level->getPatch(p());
-                Pointer<SideData<NDIM, double> > U_data = patch->getPatchData(d_U_current_idx);
-                Pointer<CellData<NDIM, double> > U_mean_data = patch->getPatchData(d_U_mean_current_idx);
-                Pointer<CellData<NDIM, double> > UU_mean_data = patch->getPatchData(d_UU_mean_current_idx);
-                Pointer<CellData<NDIM, double> > UU_fluct_data = patch->getPatchData(d_UU_fluct_current_idx);
-                Pointer<CellData<NDIM, double> > k_data = patch->getPatchData(d_k_current_idx);
-                const Box<NDIM>& patch_box = patch->getBox();
-                for (Box<NDIM>::Iterator it(patch_box); it; it++)
-                {
-                    const hier::Index<NDIM>& ic = it();
-                    VectorNd U;
-                    for (unsigned int i = 0; i < NDIM; ++i)
-                    {
-                        U(i) = 0.5 * ((*U_data)(SideIndex<NDIM>(ic, i, SideIndex<NDIM>::Upper)) +
-                                      (*U_data)(SideIndex<NDIM>(ic, i, SideIndex<NDIM>::Lower)));
-                    }
-                    for (unsigned int i = 0; i < NDIM; ++i)
-                    {
-                        (*U_mean_data)(ic, i) = U(i);
-                        for (unsigned int j = 0; j < NDIM; ++j)
-                        {
-                            (*UU_mean_data)(ic, NDIM * i + j) = U(i) * U(j);
-                            (*UU_fluct_data)(ic, NDIM * i + j) = 0.0;
-                        }
-                    }
-                    (*k_data)(ic) = 0.0;
-                }
-            }
-        }
-    }
 
     // When necessary, initialize the value of the advection velocity registered
     // with a coupled advection-diffusion solver.
@@ -1388,15 +1231,6 @@ INSStaggeredHierarchyIntegrator::preprocessIntegrateHierarchy(const double curre
         }
     }
 
-    // Initialize mean flow quantities and turbulent kinetic energy.
-    if (d_flow_averaging_interval)
-    {
-        d_hier_cc_data_ops->copyData(d_U_mean_new_idx, d_U_mean_current_idx);
-        d_hier_cc_data_ops->copyData(d_UU_mean_new_idx, d_UU_mean_current_idx);
-        d_hier_cc_data_ops->copyData(d_UU_fluct_new_idx, d_UU_fluct_current_idx);
-        d_hier_cc_data_ops->copyData(d_k_new_idx, d_k_current_idx);
-    }
-
     // Execute any registered callbacks.
     executePreprocessIntegrateHierarchyCallbackFcns(current_time, new_time, num_cycles);
     return;
@@ -1567,112 +1401,6 @@ INSStaggeredHierarchyIntegrator::postprocessIntegrateHierarchy(const double curr
         const int adv_diff_num_cycles = adv_diff_hier_integrator->getNumberOfCycles();
         adv_diff_hier_integrator->postprocessIntegrateHierarchy(
             current_time, new_time, skip_synchronize_new_state_data, adv_diff_num_cycles);
-    }
-
-    // Update mean quantities.
-    //
-    // NOTE: The time step indexing is a little funny here.  We are computing
-    // new quantities associated with the time step at the end of the current
-    // interval, and so we shift the step index by 1.
-    const int new_time_step = getIntegratorStep() + 1;
-    if (d_flow_averaging_interval && (new_time_step % d_flow_averaging_interval == 0))
-    {
-        // N is the number of samples.  Currently we always capture the value
-        // at the initial time, which is why N is shifted by 1.
-        const double N = 1 + new_time_step / d_flow_averaging_interval;
-        const double weight = ((N - 1.0) / N);
-
-        for (int ln = 0; ln <= d_hierarchy->getFinestLevelNumber(); ++ln)
-        {
-            Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(ln);
-            for (PatchLevel<NDIM>::Iterator p(level); p; p++)
-            {
-                Pointer<Patch<NDIM> > patch = level->getPatch(p());
-                const Box<NDIM>& patch_box = patch->getBox();
-                Pointer<SideData<NDIM, double> > U_data = patch->getPatchData(d_U_new_idx);
-                Pointer<CellData<NDIM, double> > U_mean_data = patch->getPatchData(d_U_mean_new_idx);
-                Pointer<CellData<NDIM, double> > UU_mean_data = patch->getPatchData(d_UU_mean_new_idx);
-                Pointer<CellData<NDIM, double> > UU_fluct_data = patch->getPatchData(d_UU_fluct_new_idx);
-                Pointer<CellData<NDIM, double> > k_data = patch->getPatchData(d_k_new_idx);
-                for (Box<NDIM>::Iterator it(patch_box); it; it++)
-                {
-                    const hier::Index<NDIM>& ic = it();
-
-                    // To simplifiy notation in this comment, define U = mean(u).
-                    //
-                    // We decompose u as u = U + u', so u' = u - U, and we
-                    // track the mean values of u(i), u(i)*u(j), and
-                    // u'(i)*u'(j).  These values are needed to determine the
-                    // turbulent kinetic energy and Reynolds stresses.
-                    //
-                    // Turbulent kinetic energy is k = 0.5*(mean(u'^2) +
-                    // mean(v'^2) + mean(w'^2)).
-                    //
-                    // Reynolds stresses are rho * mean(u'(i) * u'(j)).
-                    //
-                    // TODO: These tensors are all symmetric, so we could use
-                    // Voigt notation to cut down on redundant data storage.
-                    //
-                    // TODO: Consider adding a helper function to translate
-                    // between tensor indices and data depth.
-
-                    // Evaluate the current velocity at the cell center at the
-                    // end of the current time interval:
-                    VectorNd u;
-                    for (unsigned int i = 0; i < NDIM; ++i)
-                    {
-                        u(i) = 0.5 * ((*U_data)(SideIndex<NDIM>(ic, i, SideIndex<NDIM>::Upper)) +
-                                      (*U_data)(SideIndex<NDIM>(ic, i, SideIndex<NDIM>::Lower)));
-                    }
-
-                    // Compute the mean values of u(i), u'(i), and u(i)*u(j)
-                    // at the end of the current time interval:
-                    VectorNd u_mean, u_fluct;
-                    MatrixNd uu_mean;
-                    for (unsigned int i = 0; i < NDIM; ++i)
-                    {
-                        u_mean(i) = weight * (*U_mean_data)(ic, i) + (1.0 - weight) * u(i);
-                        u_fluct(i) = u(i) - u_mean(i);
-                        for (unsigned int j = 0; j < NDIM; ++j)
-                        {
-                            uu_mean(i, j) = weight * (*UU_mean_data)(ic, NDIM * i + j) + (1.0 - weight) * u(i) * u(j);
-                        }
-                    }
-
-                    // Compute the mean values of u'(i)*u'(j) at the end of
-                    // the current time interval:
-                    MatrixNd uu_fluct;
-                    for (unsigned int i = 0; i < NDIM; ++i)
-                    {
-                        for (unsigned int j = 0; j < NDIM; ++j)
-                        {
-                            uu_fluct(i, j) =
-                                weight * (*UU_fluct_data)(ic, NDIM * i + j) + (1.0 - weight) * u_fluct(i) * u_fluct(j);
-                        }
-                    }
-
-                    // Evaluate the turbulent kinetic energy at the end of the
-                    // current time interval:
-                    double k = 0.0;
-                    for (unsigned int i = 0; i < NDIM; ++i)
-                    {
-                        k += 0.5 * uu_fluct(i, i);
-                    }
-
-                    // Store the values:
-                    (*k_data)(ic) = k;
-                    for (unsigned int i = 0; i < NDIM; ++i)
-                    {
-                        (*U_mean_data)(ic, i) = u_mean(i);
-                        for (unsigned int j = 0; j < NDIM; ++j)
-                        {
-                            (*UU_mean_data)(ic, NDIM * i + j) = uu_mean(i, j);
-                            (*UU_fluct_data)(ic, NDIM * i + j) = uu_fluct(i, j);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     // Execute any registered callbacks.
@@ -2124,7 +1852,7 @@ INSStaggeredHierarchyIntegrator::initializeLevelDataSpecialized(const Pointer<Ba
             // Fill ghost cells.
             HierarchyDataOpsManager<NDIM>* hier_ops_manager = HierarchyDataOpsManager<NDIM>::getManager();
             Pointer<HierarchyCellDataOpsReal<NDIM, double> > hier_cc_data_ops =
-                hier_ops_manager->getOperationsDouble(d_U_cc_var, d_hierarchy, true);
+                hier_ops_manager->getOperationsDouble(d_Omega_var, d_hierarchy, true);
             Pointer<HierarchySideDataOpsReal<NDIM, double> > hier_sc_data_ops =
                 hier_ops_manager->getOperationsDouble(d_U_var, d_hierarchy, true);
             hier_sc_data_ops->resetLevels(0, level_number);
@@ -2322,18 +2050,52 @@ INSStaggeredHierarchyIntegrator::applyGradientDetectorSpecialized(const Pointer<
 void
 INSStaggeredHierarchyIntegrator::setupPlotDataSpecialized()
 {
+    IBTK_TIMER_START(t_setup_plot_data_specialized);
     Pointer<VariableContext> ctx = getCurrentContext();
 
     VariableDatabase<NDIM>* var_db = VariableDatabase<NDIM>::getDatabase();
     static const bool synch_cf_interface = true;
 
-    // Interpolate u to cell centers.
+    // Most of these require scratch data
+    const int coarsest_ln = 0;
+    const int finest_ln = d_hierarchy->getFinestLevelNumber();
+    for (int ln = coarsest_ln; ln <= finest_ln; ++ln)
+    {
+        Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(ln);
+        level->allocatePatchData(d_U_scratch_idx, d_integrator_time);
+    }
+
+    // Interpolate u to nodal data.
     if (d_output_U)
     {
         const int U_sc_idx = var_db->mapVariableAndContextToIndex(d_U_var, ctx);
-        const int U_cc_idx = var_db->mapVariableAndContextToIndex(d_U_cc_var, ctx);
-        d_hier_math_ops->interp(
-            U_cc_idx, d_U_cc_var, U_sc_idx, d_U_var, d_no_fill_op, d_integrator_time, synch_cf_interface);
+        const int U_nc_idx = var_db->mapVariableAndContextToIndex(d_U_nc_var, ctx);
+
+        // We need updated ghost values to interpolate from side data:
+        using InterpolationTransactionComponent = HierarchyGhostCellInterpolation::InterpolationTransactionComponent;
+        {
+            InterpolationTransactionComponent comp(d_U_scratch_idx,
+                                                   U_sc_idx,
+                                                   "CONSERVATIVE_LINEAR_REFINE",
+                                                   true,
+                                                   "CONSERVATIVE_COARSEN",
+                                                   "LINEAR",
+                                                   false,
+                                                   getVelocityBoundaryConditions());
+            Pointer<HierarchyGhostCellInterpolation> hier_bdry_fill = new HierarchyGhostCellInterpolation();
+            hier_bdry_fill->initializeOperatorState(comp, d_hierarchy);
+            hier_bdry_fill->fillData(0.0);
+        }
+
+        // synch both the src and dst data:
+        d_hier_math_ops->interp(U_nc_idx,
+                                d_U_nc_var,
+                                synch_cf_interface,
+                                d_U_scratch_idx,
+                                d_U_var,
+                                d_no_fill_op,
+                                d_integrator_time,
+                                synch_cf_interface);
     }
 
     // Interpolate f to cell centers.
@@ -2350,11 +2112,6 @@ INSStaggeredHierarchyIntegrator::setupPlotDataSpecialized()
     {
         const int coarsest_ln = 0;
         const int finest_ln = d_hierarchy->getFinestLevelNumber();
-        for (int ln = coarsest_ln; ln <= finest_ln; ++ln)
-        {
-            Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(ln);
-            level->allocatePatchData(d_U_scratch_idx, d_integrator_time);
-        }
         d_hier_sc_data_ops->copyData(d_U_scratch_idx, d_U_current_idx);
 
         // Make our own boundary filling op because the standard one does not do any refining:
@@ -2369,14 +2126,14 @@ INSStaggeredHierarchyIntegrator::setupPlotDataSpecialized()
         HierarchyGhostCellInterpolation U_bdry_bc_fill_op;
         U_bdry_bc_fill_op.initializeOperatorState(U_bc_component, d_hierarchy, coarsest_ln, finest_ln);
         U_bdry_bc_fill_op.fillData(d_integrator_time);
-        d_hier_math_ops->curl(
-            d_Omega_nc_idx, d_Omega_nc_var, d_U_scratch_idx, d_U_var, d_no_fill_op, d_integrator_time);
-
-        for (int ln = coarsest_ln; ln <= finest_ln; ++ln)
-        {
-            Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(ln);
-            level->deallocatePatchData(d_U_scratch_idx);
-        }
+        d_hier_math_ops->curl(d_Omega_nc_idx,
+                              d_Omega_nc_var,
+                              synch_cf_interface,
+                              d_U_scratch_idx,
+                              d_U_var,
+                              d_no_fill_op,
+                              d_integrator_time,
+                              synch_cf_interface);
     }
 
     // Compute Div U.
@@ -2390,22 +2147,16 @@ INSStaggeredHierarchyIntegrator::setupPlotDataSpecialized()
     if (d_output_EE)
     {
         const int EE_idx = var_db->mapVariableAndContextToIndex(d_EE_var, ctx);
-        const int coarsest_ln = 0;
-        const int finest_ln = d_hierarchy->getFinestLevelNumber();
-        for (int ln = coarsest_ln; ln <= finest_ln; ++ln)
-        {
-            Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(ln);
-            level->allocatePatchData(d_U_scratch_idx, d_integrator_time);
-        }
         d_hier_sc_data_ops->copyData(d_U_scratch_idx, d_U_current_idx);
         d_U_bdry_bc_fill_op->fillData(d_integrator_time);
         d_hier_math_ops->strain_rate(EE_idx, d_EE_var, d_U_scratch_idx, d_U_var, d_no_fill_op, d_integrator_time);
-        for (int ln = coarsest_ln; ln <= finest_ln; ++ln)
-        {
-            Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(ln);
-            level->deallocatePatchData(d_U_scratch_idx);
-        }
     }
+    for (int ln = coarsest_ln; ln <= finest_ln; ++ln)
+    {
+        Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(ln);
+        level->deallocatePatchData(d_U_scratch_idx);
+    }
+    IBTK_TIMER_STOP(t_setup_plot_data_specialized);
     return;
 } // setupPlotDataSpecialized
 

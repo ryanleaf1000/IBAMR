@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2011 - 2021 by the IBAMR developers
+// Copyright (c) 2011 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -555,7 +555,32 @@ public:
      *
      * \note The default value for this string is "coordinates system".
      */
+    IBTK_DEPRECATED(
+        "use FEDataManager::getCurrentCoordinatesSystemName() and FEDataManager::setCurrentCoordinatesSystemName() to "
+        "access the current coordinates system name.")
     std::string& COORDINATES_SYSTEM_NAME;
+
+    /*!
+     * \brief The name of the equation system which stores the spatial position
+     * data. The actual string is stored by FEData.
+     *
+     * \note The default value for this string is "coordinates system".
+     */
+    const std::string& getCurrentCoordinatesSystemName() const
+    {
+        return d_fe_data->d_coordinates_system_name;
+    }
+
+    /*!
+     * \brief Set name of the equation system which stores the spatial position
+     * data. The actual string is stored by FEData.
+     *
+     * \note The default value for this string is "coordinates system".
+     */
+    void setCurrentCoordinatesSystemName(const std::string& coordinates_system_name) const
+    {
+        d_fe_data->d_coordinates_system_name = coordinates_system_name;
+    }
 
     /*!
      * \brief The libMesh boundary IDs to use for specifying essential boundary
@@ -989,6 +1014,30 @@ public:
                              unsigned int max_its = 100);
 
     /*!
+     * \brief Set U to be the stabilized L2 projection of F.
+     */
+    bool computeStabilizedL2Projection(libMesh::NumericVector<double>& U,
+                                       libMesh::NumericVector<double>& F,
+                                       const std::string& system_name,
+                                       double epsilon,
+                                       bool close_U = true,
+                                       bool close_F = true,
+                                       double tol = 1.0e-6,
+                                       unsigned int max_its = 100);
+
+    /*!
+     * \brief Set U to be the smoothed L2 projection of F.
+     */
+    bool computeSmoothedL2Projection(libMesh::NumericVector<double>& U,
+                                     libMesh::NumericVector<double>& F,
+                                     const std::string& system_name,
+                                     double epsilon,
+                                     bool close_U = true,
+                                     bool close_F = true,
+                                     double tol = 1.0e-6,
+                                     unsigned int max_its = 100);
+
+    /*!
      * Update the quadrature rule for the current element.  If the provided
      * qrule is already configured appropriately, it is not modified.
      *
@@ -1355,5 +1404,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //#ifdef IBTK_HAVE_LIBMESH
-#endif //#ifndef included_IBTK_FEDataManager
+#endif // #ifdef IBTK_HAVE_LIBMESH
+#endif // #ifndef included_IBTK_FEDataManager

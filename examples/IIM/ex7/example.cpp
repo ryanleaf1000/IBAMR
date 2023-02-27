@@ -109,11 +109,11 @@ solid_surface_force_function(VectorValue<double>& F,
     std::vector<double> x_surface(NDIM, 0.0);
     for (unsigned int d = 0; d < NDIM; ++d)
     {
-        const MeshBase::const_element_iterator el_begin = mesh_bndry.active_local_elements_begin();
-        const MeshBase::const_element_iterator el_end = mesh_bndry.active_local_elements_end();
-        for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+        const auto el_begin = mesh_bndry.active_local_elements_begin();
+        const auto el_end = mesh_bndry.active_local_elements_end();
+        for (auto el_it = el_begin; el_it != el_end; ++el_it)
         {
-            Elem* const elem_bndry = *el_it;
+            const Elem* elem_bndry = *el_it;
             if (elem_bndry->contains_point(X))
                 F(d) = Tau_new_surface_system->point_value(d, X, elem_bndry); //&side_elem);
         }
@@ -133,6 +133,7 @@ static double bulk_mod = 0.0;
 void
 calculateGeomQuantitiesOfStructure(double& vol,                // mass of the body
                                    VectorValue<double>& x_com, // new center of the mass
+                                   const FEMechanicsExplicitIntegrator* const fem_solver,
                                    EquationSystems* equation_systems)
 {
     // Get the structure mesh for codim-0 solid.
@@ -141,7 +142,7 @@ calculateGeomQuantitiesOfStructure(double& vol,                // mass of the bo
 
     // Extract the FE system and DOF map, and setup the FE object.
 
-    System& X_system = equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+    System& X_system = equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
     X_system.solution->localize(*X_system.current_local_solution);
     MeshBase& mesh = equation_systems->get_mesh();
 
@@ -175,9 +176,9 @@ calculateGeomQuantitiesOfStructure(double& vol,                // mass of the bo
 
     // double X_qp_new[NDIM], X_qp_current[NDIM], R_qp_current[NDIM], R_qp_new[NDIM];
     VectorValue<double> X_qp, R_qp;
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    const auto el_begin = mesh.active_local_elements_begin();
+    const auto el_end = mesh.active_local_elements_end();
+    for (auto el_it = el_begin; el_it != el_end; ++el_it)
     {
         const Elem* const elem = *el_it;
         fe->reinit(elem);
@@ -431,7 +432,8 @@ main(int argc, char* argv[])
                 }
             }
         }
-        for (MeshBase::node_iterator it = mesh.nodes_begin(); it != mesh.nodes_end(); ++it)
+        const auto node_end = mesh.nodes_end();
+        for (MeshBase::node_iterator it = mesh.nodes_begin(); it != node_end; ++it)
         {
             Node* n = *it;
             libMesh::Point& X = *n;
@@ -442,7 +444,7 @@ main(int argc, char* argv[])
         mesh.prepare_for_use();
 
         BoundaryMesh boundary_mesh(mesh.comm(), mesh.mesh_dimension() - 1);
-        mesh.boundary_info->sync(boundary_mesh);
+        mesh.get_boundary_info().sync(boundary_mesh);
         boundary_mesh.prepare_for_use();
 
         c1_s = input_db->getDouble("C1_S");
@@ -534,7 +536,7 @@ main(int argc, char* argv[])
         std::vector<int> vars(NDIM);
         for (unsigned int d = 0; d < NDIM; ++d) vars[d] = d;
         vector<SystemData> velocity_data(1);
-        velocity_data[0] = SystemData(FEMechanicsBase::VELOCITY_SYSTEM_NAME, vars);
+        velocity_data[0] = SystemData(fem_solver->getVelocitySystemName(), vars);
 
         ibfe_bndry_ops->initializeFEEquationSystems();
 
@@ -674,7 +676,7 @@ main(int argc, char* argv[])
             l_max_stream.precision(10);
         }
 
-        calculateGeomQuantitiesOfStructure(vol, x_com, equation_systems);
+        calculateGeomQuantitiesOfStructure(vol, x_com, fem_solver, equation_systems);
         const double n_cycles = input_db->getDouble("NCYCLE");
         // Main time step loop.
         while (!MathUtilities<double>::equalEps(loop_time, loop_time_end))
@@ -687,9 +689,9 @@ main(int argc, char* argv[])
             boundary_systems = bndry_equation_systems;
             // to compute average J for each element
 
-            System& X_system = equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+            System& X_system = equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
             x_new_solid_system = &X_system;
-            u_new_solid_system = &equation_systems->get_system<System>(FEMechanicsBase::VELOCITY_SYSTEM_NAME);
+            u_new_solid_system = &equation_systems->get_system<System>(fem_solver->getVelocitySystemName());
             Tau_new_surface_system = &bndry_equation_systems->get_system<System>(IIMethod::TAU_OUT_SYSTEM_NAME);
             x_new_surface_system = &bndry_equation_systems->get_system<System>(IIMethod::COORDS_SYSTEM_NAME);
 
@@ -707,8 +709,8 @@ main(int argc, char* argv[])
                                                      /*num_cycles*/ 1);
             }
 
-            x_new_solid_system = &equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
-            u_new_solid_system = &equation_systems->get_system<System>(FEMechanicsBase::VELOCITY_SYSTEM_NAME);
+            x_new_solid_system = &equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
+            u_new_solid_system = &equation_systems->get_system<System>(fem_solver->getVelocitySystemName());
 
             time_integrator->advanceHierarchy(dt);
             boundary_systems = bndry_equation_systems;
@@ -787,11 +789,11 @@ main(int argc, char* argv[])
             const vector<vector<VectorValue<double> > >& dphi = fe->get_dphi();
             TensorValue<double> FF;
             boost::multi_array<double, 2> X_node;
-            const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-            const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
-            for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+            const auto el_begin = mesh.active_local_elements_begin();
+            const auto el_end = mesh.active_local_elements_end();
+            for (auto el_it = el_begin; el_it != el_end; ++el_it)
             {
-                Elem* const elem = *el_it;
+                const Elem* elem = *el_it;
                 fe->reinit(elem);
                 for (unsigned int d = 0; d < NDIM; ++d)
                 {
@@ -807,7 +809,7 @@ main(int argc, char* argv[])
             }
             J_integral = SAMRAI_MPI::sumReduction(J_integral);
 
-            calculateGeomQuantitiesOfStructure(vol, x_com, equation_systems);
+            calculateGeomQuantitiesOfStructure(vol, x_com, fem_solver, equation_systems);
 
             postprocess_Convergence(patch_hierarchy,
                                     navier_stokes_integrator,
@@ -880,8 +882,8 @@ postprocess_Convergence(Pointer<PatchHierarchy<NDIM> > /*patch_hierarchy*/,
     boost::multi_array<double, 2> x_node, U_node, TAU_node, X_node;
     VectorValue<double> F_qp, U_qp, x_qp, X_qp, W_qp, TAU_qp, N, n, X;
 
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
+    const auto el_begin = mesh.active_local_elements_begin();
+    const auto el_end = mesh.active_local_elements_end();
 
     DofMap& U_dof_map = U_system.get_dof_map();
     std::vector<std::vector<unsigned int> > U_dof_indices(NDIM);
@@ -889,9 +891,9 @@ postprocess_Convergence(Pointer<PatchHierarchy<NDIM> > /*patch_hierarchy*/,
     VectorValue<double> tau1, tau2;
     double Lmax_diff = 0.0;
 
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    for (auto el_it = el_begin; el_it != el_end; ++el_it)
     {
-        Elem* const elem = *el_it;
+        const Elem* elem = *el_it;
         fe->reinit(elem);
         const int n_qp = qrule->n_points();
         for (unsigned int d = 0; d < NDIM; ++d)

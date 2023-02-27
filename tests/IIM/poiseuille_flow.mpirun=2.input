@@ -4,7 +4,7 @@ RHO   = 1.0                                         // mass density of fluid (gm
 MU    = 1/Re                                        // dynamic viscosity of fluid (gm/(cm s))
 U_MAX = 2.0                                      // approximate maximum velocity in the entire domain (cm/2)                                         // external pressure (dyne/cm^2)
 PI = 3.14159265359
-THETA = 0.0 
+THETA = 0.0
 // discretization parameters
 MAX_LEVELS = 1                                      // maximum number of levels in locally refined grid
 REF_RATIO  = 1                                      // refinement ratio between levels
@@ -18,7 +18,7 @@ FAC = 0.0
 W = 0.0                                           // body    width  (cm)
 DX0 = H/N                                           // mesh width on coarsest grid level (cm)
 DX  = H/NFINEST                                     // mesh width on finest   grid level (cm)
-MFAC = 2.0                                    // ratio of Lagrangian mesh width to Cartesian mesh width for thin structure
+MFAC = 0.050                                    // ratio of Lagrangian mesh width to Cartesian mesh width for thin structure
 ELEM_TYPE = "EDGE2"                                 // type of element to use for thin structure discretization
 elem_order = "FIRST"                                // finite element order
 PK1_DEV_QUAD_ORDER = "SEVENTH"
@@ -43,7 +43,7 @@ SOLVER_TYPE                = "STAGGERED"            // the fluid solver to use (
 CFL_MAX                    = 0.10                   // maximum CFL number
 DT       				   = 0.5*CFL_MAX*DX  
 START_TIME                 = 0.0e0                  // initial simulation time
-END_TIME                   = 20 * DT              // final simulation time
+END_TIME                   = 20               // final simulation time
 GROW_DT                    = 2.0e0                  // growth factor for timesteps
 NUM_CYCLES                 = 1                      // number of cycles of fixed-point iteration
 //VISCOUS_TS_TYPE = "BACKWARD_EULER"
@@ -198,6 +198,7 @@ IIMethod {
    wss_calc_width			  = WSS_CALC_WIDTH
    min_ghost_cell_width = 6
    enable_logging_solver_iterations = FALSE
+   velocity_stabilization_eps = 0.0
 }
 
 INSStaggeredHierarchyIntegrator {

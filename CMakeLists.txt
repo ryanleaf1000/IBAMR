@@ -54,6 +54,7 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # determine some details about the current Fortran compiler:
 INCLUDE(FortranCInterface)
+FortranCInterface_VERIFY(CXX QUIET)
 IF("${FortranCInterface_GLOBAL_CASE}" STREQUAL "LOWER")
   SET(_name "name")
 ELSE()
@@ -186,7 +187,7 @@ IF(NOT "${CMAKE_CXX_COMPILER}" STREQUAL "")
     SET(MPI_ROOT "${_compiler_directory}/../")
     MESSAGE(STATUS "Using MPI compiler wrapper to set MPI_ROOT=${MPI_ROOT}")
   ELSE()
-    MESSAGE(STATUS "CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} is not an MPI compiler wrapper")
+    MESSAGE(STATUS "CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} is not an MPI compiler wrapper - CMake will use the normal MPI detection sequence")
   ENDIF()
 ELSEIF((NOT $ENV{MPI_HOME} STREQUAL "") AND ("${MPI_ROOT}" STREQUAL ""))
   # if MPI_HOME is set then we should use that instead (environment modules
@@ -1153,6 +1154,9 @@ FUNCTION(IBAMR_SETUP_TARGET_LIBRARY target_library)
     TARGET_COMPILE_FEATURES(${target_library} PUBLIC "cxx_std_11")
   ENDIF()
 
+  # To manage staticly-linked dependencies, we put these in order so that if X
+  # depends on Y we link against Y first.
+
   # we and our users will use these MPI functions so make the interface public:
   TARGET_LINK_LIBRARIES(${target_library} PUBLIC MPI::MPI_C)
   # If openMPI is built with the old C++ bindings enabled then we need to link
@@ -1161,6 +1165,12 @@ FUNCTION(IBAMR_SETUP_TARGET_LIBRARY target_library)
   IF(${MPI_MPICXX_FOUND})
     TARGET_LINK_LIBRARIES(${target_library} PUBLIC MPI::MPI_CXX)
   ENDIF()
+  # HDF5:
+  TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${HDF5_LIBRARIES}")
+  TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${HDF5_INCLUDE_DIRS}")
+  # PETSc:
+  TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${PETSC_LIBRARIES}")
+  TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${PETSC_INCLUDE_DIRS}")
   # Silo is underlinked and depends on HDF5, so do it first:
   IF(${IBAMR_HAVE_SILO})
     TARGET_LINK_LIBRARIES(${target_library} PRIVATE SILO)
@@ -1170,15 +1180,6 @@ FUNCTION(IBAMR_SETUP_TARGET_LIBRARY target_library)
   FOREACH(_lib ${SAMRAI${_d}d_LIBRARIES})
     TARGET_LINK_LIBRARIES(${target_library} PUBLIC ${_lib})
   ENDFOREACH()
-  # HDF5:
-  TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${HDF5_LIBRARIES}")
-  TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${HDF5_INCLUDE_DIRS}")
-  # Hypre:
-  # See the note under PETSc for why we do this
-  IF (NOT ${PETSC_HAVE_HYPRE})
-    TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${HYPRE_LIBRARIES}")
-  ENDIF()
-  TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${HYPRE_INCLUDE_DIRS}")
   # Boost (we only need headers):
   IF(${IBAMR_USE_BUNDLED_BOOST})
     TARGET_LINK_LIBRARIES(${target_library} PUBLIC BUNDLED_BOOST)
@@ -1191,6 +1192,11 @@ FUNCTION(IBAMR_SETUP_TARGET_LIBRARY target_library)
   ELSE()
     TARGET_LINK_LIBRARIES(${target_library} PUBLIC Eigen3::Eigen)
   ENDIF()
+  # libMesh:
+  IF(${IBAMR_HAVE_LIBMESH})
+    TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${LIBMESH_LIBRARIES}")
+    TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${LIBMESH_INCLUDE_DIRS}")
+  ENDIF()
   # muParser:
   IF(${IBAMR_USE_BUNDLED_MUPARSER})
     TARGET_LINK_LIBRARIES(${target_library} PUBLIC BUNDLED_MUPARSER)
@@ -1198,14 +1204,15 @@ FUNCTION(IBAMR_SETUP_TARGET_LIBRARY target_library)
     TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${MUPARSER_LIBRARIES}")
     TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${MUPARSER_INCLUDE_DIRS}")
   ENDIF()
-  # PETSc:
-  TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${PETSC_LIBRARIES}")
-  TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${PETSC_INCLUDE_DIRS}")
-  # libMesh:
-  IF(${IBAMR_HAVE_LIBMESH})
-    TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${LIBMESH_LIBRARIES}")
-    TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${LIBMESH_INCLUDE_DIRS}")
+  # Hypre:
+  # See the note under PETSc for why we do this
+  #
+  # This must be last since, if HYPRE is staticly linked, its symbols may end up
+  # in libMesh or PETSc libraries
+  IF (NOT ${PETSC_HAVE_HYPRE})
+    TARGET_LINK_LIBRARIES(${target_library} PUBLIC "${HYPRE_LIBRARIES}")
   ENDIF()
+  TARGET_INCLUDE_DIRECTORIES(${target_library} PUBLIC "${HYPRE_INCLUDE_DIRS}")
 ENDFUNCTION()
 
 MESSAGE(STATUS "")

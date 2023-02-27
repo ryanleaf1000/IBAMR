@@ -19,7 +19,7 @@ SHIFT1 = -2.839675405995053   //N=128
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N            // effective number of grid cells on finest   grid level
 DX0 = L/N                                           // mesh width on coarsest grid level
 DX  = L/NFINEST                                     // mesh width on finest   grid level
-MFAC = 2.0                                          // ratio of Lagrangian mesh width to Cartesian mesh width
+MFAC = 0.250                                          // ratio of Lagrangian mesh width to Cartesian mesh width
 ELEM_TYPE = "TRI3"                                  // type of element to use for structure discretization
 elem_order = "FIRST"   
 R1 = 0.5
@@ -197,6 +197,7 @@ IIMethod {
    min_ghost_cell_width = 6
    normalize_pressure_jump = NORMALIZE_PRESSURE_JUMP
    enable_logging_solver_iterations = FALSE
+   velocity_stabilization_eps  = 0.5
 }
 
 

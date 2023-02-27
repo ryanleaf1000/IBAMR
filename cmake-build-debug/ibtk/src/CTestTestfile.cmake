@@ -1,0 +1,6 @@
+# CMake generated Testfile for 
+# Source directory: /home/qi/sfw/ibamr/IBAMR/ibtk/src
+# Build directory: /home/qi/sfw/ibamr/IBAMR/cmake-build-debug/ibtk/src
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.

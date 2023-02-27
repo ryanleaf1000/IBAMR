@@ -110,9 +110,9 @@ calculateGeomQuantitiesOfStructure(double& vol,                             // v
 
     // double X_qp_new[NDIM], X_qp_current[NDIM], R_qp_current[NDIM], R_qp_new[NDIM];
     VectorValue<double> X_qp, R_qp;
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    const auto el_begin = mesh.active_local_elements_begin();
+    const auto el_end = mesh.active_local_elements_end();
+    for (auto el_it = el_begin; el_it != el_end; ++el_it)
     {
         const Elem* const elem = *el_it;
         fe->reinit(elem);
@@ -223,11 +223,11 @@ calculateFluidForceAndTorque(VectorValue<double>& F, // net force  acting on the
     boost::multi_array<double, 2> x_node, TAU_node;
     VectorValue<double> F_qp, x_qp, W_qp, TAU_qp, R_qp;
 
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    const auto el_begin = mesh.active_local_elements_begin();
+    const auto el_end = mesh.active_local_elements_end();
+    for (auto el_it = el_begin; el_it != el_end; ++el_it)
     {
-        Elem* const elem = *el_it;
+        const Elem* elem = *el_it;
         fe->reinit(elem);
         for (unsigned int d = 0; d < NDIM; ++d)
         {
@@ -314,7 +314,8 @@ update_solid_vel_pos(const double* params,
 
     pout << " Number of time integration iterations = " << iter << "\n\n";
 
-    for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != mesh.local_nodes_end(); ++it)
+    const auto node_end = mesh.local_nodes_end();
+    for (auto it = mesh.local_nodes_begin(); it != node_end; ++it)
     {
         Node* n = *it;
         if (n->n_vars(dY_sys_num))
@@ -477,7 +478,7 @@ main(int argc, char* argv[])
         solid_mesh.prepare_for_use();
 
         BoundaryMesh bndry_mesh(solid_mesh.comm(), solid_mesh.mesh_dimension() - 1);
-        solid_mesh.boundary_info->sync(bndry_mesh);
+        solid_mesh.get_boundary_info().sync(bndry_mesh);
         bndry_mesh.prepare_for_use();
 
         kappa_s = input_db->getDouble("KAPPA_S");
@@ -642,7 +643,8 @@ main(int argc, char* argv[])
         System& Y_init_solid_system = solid_equation_systems->get_system("RIGID_BODY_COORDS_SYSTEM");
         const unsigned int Y_init_solid_sys_num = Y_init_solid_system.number();
         NumericVector<double>& Y_init_solid_coords = *Y_init_solid_system.solution;
-        for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != mesh.local_nodes_end(); ++it)
+        const auto node_end = mesh.local_nodes_end();
+        for (auto it = mesh.local_nodes_begin(); it != node_end; ++it)
         {
             Node* n = *it;
             if (n->n_vars(Y_init_solid_sys_num))
@@ -664,7 +666,7 @@ main(int argc, char* argv[])
         System& dY_init_solid_system = solid_equation_systems->get_system("RIGID_BODY_COORDS_MAPPING_SYSTEM");
         const unsigned int dY_init_solid_sys_num = dY_init_solid_system.number();
         NumericVector<double>& dY_init_solid_coords = *dY_init_solid_system.solution;
-        for (MeshBase::node_iterator it = mesh.local_nodes_begin(); it != mesh.local_nodes_end(); ++it)
+        for (auto it = mesh.local_nodes_begin(); it != node_end; ++it)
         {
             Node* n = *it;
             if (n->n_vars(dY_init_solid_sys_num))
@@ -908,8 +910,8 @@ postprocess_Convergence(Pointer<PatchHierarchy<NDIM> > /*patch_hierarchy*/,
     boost::multi_array<double, 2> x_node, U_node, TAU_node, X_node;
     VectorValue<double> F_qp, U_qp, x_qp, X_qp, W_qp, TAU_qp, N, n, X;
 
-    const MeshBase::const_element_iterator el_begin = mesh.active_local_elements_begin();
-    const MeshBase::const_element_iterator el_end = mesh.active_local_elements_end();
+    const auto el_begin = mesh.active_local_elements_begin();
+    const auto el_end = mesh.active_local_elements_end();
 
     DofMap& U_dof_map = U_system.get_dof_map();
     std::vector<std::vector<unsigned int> > U_dof_indices(NDIM);
@@ -917,9 +919,9 @@ postprocess_Convergence(Pointer<PatchHierarchy<NDIM> > /*patch_hierarchy*/,
     VectorValue<double> tau1, tau2;
     double Lmax_diff = 0.0;
 
-    for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+    for (auto el_it = el_begin; el_it != el_end; ++el_it)
     {
-        Elem* const elem = *el_it;
+        const Elem* elem = *el_it;
         fe->reinit(elem);
         const int n_qp = qrule->n_points();
         for (unsigned int d = 0; d < NDIM; ++d)

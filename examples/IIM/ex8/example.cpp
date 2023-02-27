@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2017 - 2021 by the IBAMR developers
+// Copyright (c) 2017 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -11,6 +11,7 @@
 //
 // ---------------------------------------------------------------------
 
+#include "ibamr/FEMechanicsBase.h"
 #include <ibamr/FEMechanicsExplicitIntegrator.h>
 #include <ibamr/IBExplicitHierarchyIntegrator.h>
 #include <ibamr/IIMethod.h>
@@ -250,11 +251,11 @@ solid_surface_force_tube_upper_function(VectorValue<double>& F,
 
     for (unsigned int d = 0; d < NDIM; ++d)
     {
-        const MeshBase::const_element_iterator el_begin = mesh_bndry.active_local_elements_begin();
-        const MeshBase::const_element_iterator el_end = mesh_bndry.active_local_elements_end();
-        for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+        const auto el_begin = mesh_bndry.active_local_elements_begin();
+        const auto el_end = mesh_bndry.active_local_elements_end();
+        for (auto el_it = el_begin; el_it != el_end; ++el_it)
         {
-            Elem* const elem_bndry = *el_it;
+            const Elem* elem_bndry = *el_it;
 
             if ((elem_bndry->contains_point(X)) && (tube_upper_copy_info->has_boundary_id(elem, side, 6)))
             {
@@ -285,11 +286,11 @@ solid_surface_force_tube_lower_function(VectorValue<double>& F,
 
     for (unsigned int d = 0; d < NDIM; ++d)
     {
-        const MeshBase::const_element_iterator el_begin = mesh_bndry.active_local_elements_begin();
-        const MeshBase::const_element_iterator el_end = mesh_bndry.active_local_elements_end();
-        for (MeshBase::const_element_iterator el_it = el_begin; el_it != el_end; ++el_it)
+        const auto el_begin = mesh_bndry.active_local_elements_begin();
+        const auto el_end = mesh_bndry.active_local_elements_end();
+        for (auto el_it = el_begin; el_it != el_end; ++el_it)
         {
-            Elem* const elem_bndry = *el_it;
+            const Elem* elem_bndry = *el_it;
 
             if ((elem_bndry->contains_point(X)) && (tube_lower_copy_info->has_boundary_id(elem, side, 5)))
             {
@@ -360,6 +361,7 @@ static ofstream dx_posn_stream;
 
 void postprocess_data(tbox::Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                       tbox::Pointer<INSHierarchyIntegrator> navier_stokes_integrator,
+                      const FEMechanicsExplicitIntegrator* fem_solver,
                       ReplicatedMesh& tube_mesh,
                       EquationSystems* tube_equation_systems,
                       const int iteration_num,
@@ -443,20 +445,20 @@ main(int argc, char* argv[])
         translate(tube_lower_mesh, 0, H0 - 1, 0);
 
         // Imposing Dirichlet BC at the two ends
-        const MeshBase::const_element_iterator end_lower_el = tube_lower_mesh.elements_end();
-        for (MeshBase::const_element_iterator el = tube_lower_mesh.elements_begin(); el != end_lower_el; ++el)
+        const auto end_lower_el = tube_lower_mesh.elements_end();
+        for (auto el = tube_lower_mesh.elements_begin(); el != end_lower_el; ++el)
         {
-            Elem* const elem = *el;
+            const Elem* elem = *el;
             for (unsigned int side = 0; side < elem->n_sides(); ++side)
             {
                 const bool at_mesh_bdry = !elem->neighbor_ptr(side);
                 if (at_mesh_bdry)
                 {
-                    BoundaryInfo* boundary_info = tube_lower_mesh.boundary_info.get();
-                    if ((boundary_info->has_boundary_id(elem, side, 3)) ||
-                        (boundary_info->has_boundary_id(elem, side, 4)))
+                    BoundaryInfo& boundary_info = tube_lower_mesh.get_boundary_info();
+                    if ((boundary_info.has_boundary_id(elem, side, 3)) ||
+                        (boundary_info.has_boundary_id(elem, side, 4)))
                     {
-                        boundary_info->add_side(elem, side, FEDataManager::ZERO_DISPLACEMENT_XY_BDRY_ID);
+                        boundary_info.add_side(elem, side, FEDataManager::ZERO_DISPLACEMENT_XY_BDRY_ID);
                     }
                 }
             }
@@ -469,7 +471,7 @@ main(int argc, char* argv[])
         // Side 4 appears to be the outlet!
         tube_lower_copy_info = &tube_lower_mesh.get_boundary_info();
         BoundaryMesh bndry_tube_lower_mesh(init.comm(), NDIM - 1);
-        tube_lower_mesh.boundary_info->sync({ 5 }, bndry_tube_lower_mesh);
+        tube_lower_mesh.get_boundary_info().sync({ 5 }, bndry_tube_lower_mesh);
         bndry_tube_lower_mesh.prepare_for_use();
 
         // ************************************************************************//
@@ -480,20 +482,20 @@ main(int argc, char* argv[])
         translate(tube_upper_mesh, 0, H0 - 1, 0);
 
         // Imposing Dirichlet BC at the two ends
-        const MeshBase::const_element_iterator end_upper_el = tube_upper_mesh.elements_end();
-        for (MeshBase::const_element_iterator el = tube_upper_mesh.elements_begin(); el != end_upper_el; ++el)
+        const auto end_upper_el = tube_upper_mesh.elements_end();
+        for (auto el = tube_upper_mesh.elements_begin(); el != end_upper_el; ++el)
         {
-            Elem* const elem = *el;
+            const Elem* elem = *el;
             for (unsigned int side = 0; side < elem->n_sides(); ++side)
             {
                 const bool at_mesh_bdry = !elem->neighbor_ptr(side);
                 if (at_mesh_bdry)
                 {
-                    BoundaryInfo* boundary_info = tube_upper_mesh.boundary_info.get();
-                    if ((boundary_info->has_boundary_id(elem, side, 1)) ||
-                        (boundary_info->has_boundary_id(elem, side, 2)))
+                    BoundaryInfo& boundary_info = tube_upper_mesh.get_boundary_info();
+                    if ((boundary_info.has_boundary_id(elem, side, 1)) ||
+                        (boundary_info.has_boundary_id(elem, side, 2)))
                     {
-                        boundary_info->add_side(elem, side, FEDataManager::ZERO_DISPLACEMENT_XY_BDRY_ID);
+                        boundary_info.add_side(elem, side, FEDataManager::ZERO_DISPLACEMENT_XY_BDRY_ID);
                     }
                 }
             }
@@ -502,7 +504,7 @@ main(int argc, char* argv[])
 
         tube_upper_copy_info = &tube_upper_mesh.get_boundary_info();
         BoundaryMesh bndry_tube_upper_mesh(init.comm(), NDIM - 1);
-        tube_upper_mesh.boundary_info->sync({ 6 }, bndry_tube_upper_mesh);
+        tube_upper_mesh.get_boundary_info().sync({ 6 }, bndry_tube_upper_mesh);
         bndry_tube_upper_mesh.prepare_for_use();
 
         // ************************************************************************//
@@ -699,7 +701,7 @@ main(int argc, char* argv[])
         std::vector<int> vars(NDIM);
         for (unsigned int d = 0; d < NDIM; ++d) vars[d] = d;
         vector<SystemData> velocity_data(1);
-        velocity_data[0] = SystemData(FEMechanicsBase::VELOCITY_SYSTEM_NAME, vars);
+        velocity_data[0] = SystemData(fem_solver->getVelocitySystemName(), vars);
 
         ibfe_bndry_ops->initializeFEEquationSystems();
 
@@ -911,20 +913,20 @@ main(int argc, char* argv[])
 
             boundary_tube_lower_systems = bndry_tube_lower_equation_systems;
             System& X_tube_lower_system =
-                tube_lower_equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+                tube_lower_equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
             x_new_tube_lower_solid_system = &X_tube_lower_system;
 
             System& U_tube_lower_system =
-                tube_lower_equation_systems->get_system<System>(FEMechanicsBase::VELOCITY_SYSTEM_NAME);
+                tube_lower_equation_systems->get_system<System>(fem_solver->getVelocitySystemName());
             u_new_tube_lower_solid_system = &U_tube_lower_system;
 
             boundary_tube_upper_systems = bndry_tube_upper_equation_systems;
             System& X_tube_upper_system =
-                tube_upper_equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+                tube_upper_equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
             x_new_tube_upper_solid_system = &X_tube_upper_system;
 
             System& U_tube_upper_system =
-                tube_upper_equation_systems->get_system<System>(FEMechanicsBase::VELOCITY_SYSTEM_NAME);
+                tube_upper_equation_systems->get_system<System>(fem_solver->getVelocitySystemName());
             u_new_tube_upper_solid_system = &U_tube_upper_system;
 
             Tau_new_tube_lower_surface_system =
@@ -952,16 +954,16 @@ main(int argc, char* argv[])
             }
 
             x_new_tube_lower_solid_system =
-                &tube_lower_equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+                &tube_lower_equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
 
             u_new_tube_lower_solid_system =
-                &tube_lower_equation_systems->get_system<System>(FEMechanicsBase::VELOCITY_SYSTEM_NAME);
+                &tube_lower_equation_systems->get_system<System>(fem_solver->getVelocitySystemName());
 
             x_new_tube_upper_solid_system =
-                &tube_upper_equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+                &tube_upper_equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
 
             u_new_tube_upper_solid_system =
-                &tube_upper_equation_systems->get_system<System>(FEMechanicsBase::VELOCITY_SYSTEM_NAME);
+                &tube_upper_equation_systems->get_system<System>(fem_solver->getVelocitySystemName());
 
             time_integrator->advanceHierarchy(dt); // FSI solution (IIMethod)
 
@@ -1071,6 +1073,7 @@ main(int argc, char* argv[])
             pout << "\nWriting state data...\n\n";
             postprocess_data(patch_hierarchy,
                              navier_stokes_integrator,
+                             fem_solver,
                              tube_lower_mesh,
                              tube_lower_equation_systems,
                              iteration_num,
@@ -1097,13 +1100,14 @@ main(int argc, char* argv[])
 void
 postprocess_data(tbox::Pointer<PatchHierarchy<NDIM> > /*patch_hierarchy*/,
                  tbox::Pointer<INSHierarchyIntegrator> /*navier_stokes_integrator*/,
+                 const FEMechanicsExplicitIntegrator* const fem_solver,
                  ReplicatedMesh& /*tube_mesh*/,
                  EquationSystems* tube_equation_systems,
                  const int /*iteration_num*/,
                  const double loop_time,
                  const string& /*data_dump_dirname*/)
 {
-    System& X_system = tube_equation_systems->get_system<System>(FEMechanicsBase::COORDS_SYSTEM_NAME);
+    System& X_system = tube_equation_systems->get_system<System>(fem_solver->getCurrentCoordinatesSystemName());
     NumericVector<double>* X_vec = X_system.solution.get();
     std::unique_ptr<NumericVector<Number> > X_serial_vec = NumericVector<Number>::build(X_vec->comm());
     X_serial_vec->init(X_vec->size(), true, SERIAL);

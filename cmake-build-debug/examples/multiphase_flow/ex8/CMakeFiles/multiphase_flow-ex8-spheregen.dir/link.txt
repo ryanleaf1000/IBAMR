@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/multiphase_flow-ex8-spheregen.dir/sphereGen.cpp.o  -o sphereGen  -Wl,-rpath,/home/qi/sfw/ibamr/IBAMR/cmake-build-debug/lib/ 
