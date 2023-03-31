@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/ConstraintIB/flow_past_cylinder",
+		"source" : "examples/ConstraintIB/flow_past_cylinder"
+	}
+}

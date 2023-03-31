@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/navier_stokes/ex0",
+		"source" : "examples/navier_stokes/ex0"
+	}
+}

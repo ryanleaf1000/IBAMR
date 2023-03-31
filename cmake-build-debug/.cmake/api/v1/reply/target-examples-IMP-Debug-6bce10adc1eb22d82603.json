@@ -1,0 +1,60 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/IMP/explicit/ex0/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 104,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 14,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 3
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "IMP-ex0::@d4477ae7ca447d6aaab5"
+		}
+	],
+	"id" : "examples-IMP::@714eac15f71a94114fdf",
+	"name" : "examples-IMP",
+	"paths" : 
+	{
+		"build" : "examples",
+		"source" : "examples"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

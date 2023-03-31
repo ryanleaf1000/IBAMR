@@ -1,0 +1,104 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"SETUP"
+		],
+		"files" : 
+		[
+			"tests/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 26,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 185,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 186,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 187,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 188,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 8
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "tests-IB_explicit_ex0::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "tests-IB_explicit_ex1::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "tests-IB_ib_body_force::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "tests-IB_ib_body_force_kirchhoff::@a44f0ac069e85531cdee"
+		}
+	],
+	"id" : "tests-IB::@a44f0ac069e85531cdee",
+	"name" : "tests-IB",
+	"paths" : 
+	{
+		"build" : "tests",
+		"source" : "tests"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

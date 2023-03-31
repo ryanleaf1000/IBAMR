@@ -1,0 +1,18 @@
+Performing C SOURCE FILE Test C_SUPPORTS_DOLLAR succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/FortranCInterface/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_08ba8/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_08ba8.dir/build.make CMakeFiles/cmTC_08ba8.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/FortranCInterface/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_08ba8.dir/src.c.o
+/usr/local/bin/mpicc -DC_SUPPORTS_DOLLAR  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -MD -MT CMakeFiles/cmTC_08ba8.dir/src.c.o -MF CMakeFiles/cmTC_08ba8.dir/src.c.o.d -o CMakeFiles/cmTC_08ba8.dir/src.c.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/FortranCInterface/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_08ba8
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_08ba8.dir/link.txt --verbose=1
+/usr/local/bin/mpicc -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_08ba8.dir/src.c.o -o cmTC_08ba8 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/FortranCInterface/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+extern int dollar$(void);
+int main() { return 0; }
+

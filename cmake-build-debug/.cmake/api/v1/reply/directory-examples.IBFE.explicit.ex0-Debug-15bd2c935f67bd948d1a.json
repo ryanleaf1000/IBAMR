@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/IBFE/explicit/ex0",
+		"source" : "examples/IBFE/explicit/ex0"
+	}
+}

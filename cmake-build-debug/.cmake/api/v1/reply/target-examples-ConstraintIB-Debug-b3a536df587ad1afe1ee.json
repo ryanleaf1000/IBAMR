@@ -1,0 +1,252 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/ConstraintIB/eel2d/CMakeLists.txt",
+			"examples/ConstraintIB/eel3d/CMakeLists.txt",
+			"examples/ConstraintIB/falling_sphere/CMakeLists.txt",
+			"examples/ConstraintIB/flow_past_cylinder/CMakeLists.txt",
+			"examples/ConstraintIB/impulsively_started_cylinder/CMakeLists.txt",
+			"examples/ConstraintIB/knifefish/CMakeLists.txt",
+			"examples/ConstraintIB/moving_plate/CMakeLists.txt",
+			"examples/ConstraintIB/oscillating_rigid_cylinder/CMakeLists.txt",
+			"examples/ConstraintIB/stokes_first_problem/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 104,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 14,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 3
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 14,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 30,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 8
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 14,
+				"parent" : 10
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 11
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 32,
+				"parent" : 10
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 13
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 14,
+				"parent" : 15
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 16
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 14,
+				"parent" : 18
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 19
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 6,
+				"line" : 14,
+				"parent" : 21
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 22
+			},
+			{
+				"file" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 14,
+				"parent" : 24
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 25
+			},
+			{
+				"file" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 8,
+				"line" : 14,
+				"parent" : 27
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 28
+			},
+			{
+				"file" : 9
+			},
+			{
+				"command" : 2,
+				"file" : 9,
+				"line" : 14,
+				"parent" : 30
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 31
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "ConstraintIB-eel2d::@b3244ad63e38318d516f"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "ConstraintIB-eel3d::@090166a909608abe3df7"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "ConstraintIB-eel3d-generator::@090166a909608abe3df7"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "ConstraintIB-filling_sphere::@4286875f531e3b00557c"
+		},
+		{
+			"backtrace" : 14,
+			"id" : "ConstraintIB-spheregen::@4286875f531e3b00557c"
+		},
+		{
+			"backtrace" : 17,
+			"id" : "ConstraintIB-flow_past_cylinder::@393c898e5fb490afc5d0"
+		},
+		{
+			"backtrace" : 20,
+			"id" : "ConstraintIB-impulsively_started_cylinder::@c07100f708a9d8f1fab8"
+		},
+		{
+			"backtrace" : 23,
+			"id" : "ConstraintIB-knifefish::@127b15e85dee4fd98464"
+		},
+		{
+			"backtrace" : 26,
+			"id" : "ConstraintIB-moving_plate::@bc5ed7cd85a49a217de2"
+		},
+		{
+			"backtrace" : 29,
+			"id" : "ConstraintIB-oscillating_rigid_cylinder::@b30d3b8eae6e3b394469"
+		},
+		{
+			"backtrace" : 32,
+			"id" : "ConstraintIB-stokes_first_problem::@9feb7dcb3ddcfe367d70"
+		}
+	],
+	"id" : "examples-ConstraintIB::@714eac15f71a94114fdf",
+	"name" : "examples-ConstraintIB",
+	"paths" : 
+	{
+		"build" : "examples",
+		"source" : "examples"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

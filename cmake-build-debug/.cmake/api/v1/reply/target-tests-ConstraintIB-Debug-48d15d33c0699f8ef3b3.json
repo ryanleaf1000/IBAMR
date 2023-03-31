@@ -1,0 +1,56 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"SETUP"
+		],
+		"files" : 
+		[
+			"tests/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 26,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 182,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 2
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "tests-ConstraintIB_oscillating_rigid_cylinder::@a44f0ac069e85531cdee"
+		}
+	],
+	"id" : "tests-ConstraintIB::@a44f0ac069e85531cdee",
+	"name" : "tests-ConstraintIB",
+	"paths" : 
+	{
+		"build" : "tests",
+		"source" : "tests"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

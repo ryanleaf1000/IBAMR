@@ -1,0 +1,160 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/IBLevelSet/ex0/CMakeLists.txt",
+			"examples/IBLevelSet/ex1/CMakeLists.txt",
+			"examples/IBLevelSet/ex2/CMakeLists.txt",
+			"examples/IBLevelSet/ex3/CMakeLists.txt",
+			"examples/IBLevelSet/ex4/CMakeLists.txt",
+			"examples/IBLevelSet/ex5/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 104,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 14,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 3
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 14,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 6
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 14,
+				"parent" : 8
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 9
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 14,
+				"parent" : 11
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 12
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 14,
+				"parent" : 14
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 15
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 6,
+				"line" : 14,
+				"parent" : 17
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 18
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "IBLevelSet-ex0::@961ce6bbfb43a65689c3"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "IBLevelSet-ex1::@8df61e9fa73a1104b1c0"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "IBLevelSet-ex2::@7eaff820001918132ac1"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "IBLevelSet-ex3::@51cd7e36b6a3243a5a6f"
+		},
+		{
+			"backtrace" : 16,
+			"id" : "IBLevelSet-ex4::@c5b2d5bb47f08f747237"
+		},
+		{
+			"backtrace" : 19,
+			"id" : "IBLevelSet-ex5::@8beb66fe14c23b378b12"
+		}
+	],
+	"id" : "examples-IBLevelSet::@714eac15f71a94114fdf",
+	"name" : "examples-IBLevelSet",
+	"paths" : 
+	{
+		"build" : "examples",
+		"source" : "examples"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

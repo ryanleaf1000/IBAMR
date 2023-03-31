@@ -1,0 +1,187 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 384,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 401,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1045,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1232,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1234,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1256,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1275,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "include/contrib/muparser",
+			"paths" : 
+			[
+				"ibtk/contrib/muparser/include/muParser.h",
+				"ibtk/contrib/muparser/include/muParserBase.h",
+				"ibtk/contrib/muparser/include/muParserBytecode.h",
+				"ibtk/contrib/muparser/include/muParserCallback.h",
+				"ibtk/contrib/muparser/include/muParserDLL.h",
+				"ibtk/contrib/muparser/include/muParserDef.h",
+				"ibtk/contrib/muparser/include/muParserError.h",
+				"ibtk/contrib/muparser/include/muParserFixes.h",
+				"ibtk/contrib/muparser/include/muParserInt.h",
+				"ibtk/contrib/muparser/include/muParserStack.h",
+				"ibtk/contrib/muparser/include/muParserTemplateMagic.h",
+				"ibtk/contrib/muparser/include/muParserTest.h",
+				"ibtk/contrib/muparser/include/muParserToken.h",
+				"ibtk/contrib/muparser/include/muParserTokenReader.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "library",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/libBUNDLED_MUPARSER.dylib"
+			],
+			"targetId" : "BUNDLED_MUPARSER::@6890427a1f51a3e7e1df",
+			"targetIndex" : 0,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "include/ibtk",
+			"paths" : 
+			[
+				"cmake-build-debug/ibtk/include/ibtk/config.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"include/ibamr"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"ibtk/include/ibtk"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/ibamr",
+			"exportName" : "IBAMRTargets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "BUNDLED_MUPARSER::@6890427a1f51a3e7e1df",
+					"index" : 0
+				},
+				{
+					"id" : "IBTKHeaders::@6890427a1f51a3e7e1df",
+					"index" : 0
+				},
+				{
+					"id" : "IBAMRHeaders::@6890427a1f51a3e7e1df",
+					"index" : 0
+				},
+				{
+					"id" : "IBTK2d::@0e7a75a8cd22d82e135c",
+					"index" : 72
+				},
+				{
+					"id" : "IBTK3d::@0e7a75a8cd22d82e135c",
+					"index" : 73
+				},
+				{
+					"id" : "IBAMR2d::@145eef247bfb46b6828c",
+					"index" : 45
+				},
+				{
+					"id" : "IBAMR3d::@145eef247bfb46b6828c",
+					"index" : 46
+				}
+			],
+			"paths" : 
+			[
+				"CMakeFiles/Export/lib/cmake/ibamr/IBAMRTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/ibamr",
+			"paths" : 
+			[
+				"cmake-build-debug/cmake/IBAMRConfig.cmake",
+				"cmake-build-debug/cmake/IBAMRConfigVersion.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	}
+}

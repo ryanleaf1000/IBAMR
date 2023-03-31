@@ -1,0 +1,73 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"SETUP_2D",
+			"SETUP_3D"
+		],
+		"files" : 
+		[
+			"tests/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 26,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 124,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 69,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 125,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 89,
+				"parent" : 4
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "tests-fe_mechanics_fe_mechanics_ex0_2d::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "tests-fe_mechanics_fe_mechanics_ex0_3d::@a44f0ac069e85531cdee"
+		}
+	],
+	"id" : "tests-fe_mechanics::@a44f0ac069e85531cdee",
+	"name" : "tests-fe_mechanics",
+	"paths" : 
+	{
+		"build" : "tests",
+		"source" : "tests"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

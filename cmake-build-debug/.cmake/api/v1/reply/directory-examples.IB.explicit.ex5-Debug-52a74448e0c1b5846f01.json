@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/IB/explicit/ex5",
+		"source" : "examples/IB/explicit/ex5"
+	}
+}

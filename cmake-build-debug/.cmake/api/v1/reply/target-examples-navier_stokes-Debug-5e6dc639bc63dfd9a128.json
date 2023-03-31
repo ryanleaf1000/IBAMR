@@ -1,0 +1,260 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/navier_stokes/ex0/CMakeLists.txt",
+			"examples/navier_stokes/ex1/CMakeLists.txt",
+			"examples/navier_stokes/ex2/CMakeLists.txt",
+			"examples/navier_stokes/ex3/CMakeLists.txt",
+			"examples/navier_stokes/ex4/CMakeLists.txt",
+			"examples/navier_stokes/ex5/CMakeLists.txt",
+			"examples/navier_stokes/ex6/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 104,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 14,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 31,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 5
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 14,
+				"parent" : 7
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 31,
+				"parent" : 7
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 10
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 48,
+				"parent" : 7
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 12
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 63,
+				"parent" : 7
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 14
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 14,
+				"parent" : 16
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 17
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 14,
+				"parent" : 19
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 20
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 14,
+				"parent" : 22
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 23
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 31,
+				"parent" : 22
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 25
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 6,
+				"line" : 14,
+				"parent" : 27
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 28
+			},
+			{
+				"file" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 14,
+				"parent" : 30
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 31
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "navier_stokes-ex0-2d::@1c4966d8486ff229d383"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "navier_stokes-ex0-3d::@1c4966d8486ff229d383"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "navier_stokes-ex1-2d::@49b636c485ce6ab7b750"
+		},
+		{
+			"backtrace" : 11,
+			"id" : "navier_stokes-ex1-3d::@49b636c485ce6ab7b750"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "navier_stokes-convergence-2d::@49b636c485ce6ab7b750"
+		},
+		{
+			"backtrace" : 15,
+			"id" : "navier_stokes-convergence-3d::@49b636c485ce6ab7b750"
+		},
+		{
+			"backtrace" : 18,
+			"id" : "navier_stokes-ex2::@0e9b7d036cd8c8164dcf"
+		},
+		{
+			"backtrace" : 21,
+			"id" : "navier_stokes-ex3::@9080d03015bb689171dc"
+		},
+		{
+			"backtrace" : 24,
+			"id" : "navier_stokes-ex4-2d::@95be2fc6386b74830f48"
+		},
+		{
+			"backtrace" : 26,
+			"id" : "navier_stokes-ex4-3d::@95be2fc6386b74830f48"
+		},
+		{
+			"backtrace" : 29,
+			"id" : "navier_stokes-ex5::@f06061feb07004cdf0d9"
+		},
+		{
+			"backtrace" : 32,
+			"id" : "navier_stokes-ex6::@b2f6d96196a8abd0f379"
+		}
+	],
+	"id" : "examples-navier_stokes::@714eac15f71a94114fdf",
+	"name" : "examples-navier_stokes",
+	"paths" : 
+	{
+		"build" : "examples",
+		"source" : "examples"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/ConstraintIB/moving_plate",
+		"source" : "examples/ConstraintIB/moving_plate"
+	}
+}

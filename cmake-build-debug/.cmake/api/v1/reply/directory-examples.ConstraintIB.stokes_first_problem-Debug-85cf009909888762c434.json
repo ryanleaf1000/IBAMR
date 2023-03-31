@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/ConstraintIB/stokes_first_problem",
+		"source" : "examples/ConstraintIB/stokes_first_problem"
+	}
+}

@@ -1,0 +1,26 @@
+Performing C++ SOURCE FILE Test LIBMESH_WITH_CXX17 failed with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_dad56/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_dad56.dir/build.make CMakeFiles/cmTC_dad56.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_dad56.dir/src.cxx.o
+/usr/local/bin/mpicxx -DLIBMESH_WITH_CXX17 -I/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_dad56.dir/src.cxx.o -MF CMakeFiles/cmTC_dad56.dir/src.cxx.o.d -o CMakeFiles/cmTC_dad56.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx:6:8: error: 
+      #error
+       ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTC_dad56.dir/build.make:79: CMakeFiles/cmTC_dad56.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+make: *** [Makefile:127: cmTC_dad56/fast] Error 2
+
+
+Source file was:
+
+      #include <libmesh/libmesh_config.h>
+      #ifdef LIBMESH_HAVE_CXX17
+      // OK
+      #else
+      #error
+      #endif
+      int main() {}
+      

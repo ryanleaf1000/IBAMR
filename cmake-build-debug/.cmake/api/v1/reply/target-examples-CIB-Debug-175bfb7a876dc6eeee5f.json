@@ -1,0 +1,140 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/CIB/ex0/CMakeLists.txt",
+			"examples/CIB/ex1/CMakeLists.txt",
+			"examples/CIB/ex2/CMakeLists.txt",
+			"examples/CIB/ex3/CMakeLists.txt",
+			"examples/CIB/ex4/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 104,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 14,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 3
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 14,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 6
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 14,
+				"parent" : 8
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 9
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 14,
+				"parent" : 11
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 12
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 14,
+				"parent" : 14
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 15
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "CIB-ex0::@58e3f8199a407fc254de"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "CIB-ex1::@78f7baf6118c296c9c0f"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "CIB-ex2::@a91b209c09bca1ff4a84"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "CIB-ex3::@b645cd8f1a4b538bdc16"
+		},
+		{
+			"backtrace" : 16,
+			"id" : "CIB-ex4::@2122df29aaf2641547be"
+		}
+	],
+	"id" : "examples-CIB::@714eac15f71a94114fdf",
+	"name" : "examples-CIB",
+	"paths" : 
+	{
+		"build" : "examples",
+		"source" : "examples"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

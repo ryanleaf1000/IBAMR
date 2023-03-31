@@ -1,0 +1,972 @@
+The system is: Darwin - 21.6.0 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/local/bin/mpicc 
+Build flags: -march=core2;-mtune=haswell;-mssse3;-ftree-vectorize;-fPIC;-fPIE;-fstack-protector-strong;-O2;-pipe;-isystem;/Users/qisun/anaconda3/include
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/local/bin/mpicxx 
+Build flags: -march=core2;-mtune=haswell;-mssse3;-ftree-vectorize;-fPIC;-fPIE;-fstack-protector-strong;-O2;-pipe;-stdlib=libc++;-fvisibility-inlines-hidden;-std=c++14;-fmessage-length=0;-isystem;/Users/qisun/anaconda3/include
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is Clang, found in "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdCXX/a.out"
+
+Compiling the Fortran compiler identification source file "CMakeFortranCompilerId.F" succeeded.
+Compiler: /usr/local/bin/gfortran 
+Build flags: 
+Id flags: -v 
+
+The output was:
+0
+Driving: /usr/local/bin/gfortran -v CMakeFortranCompilerId.F --sysroot=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -mmacosx-version-min=12.0.0 -asm_macosx_version_min=12.0 -nodefaultexport -l gfortran -shared-libgcc
+Using built-in specs.
+COLLECT_GCC=/usr/local/bin/gfortran
+COLLECT_LTO_WRAPPER=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/lto-wrapper
+Target: x86_64-apple-darwin21
+Configured with: ../configure --prefix=/usr/local/opt/gcc --libdir=/usr/local/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c,c++,objc,obj-c++,fortran --program-suffix=-12 --with-gmp=/usr/local/opt/gmp --with-mpfr=/usr/local/opt/mpfr --with-mpc=/usr/local/opt/libmpc --with-isl=/usr/local/opt/isl --with-zstd=/usr/local/opt/zstd --with-pkgversion='Homebrew GCC 12.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=x86_64-apple-darwin21 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 12.2.0 (Homebrew GCC 12.2.0) 
+COLLECT_GCC_OPTIONS='-v' '--sysroot=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-mmacosx-version-min=12.0.0' '-asm_macosx_version_min=12.0' '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'a-'
+ /usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/f951 CMakeFortranCompilerId.F -ffixed-form -cpp=/var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//ccApHD57.f90 -quiet -v -iprefix /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -D__DYNAMIC__ CMakeFortranCompilerId.F -fPIC -quiet -dumpdir a- -dumpbase CMakeFortranCompilerId.F -dumpbase-ext .F -mmacosx-version-min=12.0.0 -mtune=core2 -version -fintrinsic-modules-path /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude -o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//ccH7GBdE.s
+GNU Fortran (Homebrew GCC 12.2.0) version 12.2.0 (x86_64-apple-darwin21)
+	compiled by GNU C version 12.2.0, GMP version 6.2.1, MPFR version 4.1.0-p13, MPC version 1.2.1, isl version isl-0.25-GMP
+
+warning: MPFR header version 4.1.0-p13 differs from library version 4.2.0.
+warning: MPC header version 1.2.1 differs from library version 1.3.1.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../../../../x86_64-apple-darwin21/include"
+ignoring duplicate directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include"
+ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include"
+ignoring duplicate directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed"
+ignoring nonexistent directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../../../../x86_64-apple-darwin21/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude
+ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include
+ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed
+ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+End of search list.
+GNU Fortran2008 (Homebrew GCC 12.2.0) version 12.2.0 (x86_64-apple-darwin21)
+	compiled by GNU C version 12.2.0, GMP version 6.2.1, MPFR version 4.1.0-p13, MPC version 1.2.1, isl version isl-0.25-GMP
+
+warning: MPFR header version 4.1.0-p13 differs from library version 4.2.0.
+warning: MPC header version 1.2.1 differs from library version 1.3.1.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+COLLECT_GCC_OPTIONS='-v' '--sysroot=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-mmacosx-version-min=12.0.0'  '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'a-'
+ as -arch x86_64 -v -mmacosx-version-min=12.0 -mllvm -x86-pad-for-align=false -force_cpusubtype_ALL -o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc5YtlBD.o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//ccH7GBdE.s
+clang version 11.1.0
+Target: x86_64-apple-darwin21.6.0
+Thread model: posix
+InstalledDir: /Users/qisun/anaconda3/bin
+ "/Users/qisun/anaconda3/bin/clang-11" -cc1as -triple x86_64-apple-macosx12.0.0 -filetype obj -main-file-name ccH7GBdE.s -target-cpu penryn -fdebug-compilation-dir /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdFortran -dwarf-debug-producer "clang version 11.1.0" -dwarf-version=4 -mrelocation-model pic -mllvm -x86-pad-for-align=false -o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc5YtlBD.o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//ccH7GBdE.s
+Reading specs from /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../libgfortran.spec
+rename spec lib to liborig
+COLLECT_GCC_OPTIONS='-v' '--sysroot=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-mmacosx-version-min=12.0.0'  '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'a-'
+COMPILER_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/
+LIBRARY_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../
+COLLECT_GCC_OPTIONS='-v' '--sysroot=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-mmacosx-version-min=12.0.0'  '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'a.'
+ /usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/collect2 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/ -dynamic -arch x86_64 -macosx_version_min 12.0.0 -o a.out -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12 -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../.. /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc5YtlBD.o -lgfortran -lgcc_s.1.1 -lgcc -lquadmath -lgcc_s.1.1 -lgcc -lSystem -no_compact_unwind -rpath @loader_path -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12 -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current
+
+
+Compilation of the Fortran compiler identification source "CMakeFortranCompilerId.F" produced "a.out"
+
+The Fortran compiler identification is GNU, found in "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdFortran/a.out"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_8e6e8/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_8e6e8.dir/build.make CMakeFiles/cmTC_8e6e8.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o
+/usr/local/bin/mpicc   -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompilerABI.c
+clang version 11.1.0
+Target: x86_64-apple-darwin21.6.0
+Thread model: posix
+InstalledDir: /Users/qisun/anaconda3/bin
+clang-11: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+ (in-process)
+ "/Users/qisun/anaconda3/bin/clang-11" -cc1 -triple x86_64-apple-macosx12.0.0 -Wundef-prefix=TARGET_OS_OSX -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=all -fno-rounding-math -munwind-tables -target-sdk-version=13.1 -fcompatibility-qualified-id-block-type-checking -target-cpu core2 -target-feature +ssse3 -debugger-tuning=lldb -target-linker-version 530 -v -resource-dir /Users/qisun/anaconda3/lib/clang/11.1.0 -dependency-file CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -sys-header-deps -isystem /Users/qisun/anaconda3/include -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -I /usr/local/Cellar/open-mpi/4.1.5/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Users/qisun/anaconda3/lib/clang/11.1.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include -O2 -fdebug-compilation-dir /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -stack-protector 2 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fmax-type-align=16 -vectorize-loops -vectorize-slp -o CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -x c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompilerABI.c
+clang -cc1 version 11.1.0 based upon LLVM 11.1.0 default target x86_64-apple-darwin21.6.0
+ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include"
+ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/Cellar/open-mpi/4.1.5/include
+ /Users/qisun/anaconda3/include
+ /Users/qisun/anaconda3/lib/clang/11.1.0/include
+ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+End of search list.
+Linking C executable cmTC_8e6e8
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8e6e8.dir/link.txt --verbose=1
+/usr/local/bin/mpicc -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl,-v CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -o cmTC_8e6e8 
+clang version 11.1.0
+Target: x86_64-apple-darwin21.6.0
+Thread model: posix
+InstalledDir: /Users/qisun/anaconda3/bin
+ "/Users/qisun/anaconda3/bin/ld" -demangle -lto_library /Users/qisun/anaconda3/lib/libLTO.11.dylib -dynamic -arch x86_64 -platform_version macos 12.0.0 13.1 -pie -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o cmTC_8e6e8 -L/Users/qisun/anaconda3/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/opt/libevent/lib -search_paths_first -headerpad_max_install_names -pie -headerpad_max_install_names -dead_strip_dylibs -rpath /Users/qisun/anaconda3/lib -v CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -lmpi -lSystem /Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a
+@(#)PROGRAM:ld  PROJECT:ld64-530
+BUILD 16:51:25 Apr  5 2021
+configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em (tvOS)
+Library search paths:
+	/Users/qisun/anaconda3/lib
+	/usr/local/Cellar/open-mpi/4.1.5/lib
+	/usr/local/opt/libevent/lib
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib
+Framework search paths:
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/local/Cellar/open-mpi/4.1.5/include]
+    add: [/Users/qisun/anaconda3/include]
+    add: [/Users/qisun/anaconda3/lib/clang/11.1.0/include]
+    add: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  end of search list found
+  collapse include dir [/usr/local/Cellar/open-mpi/4.1.5/include] ==> [/usr/local/Cellar/open-mpi/4.1.5/include]
+  collapse include dir [/Users/qisun/anaconda3/include] ==> [/Users/qisun/anaconda3/include]
+  collapse include dir [/Users/qisun/anaconda3/lib/clang/11.1.0/include] ==> [/Users/qisun/anaconda3/lib/clang/11.1.0/include]
+  collapse include dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  implicit include dirs: [/usr/local/Cellar/open-mpi/4.1.5/include;/Users/qisun/anaconda3/include;/Users/qisun/anaconda3/lib/clang/11.1.0/include;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_8e6e8/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_8e6e8.dir/build.make CMakeFiles/cmTC_8e6e8.dir/build]
+  ignore line: [make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/local/bin/mpicc   -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang version 11.1.0]
+  ignore line: [Target: x86_64-apple-darwin21.6.0]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/qisun/anaconda3/bin]
+  ignore line: [clang-11: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+  ignore line: [ (in-process)]
+  ignore line: [ "/Users/qisun/anaconda3/bin/clang-11" -cc1 -triple x86_64-apple-macosx12.0.0 -Wundef-prefix=TARGET_OS_OSX -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=all -fno-rounding-math -munwind-tables -target-sdk-version=13.1 -fcompatibility-qualified-id-block-type-checking -target-cpu core2 -target-feature +ssse3 -debugger-tuning=lldb -target-linker-version 530 -v -resource-dir /Users/qisun/anaconda3/lib/clang/11.1.0 -dependency-file CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -sys-header-deps -isystem /Users/qisun/anaconda3/include -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -I /usr/local/Cellar/open-mpi/4.1.5/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Users/qisun/anaconda3/lib/clang/11.1.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include -O2 -fdebug-compilation-dir /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -stack-protector 2 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fmax-type-align=16 -vectorize-loops -vectorize-slp -o CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -x c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang -cc1 version 11.1.0 based upon LLVM 11.1.0 default target x86_64-apple-darwin21.6.0]
+  ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include"]
+  ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/local/Cellar/open-mpi/4.1.5/include]
+  ignore line: [ /Users/qisun/anaconda3/include]
+  ignore line: [ /Users/qisun/anaconda3/lib/clang/11.1.0/include]
+  ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)]
+  ignore line: [End of search list.]
+  ignore line: [Linking C executable cmTC_8e6e8]
+  ignore line: [/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8e6e8.dir/link.txt --verbose=1]
+  ignore line: [/usr/local/bin/mpicc -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -Wl -pie -Wl -headerpad_max_install_names -Wl -dead_strip_dylibs -Wl -rpath /Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl -v CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -o cmTC_8e6e8 ]
+  ignore line: [clang version 11.1.0]
+  ignore line: [Target: x86_64-apple-darwin21.6.0]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/qisun/anaconda3/bin]
+  link line: [ "/Users/qisun/anaconda3/bin/ld" -demangle -lto_library /Users/qisun/anaconda3/lib/libLTO.11.dylib -dynamic -arch x86_64 -platform_version macos 12.0.0 13.1 -pie -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o cmTC_8e6e8 -L/Users/qisun/anaconda3/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/opt/libevent/lib -search_paths_first -headerpad_max_install_names -pie -headerpad_max_install_names -dead_strip_dylibs -rpath /Users/qisun/anaconda3/lib -v CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o -lmpi -lSystem /Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a]
+    arg [/Users/qisun/anaconda3/bin/ld] ==> ignore
+    arg [-demangle] ==> ignore
+    arg [-lto_library] ==> ignore, skip following value
+    arg [/Users/qisun/anaconda3/lib/libLTO.11.dylib] ==> skip value of -lto_library
+    arg [-dynamic] ==> ignore
+    arg [-arch] ==> ignore
+    arg [x86_64] ==> ignore
+    arg [-platform_version] ==> ignore
+    arg [macos] ==> ignore
+    arg [12.0.0] ==> ignore
+    arg [13.1] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-syslibroot] ==> ignore
+    arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_8e6e8] ==> ignore
+    arg [-L/Users/qisun/anaconda3/lib] ==> dir [/Users/qisun/anaconda3/lib]
+    arg [-L/usr/local/Cellar/open-mpi/4.1.5/lib] ==> dir [/usr/local/Cellar/open-mpi/4.1.5/lib]
+    arg [-L/usr/local/opt/libevent/lib] ==> dir [/usr/local/opt/libevent/lib]
+    arg [-search_paths_first] ==> ignore
+    arg [-headerpad_max_install_names] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-headerpad_max_install_names] ==> ignore
+    arg [-dead_strip_dylibs] ==> ignore
+    arg [-rpath] ==> ignore
+    arg [/Users/qisun/anaconda3/lib] ==> ignore
+    arg [-v] ==> ignore
+    arg [CMakeFiles/cmTC_8e6e8.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lmpi] ==> lib [mpi]
+    arg [-lSystem] ==> lib [System]
+    arg [/Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a]
+  Library search paths: [;/Users/qisun/anaconda3/lib;/usr/local/Cellar/open-mpi/4.1.5/lib;/usr/local/opt/libevent/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  Framework search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/]
+  remove lib [System]
+  remove lib [/Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a]
+  collapse library dir [/Users/qisun/anaconda3/lib] ==> [/Users/qisun/anaconda3/lib]
+  collapse library dir [/usr/local/Cellar/open-mpi/4.1.5/lib] ==> [/usr/local/Cellar/open-mpi/4.1.5/lib]
+  collapse library dir [/usr/local/opt/libevent/lib] ==> [/usr/local/opt/libevent/lib]
+  collapse library dir [/Users/qisun/anaconda3/lib] ==> [/Users/qisun/anaconda3/lib]
+  collapse library dir [/usr/local/Cellar/open-mpi/4.1.5/lib] ==> [/usr/local/Cellar/open-mpi/4.1.5/lib]
+  collapse library dir [/usr/local/opt/libevent/lib] ==> [/usr/local/opt/libevent/lib]
+  collapse library dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  collapse framework dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks]
+  implicit libs: [mpi]
+  implicit objs: []
+  implicit dirs: [/Users/qisun/anaconda3/lib;/usr/local/Cellar/open-mpi/4.1.5/lib;/usr/local/opt/libevent/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  implicit fwks: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks]
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_41478/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_41478.dir/build.make CMakeFiles/cmTC_41478.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o
+/usr/local/bin/mpicxx   -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompilerABI.cpp
+clang version 11.1.0
+Target: x86_64-apple-darwin21.6.0
+Thread model: posix
+InstalledDir: /Users/qisun/anaconda3/bin
+clang-11: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+ (in-process)
+ "/Users/qisun/anaconda3/bin/clang-11" -cc1 -triple x86_64-apple-macosx12.0.0 -Wundef-prefix=TARGET_OS_OSX -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=all -fno-rounding-math -munwind-tables -target-sdk-version=13.1 -fcompatibility-qualified-id-block-type-checking -target-cpu core2 -target-feature +ssse3 -debugger-tuning=lldb -target-linker-version 530 -v -resource-dir /Users/qisun/anaconda3/lib/clang/11.1.0 -dependency-file CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isystem /Users/qisun/anaconda3/include -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -I /usr/local/Cellar/open-mpi/4.1.5/include -stdlib=libc++ -internal-isystem /Users/qisun/anaconda3/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Users/qisun/anaconda3/lib/clang/11.1.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include -O2 -std=c++14 -fdeprecated-macro -fdebug-compilation-dir /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fvisibility-inlines-hidden -stack-protector 2 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -fmax-type-align=16 -vectorize-loops -vectorize-slp -o CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompilerABI.cpp
+clang -cc1 version 11.1.0 based upon LLVM 11.1.0 default target x86_64-apple-darwin21.6.0
+ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include"
+ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/Cellar/open-mpi/4.1.5/include
+ /Users/qisun/anaconda3/include
+ /Users/qisun/anaconda3/bin/../include/c++/v1
+ /Users/qisun/anaconda3/lib/clang/11.1.0/include
+ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+End of search list.
+Linking CXX executable cmTC_41478
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_41478.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl,-v CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_41478 
+clang version 11.1.0
+Target: x86_64-apple-darwin21.6.0
+Thread model: posix
+InstalledDir: /Users/qisun/anaconda3/bin
+ "/Users/qisun/anaconda3/bin/ld" -demangle -lto_library /Users/qisun/anaconda3/lib/libLTO.11.dylib -dynamic -arch x86_64 -platform_version macos 12.0.0 13.1 -pie -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o cmTC_41478 -L/Users/qisun/anaconda3/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/opt/libevent/lib -search_paths_first -headerpad_max_install_names -pie -headerpad_max_install_names -dead_strip_dylibs -rpath /Users/qisun/anaconda3/lib -v CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -lmpi -lc++ -lSystem /Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a
+@(#)PROGRAM:ld  PROJECT:ld64-530
+BUILD 16:51:25 Apr  5 2021
+configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em (tvOS)
+Library search paths:
+	/Users/qisun/anaconda3/lib
+	/usr/local/Cellar/open-mpi/4.1.5/lib
+	/usr/local/opt/libevent/lib
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib
+Framework search paths:
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/local/Cellar/open-mpi/4.1.5/include]
+    add: [/Users/qisun/anaconda3/include]
+    add: [/Users/qisun/anaconda3/bin/../include/c++/v1]
+    add: [/Users/qisun/anaconda3/lib/clang/11.1.0/include]
+    add: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  end of search list found
+  collapse include dir [/usr/local/Cellar/open-mpi/4.1.5/include] ==> [/usr/local/Cellar/open-mpi/4.1.5/include]
+  collapse include dir [/Users/qisun/anaconda3/include] ==> [/Users/qisun/anaconda3/include]
+  collapse include dir [/Users/qisun/anaconda3/bin/../include/c++/v1] ==> [/Users/qisun/anaconda3/include/c++/v1]
+  collapse include dir [/Users/qisun/anaconda3/lib/clang/11.1.0/include] ==> [/Users/qisun/anaconda3/lib/clang/11.1.0/include]
+  collapse include dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  implicit include dirs: [/usr/local/Cellar/open-mpi/4.1.5/include;/Users/qisun/anaconda3/include;/Users/qisun/anaconda3/include/c++/v1;/Users/qisun/anaconda3/lib/clang/11.1.0/include;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_41478/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_41478.dir/build.make CMakeFiles/cmTC_41478.dir/build]
+  ignore line: [make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/local/bin/mpicxx   -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang version 11.1.0]
+  ignore line: [Target: x86_64-apple-darwin21.6.0]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/qisun/anaconda3/bin]
+  ignore line: [clang-11: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+  ignore line: [ (in-process)]
+  ignore line: [ "/Users/qisun/anaconda3/bin/clang-11" -cc1 -triple x86_64-apple-macosx12.0.0 -Wundef-prefix=TARGET_OS_OSX -Werror=undef-prefix -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=all -fno-rounding-math -munwind-tables -target-sdk-version=13.1 -fcompatibility-qualified-id-block-type-checking -target-cpu core2 -target-feature +ssse3 -debugger-tuning=lldb -target-linker-version 530 -v -resource-dir /Users/qisun/anaconda3/lib/clang/11.1.0 -dependency-file CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isystem /Users/qisun/anaconda3/include -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -I /usr/local/Cellar/open-mpi/4.1.5/include -stdlib=libc++ -internal-isystem /Users/qisun/anaconda3/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Users/qisun/anaconda3/lib/clang/11.1.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include -O2 -std=c++14 -fdeprecated-macro -fdebug-compilation-dir /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fvisibility-inlines-hidden -stack-protector 2 -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -fmax-type-align=16 -vectorize-loops -vectorize-slp -o CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang -cc1 version 11.1.0 based upon LLVM 11.1.0 default target x86_64-apple-darwin21.6.0]
+  ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include"]
+  ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/local/Cellar/open-mpi/4.1.5/include]
+  ignore line: [ /Users/qisun/anaconda3/include]
+  ignore line: [ /Users/qisun/anaconda3/bin/../include/c++/v1]
+  ignore line: [ /Users/qisun/anaconda3/lib/clang/11.1.0/include]
+  ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)]
+  ignore line: [End of search list.]
+  ignore line: [Linking CXX executable cmTC_41478]
+  ignore line: [/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_41478.dir/link.txt --verbose=1]
+  ignore line: [/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -Wl -pie -Wl -headerpad_max_install_names -Wl -dead_strip_dylibs -Wl -rpath /Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl -v CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_41478 ]
+  ignore line: [clang version 11.1.0]
+  ignore line: [Target: x86_64-apple-darwin21.6.0]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/qisun/anaconda3/bin]
+  link line: [ "/Users/qisun/anaconda3/bin/ld" -demangle -lto_library /Users/qisun/anaconda3/lib/libLTO.11.dylib -dynamic -arch x86_64 -platform_version macos 12.0.0 13.1 -pie -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o cmTC_41478 -L/Users/qisun/anaconda3/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/opt/libevent/lib -search_paths_first -headerpad_max_install_names -pie -headerpad_max_install_names -dead_strip_dylibs -rpath /Users/qisun/anaconda3/lib -v CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o -lmpi -lc++ -lSystem /Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a]
+    arg [/Users/qisun/anaconda3/bin/ld] ==> ignore
+    arg [-demangle] ==> ignore
+    arg [-lto_library] ==> ignore, skip following value
+    arg [/Users/qisun/anaconda3/lib/libLTO.11.dylib] ==> skip value of -lto_library
+    arg [-dynamic] ==> ignore
+    arg [-arch] ==> ignore
+    arg [x86_64] ==> ignore
+    arg [-platform_version] ==> ignore
+    arg [macos] ==> ignore
+    arg [12.0.0] ==> ignore
+    arg [13.1] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-syslibroot] ==> ignore
+    arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_41478] ==> ignore
+    arg [-L/Users/qisun/anaconda3/lib] ==> dir [/Users/qisun/anaconda3/lib]
+    arg [-L/usr/local/Cellar/open-mpi/4.1.5/lib] ==> dir [/usr/local/Cellar/open-mpi/4.1.5/lib]
+    arg [-L/usr/local/opt/libevent/lib] ==> dir [/usr/local/opt/libevent/lib]
+    arg [-search_paths_first] ==> ignore
+    arg [-headerpad_max_install_names] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-headerpad_max_install_names] ==> ignore
+    arg [-dead_strip_dylibs] ==> ignore
+    arg [-rpath] ==> ignore
+    arg [/Users/qisun/anaconda3/lib] ==> ignore
+    arg [-v] ==> ignore
+    arg [CMakeFiles/cmTC_41478.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lmpi] ==> lib [mpi]
+    arg [-lc++] ==> lib [c++]
+    arg [-lSystem] ==> lib [System]
+    arg [/Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a]
+  Library search paths: [;/Users/qisun/anaconda3/lib;/usr/local/Cellar/open-mpi/4.1.5/lib;/usr/local/opt/libevent/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  Framework search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/]
+  remove lib [System]
+  remove lib [/Users/qisun/anaconda3/lib/clang/11.1.0/lib/darwin/libclang_rt.osx.a]
+  collapse library dir [/Users/qisun/anaconda3/lib] ==> [/Users/qisun/anaconda3/lib]
+  collapse library dir [/usr/local/Cellar/open-mpi/4.1.5/lib] ==> [/usr/local/Cellar/open-mpi/4.1.5/lib]
+  collapse library dir [/usr/local/opt/libevent/lib] ==> [/usr/local/opt/libevent/lib]
+  collapse library dir [/Users/qisun/anaconda3/lib] ==> [/Users/qisun/anaconda3/lib]
+  collapse library dir [/usr/local/Cellar/open-mpi/4.1.5/lib] ==> [/usr/local/Cellar/open-mpi/4.1.5/lib]
+  collapse library dir [/usr/local/opt/libevent/lib] ==> [/usr/local/opt/libevent/lib]
+  collapse library dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  collapse framework dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks]
+  implicit libs: [mpi;c++]
+  implicit objs: []
+  implicit dirs: [/Users/qisun/anaconda3/lib;/usr/local/Cellar/open-mpi/4.1.5/lib;/usr/local/opt/libevent/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  implicit fwks: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks]
+
+
+Detecting Fortran compiler ABI info compiled with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_73078/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_73078.dir/build.make CMakeFiles/cmTC_73078.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building Fortran object CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o
+/usr/local/bin/gfortran   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk   -v -Wl,-v -c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFortranCompilerABI.F90 -o CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o
+Using built-in specs.
+COLLECT_GCC=/usr/local/bin/gfortran
+Target: x86_64-apple-darwin21
+Configured with: ../configure --prefix=/usr/local/opt/gcc --libdir=/usr/local/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c,c++,objc,obj-c++,fortran --program-suffix=-12 --with-gmp=/usr/local/opt/gmp --with-mpfr=/usr/local/opt/mpfr --with-mpc=/usr/local/opt/libmpc --with-isl=/usr/local/opt/isl --with-zstd=/usr/local/opt/zstd --with-pkgversion='Homebrew GCC 12.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=x86_64-apple-darwin21 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 12.2.0 (Homebrew GCC 12.2.0) 
+COLLECT_GCC_OPTIONS='-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=12.0.0' '-asm_macosx_version_min=12.0' '-nodefaultexport' '-mtune=core2' '-dumpdir' 'CMakeFiles/cmTC_73078.dir/'
+ /usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/f951 /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFortranCompilerABI.F90 -cpp=/var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//ccYb9Kl3.f90 -quiet -v -iprefix /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/ -D__DYNAMIC__ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFortranCompilerABI.F90 -fPIC -quiet -dumpdir CMakeFiles/cmTC_73078.dir/ -dumpbase CMakeFortranCompilerABI.F90.F90 -dumpbase-ext .F90 -mmacosx-version-min=12.0.0 -mtune=core2 -version -fintrinsic-modules-path /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude -o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc0HGHgm.s
+GNU Fortran (Homebrew GCC 12.2.0) version 12.2.0 (x86_64-apple-darwin21)
+	compiled by GNU C version 12.2.0, GMP version 6.2.1, MPFR version 4.1.0-p13, MPC version 1.2.1, isl version isl-0.25-GMP
+
+warning: MPFR header version 4.1.0-p13 differs from library version 4.2.0.
+warning: MPC header version 1.2.1 differs from library version 1.3.1.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../../../../x86_64-apple-darwin21/include"
+ignoring duplicate directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include"
+ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include"
+ignoring duplicate directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed"
+ignoring nonexistent directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../../../../x86_64-apple-darwin21/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude
+ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include
+ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed
+ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+End of search list.
+GNU Fortran2008 (Homebrew GCC 12.2.0) version 12.2.0 (x86_64-apple-darwin21)
+	compiled by GNU C version 12.2.0, GMP version 6.2.1, MPFR version 4.1.0-p13, MPC version 1.2.1, isl version isl-0.25-GMP
+
+warning: MPFR header version 4.1.0-p13 differs from library version 4.2.0.
+warning: MPC header version 1.2.1 differs from library version 1.3.1.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+COLLECT_GCC_OPTIONS='-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=12.0.0'  '-nodefaultexport' '-mtune=core2' '-dumpdir' 'CMakeFiles/cmTC_73078.dir/'
+ as -arch x86_64 -v -mmacosx-version-min=12.0 -mllvm -x86-pad-for-align=false -force_cpusubtype_ALL -o CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc0HGHgm.s
+clang version 11.1.0
+Target: x86_64-apple-darwin21.6.0
+Thread model: posix
+InstalledDir: /Users/qisun/anaconda3/bin
+ "/Users/qisun/anaconda3/bin/clang-11" -cc1as -triple x86_64-apple-macosx12.0.0 -filetype obj -main-file-name cc0HGHgm.s -target-cpu penryn -fdebug-compilation-dir /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp -dwarf-debug-producer "clang version 11.1.0" -dwarf-version=4 -mrelocation-model pic -mllvm -x86-pad-for-align=false -o CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc0HGHgm.s
+COMPILER_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/
+LIBRARY_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../
+COLLECT_GCC_OPTIONS='-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=12.0.0'  '-nodefaultexport' '-mtune=core2' '-dumpdir' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.'
+Linking Fortran executable cmTC_73078
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_73078.dir/link.txt --verbose=1
+/usr/local/bin/gfortran -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl,-v  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o -o cmTC_73078 
+Driving: /usr/local/bin/gfortran -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl,-v -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o -o cmTC_73078 -mmacosx-version-min=12.0.0 -asm_macosx_version_min=12.0 -nodefaultexport -l gfortran -shared-libgcc
+Using built-in specs.
+COLLECT_GCC=/usr/local/bin/gfortran
+COLLECT_LTO_WRAPPER=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/lto-wrapper
+Target: x86_64-apple-darwin21
+Configured with: ../configure --prefix=/usr/local/opt/gcc --libdir=/usr/local/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c,c++,objc,obj-c++,fortran --program-suffix=-12 --with-gmp=/usr/local/opt/gmp --with-mpfr=/usr/local/opt/mpfr --with-mpc=/usr/local/opt/libmpc --with-isl=/usr/local/opt/isl --with-zstd=/usr/local/opt/zstd --with-pkgversion='Homebrew GCC 12.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=x86_64-apple-darwin21 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 12.2.0 (Homebrew GCC 12.2.0) 
+Reading specs from /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../libgfortran.spec
+rename spec lib to liborig
+COLLECT_GCC_OPTIONS='-L/Users/qisun/anaconda3/lib' '-v' '-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-o' 'cmTC_73078' '-mmacosx-version-min=12.0.0' '-asm_macosx_version_min=12.0' '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'cmTC_73078-'
+COMPILER_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/
+LIBRARY_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../
+COLLECT_GCC_OPTIONS='-L/Users/qisun/anaconda3/lib' '-v' '-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-o' 'cmTC_73078' '-mmacosx-version-min=12.0.0' '-asm_macosx_version_min=12.0' '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'cmTC_73078.'
+ /usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/collect2 -dynamic -arch x86_64 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -macosx_version_min 12.0.0 -o cmTC_73078 -L/Users/qisun/anaconda3/lib -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12 -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../.. -pie -headerpad_max_install_names -dead_strip_dylibs -rpath /Users/qisun/anaconda3/lib -v CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o -lgfortran -lgcc_s.1.1 -lgcc -lquadmath -lgcc_s.1.1 -lgcc -lSystem -no_compact_unwind -rpath @loader_path -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12 -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current
+collect2 version 12.2.0
+/Users/qisun/anaconda3/bin/ld -dynamic -arch x86_64 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -macosx_version_min 12.0.0 -o cmTC_73078 -L/Users/qisun/anaconda3/lib -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12 -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../.. -pie -headerpad_max_install_names -dead_strip_dylibs -rpath /Users/qisun/anaconda3/lib -v CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o -lgfortran -lgcc_s.1.1 -lgcc -lquadmath -lgcc_s.1.1 -lgcc -lSystem -no_compact_unwind -rpath @loader_path -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12 -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current
+@(#)PROGRAM:ld  PROJECT:ld64-530
+BUILD 16:51:25 Apr  5 2021
+configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em (tvOS)
+Library search paths:
+	/Users/qisun/anaconda3/lib
+	/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12
+	/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc
+	/usr/local/Cellar/gcc/12.2.0/lib/gcc/current
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib
+Framework search paths:
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+
+Parsed Fortran implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude]
+    add: [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include]
+    add: [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed]
+    add: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  end of search list found
+  collapse include dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude]
+  collapse include dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/include]
+  collapse include dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed]
+  collapse include dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  implicit include dirs: [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/include;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+
+
+Parsed Fortran implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_73078/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_73078.dir/build.make CMakeFiles/cmTC_73078.dir/build]
+  ignore line: [make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: [Building Fortran object CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o]
+  ignore line: [/usr/local/bin/gfortran   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk   -v -Wl -v -c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFortranCompilerABI.F90 -o CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/local/bin/gfortran]
+  ignore line: [Target: x86_64-apple-darwin21]
+  ignore line: [Configured with: ../configure --prefix=/usr/local/opt/gcc --libdir=/usr/local/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c c++ objc obj-c++ fortran --program-suffix=-12 --with-gmp=/usr/local/opt/gmp --with-mpfr=/usr/local/opt/mpfr --with-mpc=/usr/local/opt/libmpc --with-isl=/usr/local/opt/isl --with-zstd=/usr/local/opt/zstd --with-pkgversion='Homebrew GCC 12.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=x86_64-apple-darwin21 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk]
+  ignore line: [Thread model: posix]
+  ignore line: [Supported LTO compression algorithms: zlib zstd]
+  ignore line: [gcc version 12.2.0 (Homebrew GCC 12.2.0) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=12.0.0' '-asm_macosx_version_min=12.0' '-nodefaultexport' '-mtune=core2' '-dumpdir' 'CMakeFiles/cmTC_73078.dir/']
+  ignore line: [ /usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/f951 /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFortranCompilerABI.F90 -cpp=/var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//ccYb9Kl3.f90 -quiet -v -iprefix /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/ -D__DYNAMIC__ -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFortranCompilerABI.F90 -fPIC -quiet -dumpdir CMakeFiles/cmTC_73078.dir/ -dumpbase CMakeFortranCompilerABI.F90.F90 -dumpbase-ext .F90 -mmacosx-version-min=12.0.0 -mtune=core2 -version -fintrinsic-modules-path /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude -o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc0HGHgm.s]
+  ignore line: [GNU Fortran (Homebrew GCC 12.2.0) version 12.2.0 (x86_64-apple-darwin21)]
+  ignore line: [	compiled by GNU C version 12.2.0  GMP version 6.2.1  MPFR version 4.1.0-p13  MPC version 1.2.1  isl version isl-0.25-GMP]
+  ignore line: []
+  ignore line: [warning: MPFR header version 4.1.0-p13 differs from library version 4.2.0.]
+  ignore line: [warning: MPC header version 1.2.1 differs from library version 1.3.1.]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../../../../x86_64-apple-darwin21/include"]
+  ignore line: [ignoring duplicate directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include"]
+  ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/local/include"]
+  ignore line: [ignoring duplicate directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/../../../../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../../../../x86_64-apple-darwin21/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude]
+  ignore line: [ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include]
+  ignore line: [ /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed]
+  ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU Fortran2008 (Homebrew GCC 12.2.0) version 12.2.0 (x86_64-apple-darwin21)]
+  ignore line: [	compiled by GNU C version 12.2.0  GMP version 6.2.1  MPFR version 4.1.0-p13  MPC version 1.2.1  isl version isl-0.25-GMP]
+  ignore line: []
+  ignore line: [warning: MPFR header version 4.1.0-p13 differs from library version 4.2.0.]
+  ignore line: [warning: MPC header version 1.2.1 differs from library version 1.3.1.]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [COLLECT_GCC_OPTIONS='-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=12.0.0'  '-nodefaultexport' '-mtune=core2' '-dumpdir' 'CMakeFiles/cmTC_73078.dir/']
+  ignore line: [ as -arch x86_64 -v -mmacosx-version-min=12.0 -mllvm -x86-pad-for-align=false -force_cpusubtype_ALL -o CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc0HGHgm.s]
+  ignore line: [clang version 11.1.0]
+  ignore line: [Target: x86_64-apple-darwin21.6.0]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/qisun/anaconda3/bin]
+  ignore line: [ "/Users/qisun/anaconda3/bin/clang-11" -cc1as -triple x86_64-apple-macosx12.0.0 -filetype obj -main-file-name cc0HGHgm.s -target-cpu penryn -fdebug-compilation-dir /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp -dwarf-debug-producer "clang version 11.1.0" -dwarf-version=4 -mrelocation-model pic -mllvm -x86-pad-for-align=false -o CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o /var/folders/1t/2jwyg3p11p33rld4z0s14fqc0000gn/T//cc0HGHgm.s]
+  ignore line: [COMPILER_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/]
+  ignore line: [LIBRARY_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-v' '-c' '-o' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o' '-mmacosx-version-min=12.0.0'  '-nodefaultexport' '-mtune=core2' '-dumpdir' 'CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.']
+  ignore line: [Linking Fortran executable cmTC_73078]
+  ignore line: [/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_73078.dir/link.txt --verbose=1]
+  ignore line: [/usr/local/bin/gfortran -Wl -pie -Wl -headerpad_max_install_names -Wl -dead_strip_dylibs -Wl -rpath /Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl -v  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o -o cmTC_73078 ]
+  ignore line: [Driving: /usr/local/bin/gfortran -Wl -pie -Wl -headerpad_max_install_names -Wl -dead_strip_dylibs -Wl -rpath /Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -v -Wl -v -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o -o cmTC_73078 -mmacosx-version-min=12.0.0 -asm_macosx_version_min=12.0 -nodefaultexport -l gfortran -shared-libgcc]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/local/bin/gfortran]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/lto-wrapper]
+  ignore line: [Target: x86_64-apple-darwin21]
+  ignore line: [Configured with: ../configure --prefix=/usr/local/opt/gcc --libdir=/usr/local/opt/gcc/lib/gcc/current --disable-nls --enable-checking=release --with-gcc-major-version-only --enable-languages=c c++ objc obj-c++ fortran --program-suffix=-12 --with-gmp=/usr/local/opt/gmp --with-mpfr=/usr/local/opt/mpfr --with-mpc=/usr/local/opt/libmpc --with-isl=/usr/local/opt/isl --with-zstd=/usr/local/opt/zstd --with-pkgversion='Homebrew GCC 12.2.0' --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --with-system-zlib --build=x86_64-apple-darwin21 --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk]
+  ignore line: [Thread model: posix]
+  ignore line: [Supported LTO compression algorithms: zlib zstd]
+  ignore line: [gcc version 12.2.0 (Homebrew GCC 12.2.0) ]
+  ignore line: [Reading specs from /usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../libgfortran.spec]
+  ignore line: [rename spec lib to liborig]
+  ignore line: [COLLECT_GCC_OPTIONS='-L/Users/qisun/anaconda3/lib' '-v' '-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-o' 'cmTC_73078' '-mmacosx-version-min=12.0.0' '-asm_macosx_version_min=12.0' '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'cmTC_73078-']
+  ignore line: [COMPILER_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/]
+  ignore line: [LIBRARY_PATH=/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/:/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../../]
+  ignore line: [COLLECT_GCC_OPTIONS='-L/Users/qisun/anaconda3/lib' '-v' '-isysroot' '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk' '-o' 'cmTC_73078' '-mmacosx-version-min=12.0.0' '-asm_macosx_version_min=12.0' '-nodefaultexport' '-shared-libgcc' '-mtune=core2' '-dumpdir' 'cmTC_73078.']
+  link line: [ /usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/collect2 -dynamic -arch x86_64 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -macosx_version_min 12.0.0 -o cmTC_73078 -L/Users/qisun/anaconda3/lib -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12 -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc -L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../.. -pie -headerpad_max_install_names -dead_strip_dylibs -rpath /Users/qisun/anaconda3/lib -v CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o -lgfortran -lgcc_s.1.1 -lgcc -lquadmath -lgcc_s.1.1 -lgcc -lSystem -no_compact_unwind -rpath @loader_path -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12 -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc -rpath /usr/local/Cellar/gcc/12.2.0/lib/gcc/current]
+    arg [/usr/local/Cellar/gcc/12.2.0/bin/../libexec/gcc/x86_64-apple-darwin21/12/collect2] ==> ignore
+    arg [-dynamic] ==> ignore
+    arg [-arch] ==> ignore
+    arg [x86_64] ==> ignore
+    arg [-syslibroot] ==> ignore
+    arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk] ==> ignore
+    arg [-macosx_version_min] ==> ignore
+    arg [12.0.0] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_73078] ==> ignore
+    arg [-L/Users/qisun/anaconda3/lib] ==> dir [/Users/qisun/anaconda3/lib]
+    arg [-L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12] ==> dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12]
+    arg [-L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc] ==> dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc]
+    arg [-L/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../..] ==> dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../..]
+    arg [-pie] ==> ignore
+    arg [-headerpad_max_install_names] ==> ignore
+    arg [-dead_strip_dylibs] ==> ignore
+    arg [-rpath] ==> ignore
+    arg [/Users/qisun/anaconda3/lib] ==> ignore
+    arg [-v] ==> ignore
+    arg [CMakeFiles/cmTC_73078.dir/CMakeFortranCompilerABI.F90.o] ==> ignore
+    arg [-lgfortran] ==> lib [gfortran]
+    arg [-lgcc_s.1.1] ==> lib [gcc_s.1.1]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lquadmath] ==> lib [quadmath]
+    arg [-lgcc_s.1.1] ==> lib [gcc_s.1.1]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lSystem] ==> lib [System]
+    arg [-no_compact_unwind] ==> ignore
+    arg [-rpath] ==> ignore
+    arg [@loader_path] ==> ignore
+    arg [-rpath] ==> ignore
+    arg [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12] ==> ignore
+    arg [-rpath] ==> ignore
+    arg [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc] ==> ignore
+    arg [-rpath] ==> ignore
+    arg [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current] ==> ignore
+  Library search paths: [;/Users/qisun/anaconda3/lib;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  Framework search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/]
+  remove lib [System]
+  collapse library dir [/Users/qisun/anaconda3/lib] ==> [/Users/qisun/anaconda3/lib]
+  collapse library dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12]
+  collapse library dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc]
+  collapse library dir [/usr/local/Cellar/gcc/12.2.0/bin/../lib/gcc/current/gcc/x86_64-apple-darwin21/12/../../..] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current]
+  collapse library dir [/Users/qisun/anaconda3/lib] ==> [/Users/qisun/anaconda3/lib]
+  collapse library dir [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12]
+  collapse library dir [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc]
+  collapse library dir [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current] ==> [/usr/local/Cellar/gcc/12.2.0/lib/gcc/current]
+  collapse library dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  collapse framework dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks]
+  implicit libs: [gfortran;gcc_s.1.1;gcc;quadmath;gcc_s.1.1;gcc]
+  implicit objs: []
+  implicit dirs: [/Users/qisun/anaconda3/lib;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc;/usr/local/Cellar/gcc/12.2.0/lib/gcc/current;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib]
+  implicit fwks: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks]
+
+
+Performing C++ SOURCE FILE Test IBTK_HAVE_PRAGMA_KEYWORD succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_fc7bf/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_fc7bf.dir/build.make CMakeFiles/cmTC_fc7bf.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_fc7bf.dir/src.cxx.o
+/usr/local/bin/mpicxx -DIBTK_HAVE_PRAGMA_KEYWORD  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -MD -MT CMakeFiles/cmTC_fc7bf.dir/src.cxx.o -MF CMakeFiles/cmTC_fc7bf.dir/src.cxx.o.d -o CMakeFiles/cmTC_fc7bf.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_fc7bf
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fc7bf.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_fc7bf.dir/src.cxx.o -o cmTC_fc7bf 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+  _Pragma("GCC diagnostic push")
+  _Pragma("GCC diagnostic ignored \"-Wunknown-pragmas\"")
+  _Pragma("GCC diagnostic ignored \"-Wpragmas\"")
+  _Pragma("GCC diagnostic ignored \"-Wextra\"")
+  _Pragma("GCC diagnostic pop")
+  int main() {}
+  
+Performing C++ SOURCE FILE Test CXX_COMPILER_SUPPORTS_MPI succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_9cf73/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_9cf73.dir/build.make CMakeFiles/cmTC_9cf73.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_9cf73.dir/src.cxx.o
+/usr/local/bin/mpicxx -DCXX_COMPILER_SUPPORTS_MPI  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_9cf73.dir/src.cxx.o -MF CMakeFiles/cmTC_9cf73.dir/src.cxx.o.d -o CMakeFiles/cmTC_9cf73.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_9cf73
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9cf73.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_9cf73.dir/src.cxx.o -o cmTC_9cf73 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+  #include <mpi.h>
+  int main(int argc, char **argv)
+  {
+    MPI_Init(&argc, &argv);
+    MPI_Finalize();
+  }
+  
+Performing C++ SOURCE FILE Test BOOST_WITH_MULTI_ARRAY succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_61867/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_61867.dir/build.make CMakeFiles/cmTC_61867.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_61867.dir/src.cxx.o
+/usr/local/bin/mpicxx -DBOOST_WITH_MULTI_ARRAY -I/usr/local/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -std=c++11 -MD -MT CMakeFiles/cmTC_61867.dir/src.cxx.o -MF CMakeFiles/cmTC_61867.dir/src.cxx.o.d -o CMakeFiles/cmTC_61867.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_61867
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_61867.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_61867.dir/src.cxx.o -o cmTC_61867 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+  #include <boost/multi_array.hpp>
+  int main() {}
+  
+Performing C++ SOURCE FILE Test BOOST_WITH_ROUND succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_3abd2/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_3abd2.dir/build.make CMakeFiles/cmTC_3abd2.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_3abd2.dir/src.cxx.o
+/usr/local/bin/mpicxx -DBOOST_WITH_ROUND -I/usr/local/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -std=c++11 -MD -MT CMakeFiles/cmTC_3abd2.dir/src.cxx.o -MF CMakeFiles/cmTC_3abd2.dir/src.cxx.o.d -o CMakeFiles/cmTC_3abd2.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+In file included from /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx:2:
+In file included from /usr/local/include/boost/math/special_functions/round.hpp:13:
+/usr/local/include/boost/math/tools/config.hpp:23:6: warning: "The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)" [-W#warnings]
+#    warning "The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)"
+     ^
+1 warning generated.
+Linking CXX executable cmTC_3abd2
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3abd2.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_3abd2.dir/src.cxx.o -o cmTC_3abd2 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+  #include <boost/math/special_functions/round.hpp>
+  int main() {}
+  
+Performing C++ SOURCE FILE Test BOOST_WITH_ROOTS succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_c04a1/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_c04a1.dir/build.make CMakeFiles/cmTC_c04a1.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_c04a1.dir/src.cxx.o
+/usr/local/bin/mpicxx -DBOOST_WITH_ROOTS -I/usr/local/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -std=c++11 -MD -MT CMakeFiles/cmTC_c04a1.dir/src.cxx.o -MF CMakeFiles/cmTC_c04a1.dir/src.cxx.o.d -o CMakeFiles/cmTC_c04a1.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+In file included from /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx:2:
+In file included from /usr/local/include/boost/math/tools/roots.hpp:19:
+/usr/local/include/boost/math/tools/config.hpp:23:6: warning: "The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)" [-W#warnings]
+#    warning "The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)"
+     ^
+1 warning generated.
+Linking CXX executable cmTC_c04a1
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c04a1.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_c04a1.dir/src.cxx.o -o cmTC_c04a1 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+  #include <boost/math/tools/roots.hpp>
+  int main() {}
+  
+Performing C++ SOURCE FILE Test SAMRAI_WITH_MPI succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_d860a/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_d860a.dir/build.make CMakeFiles/cmTC_d860a.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_d860a.dir/src.cxx.o
+/usr/local/bin/mpicxx -DSAMRAI_WITH_MPI -I/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_d860a.dir/src.cxx.o -MF CMakeFiles/cmTC_d860a.dir/src.cxx.o.d -o CMakeFiles/cmTC_d860a.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_d860a
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d860a.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_d860a.dir/src.cxx.o -o cmTC_d860a 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+  #include <SAMRAI_config.h>
+  #ifndef HAVE_MPI
+  #error
+  #endif
+  int main() {}
+  
+Performing C++ SOURCE FILE Test LIBMESH_WITH_CXX14 succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_65388/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_65388.dir/build.make CMakeFiles/cmTC_65388.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_65388.dir/src.cxx.o
+/usr/local/bin/mpicxx -DLIBMESH_WITH_CXX14 -I/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_65388.dir/src.cxx.o -MF CMakeFiles/cmTC_65388.dir/src.cxx.o.d -o CMakeFiles/cmTC_65388.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_65388
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_65388.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_65388.dir/src.cxx.o -o cmTC_65388 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+      #include <libmesh/libmesh_config.h>
+      // older versions do not define LIBMESH_HAVE_CXX14
+      #ifdef LIBMESH_HAVE_CXX14_MAKE_UNIQUE
+      // OK
+      #else
+      #error
+      #endif
+      int main() {}
+      
+Performing C++ SOURCE FILE Test LIBMESH_WITH_PETSC succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_cd074/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_cd074.dir/build.make CMakeFiles/cmTC_cd074.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_cd074.dir/src.cxx.o
+/usr/local/bin/mpicxx -DLIBMESH_WITH_PETSC -I/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_cd074.dir/src.cxx.o -MF CMakeFiles/cmTC_cd074.dir/src.cxx.o.d -o CMakeFiles/cmTC_cd074.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_cd074
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd074.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_cd074.dir/src.cxx.o -o cmTC_cd074 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+      #include <libmesh/libmesh_config.h>
+      #ifdef LIBMESH_HAVE_PETSC
+      // OK
+      #else
+      #error
+      #endif
+      int main() {}
+      
+Performing C++ SOURCE FILE Test LIBMESH_WITH_SAME_PETSC succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_48c29/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_48c29.dir/build.make CMakeFiles/cmTC_48c29.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_48c29.dir/src.cxx.o
+/usr/local/bin/mpicxx -DLIBMESH_WITH_SAME_PETSC -I/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_48c29.dir/src.cxx.o -MF CMakeFiles/cmTC_48c29.dir/src.cxx.o.d -o CMakeFiles/cmTC_48c29.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_48c29
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_48c29.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_48c29.dir/src.cxx.o -o cmTC_48c29 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+      #include <libmesh/libmesh_config.h>
+      #if LIBMESH_DETECTED_PETSC_VERSION_MAJOR != 3
+      #error
+      #endif
+      #if LIBMESH_DETECTED_PETSC_VERSION_MINOR != 13
+      #error
+      #endif
+      #if LIBMESH_DETECTED_PETSC_VERSION_SUBMINOR != 4
+      #error
+      #endif
+      int main() {}
+      
+Performing C++ SOURCE FILE Test LIBMESH_WITH_MPI succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_e501c/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_e501c.dir/build.make CMakeFiles/cmTC_e501c.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_e501c.dir/src.cxx.o
+/usr/local/bin/mpicxx -DLIBMESH_WITH_MPI -I/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_e501c.dir/src.cxx.o -MF CMakeFiles/cmTC_e501c.dir/src.cxx.o.d -o CMakeFiles/cmTC_e501c.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_e501c
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e501c.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_e501c.dir/src.cxx.o -o cmTC_e501c 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+      #include <libmesh/libmesh_config.h>
+      #ifdef LIBMESH_HAVE_MPI
+      // OK
+      #else
+      #error
+      #endif
+      int main() {}
+      
+Performing C++ SOURCE FILE Test LIBMESH_WITH_XDR succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_f4d87/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_f4d87.dir/build.make CMakeFiles/cmTC_f4d87.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_f4d87.dir/src.cxx.o
+/usr/local/bin/mpicxx -DLIBMESH_WITH_XDR -I/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_f4d87.dir/src.cxx.o -MF CMakeFiles/cmTC_f4d87.dir/src.cxx.o.d -o CMakeFiles/cmTC_f4d87.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_f4d87
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f4d87.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_f4d87.dir/src.cxx.o -o cmTC_f4d87 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+
+      #include <libmesh/libmesh_config.h>
+      #ifdef LIBMESH_HAVE_XDR
+      // OK
+      #else
+      #error
+      #endif
+      int main() {}
+      
+Performing C++ SOURCE FILE Test PETSC_SAME_MPI_COMPILE_TEST succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_ed585/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_ed585.dir/build.make CMakeFiles/cmTC_ed585.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_ed585.dir/src.cxx.o
+/usr/local/bin/mpicxx -DPETSC_SAME_MPI_COMPILE_TEST -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_ed585.dir/src.cxx.o -MF CMakeFiles/cmTC_ed585.dir/src.cxx.o.d -o CMakeFiles/cmTC_ed585.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_ed585
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ed585.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_ed585.dir/src.cxx.o -o cmTC_ed585  /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -Wl,-rpath,/usr/local/opt/libevent/lib -L/usr/local/opt/libevent/lib -Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -lpetsc -lHYPRE -llapack -lblas -lsilo -lc++ -ldl -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm -lc++ -ldl /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -Wl,-rpath,/usr/local/opt/libevent/lib -L/usr/local/opt/libevent/lib -Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -lpetsc -lHYPRE -llapack -lblas -lsilo -lc++ -ldl -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm -lc++ -ldl /usr/local/lib/libmpi.dylib /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib -lpetsc -lHYPRE -llapack -lblas -lsilo -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib -lpetsc -lHYPRE -llapack -lblas -lsilo -lc++ -ldl -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm /usr/local/lib/libmpi.dylib 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+#include <mpi.h>
+#include <petscvec.h>
+
+int main(int argc, char **argv)
+{
+    PetscInitialize(&argc, &argv, NULL, NULL);
+
+    Vec vec;
+    double values[2] = {42.0, 42.0};
+    VecCreateGhostWithArray(MPI_COMM_WORLD, 2, PETSC_DECIDE, 0, NULL,
+                            values, &vec);
+    VecDestroy(&vec);
+
+    PetscFinalize();
+}
+Performing C++ SOURCE FILE Test HDF5_SAME_MPI_COMPILE_TEST succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_772c2/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_772c2.dir/build.make CMakeFiles/cmTC_772c2.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_772c2.dir/src.cxx.o
+/usr/local/bin/mpicxx -DHDF5_SAME_MPI_COMPILE_TEST -I/usr/local/Cellar/hdf5/1.12.2_2/include -I/usr/local/opt/libaec/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_772c2.dir/src.cxx.o -MF CMakeFiles/cmTC_772c2.dir/src.cxx.o.d -o CMakeFiles/cmTC_772c2.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_772c2
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_772c2.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_772c2.dir/src.cxx.o -o cmTC_772c2  /usr/local/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib /usr/local/lib/libsz.dylib /Users/qisun/anaconda3/lib/libz.dylib /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libdl.tbd /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libm.tbd /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -Wl,-rpath,/usr/local/opt/libevent/lib -L/usr/local/opt/libevent/lib -Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -lpetsc -lHYPRE -llapack -lblas -lsilo -lc++ -ldl -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm -lc++ -ldl /usr/local/lib/libmpi.dylib -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm /usr/local/lib/libmpi.dylib 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+#include <hdf5.h>
+#include <mpi.h>
+#include <petscsys.h> // this is the preprocessor check
+
+int main(int argc, char **argv)
+{
+    MPI_Init(&argc, &argv);
+    hid_t  file_id = H5Fcreate("file.h5", H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+    (void)file_id;
+    herr_t status  = H5Fclose(file_id);
+    (void)status;
+    MPI_Finalize();
+}
+Performing C++ SOURCE FILE Test HYPRE_SAME_MPI_COMPILE_TEST succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_39a59/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_39a59.dir/build.make CMakeFiles/cmTC_39a59.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_39a59.dir/src.cxx.o
+/usr/local/bin/mpicxx -DHYPRE_SAME_MPI_COMPILE_TEST -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_39a59.dir/src.cxx.o -MF CMakeFiles/cmTC_39a59.dir/src.cxx.o.d -o CMakeFiles/cmTC_39a59.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_39a59
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_39a59.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_39a59.dir/src.cxx.o -o cmTC_39a59  -Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libHYPRE.dylib /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -Wl,-rpath,/usr/local/opt/libevent/lib -L/usr/local/opt/libevent/lib -Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -lpetsc -lHYPRE -llapack -lblas -lsilo -lc++ -ldl -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm -lc++ -ldl /usr/local/lib/libmpi.dylib -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm /usr/local/lib/libmpi.dylib 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+#include <HYPRE_struct_ls.h>
+#include <mpi.h>
+#include <petscsys.h>
+
+int main(int argc, char **argv)
+{
+    MPI_Init(&argc, &argv);
+    HYPRE_StructGrid grid;
+    HYPRE_StructGridCreate(MPI_COMM_WORLD, 2, &grid);
+    HYPRE_StructGridAssemble(grid);
+    HYPRE_StructGridDestroy(grid);
+    MPI_Finalize();
+}
+Performing C++ SOURCE FILE Test LIBMESH_SAME_MPI_COMPILE_TEST succeeded with the following output:
+Change Dir: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/qisun/anaconda3/bin/make -f Makefile cmTC_f9a5c/fast && /Users/qisun/anaconda3/bin/make  -f CMakeFiles/cmTC_f9a5c.dir/build.make CMakeFiles/cmTC_f9a5c.dir/build
+make[1]: Entering directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_f9a5c.dir/src.cxx.o
+/usr/local/bin/mpicxx -DLIBMESH_SAME_MPI_COMPILE_TEST -I/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include -I/Users/qisun/sfw/petsc/3.13.4/include -I/Users/qisun/sfw/petsc/3.13.4/mac-debug/include -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE -MD -MT CMakeFiles/cmTC_f9a5c.dir/src.cxx.o -MF CMakeFiles/cmTC_f9a5c.dir/src.cxx.o.d -o CMakeFiles/cmTC_f9a5c.dir/src.cxx.o -c /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_f9a5c
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f9a5c.dir/link.txt --verbose=1
+/usr/local/bin/mpicxx -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include  -O3 -DNDEBUG -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib  CMakeFiles/cmTC_f9a5c.dir/src.cxx.o -o cmTC_f9a5c  /Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib/libmesh_dbg.dylib -Wl,-rpath,/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib -L/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib -lmesh_dbg -ltimpi_dbg -Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -Wl,-rpath,/usr/local/opt/libevent/lib -L/usr/local/opt/libevent/lib -lz -lpetsc -lHYPRE -llapack -lblas -lsilo -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm -lc++ -ldl /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib -Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib -L/usr/local/Cellar/open-mpi/4.1.5/lib -Wl,-rpath,/usr/local/opt/libevent/lib -L/usr/local/opt/libevent/lib -Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0 -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib -lpetsc -lHYPRE -llapack -lblas -lsilo -lc++ -ldl -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi -lgfortran -lquadmath -lm -lc++ -ldl /usr/local/lib/libmpi.dylib /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib /usr/local/lib/libmpi.dylib 
+make[1]: Leaving directory '/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+#include <mpi.h>
+#include <petscsys.h>
+
+#include <libmesh/libmesh_config.h>
+
+// This test is a little different: since libMesh may use C++11 C++14, or C++17,
+// but we but have not yet configured that flag yet, we instead use libMesh's
+// petsc dependency to check that we have the same MPI version.
+int main(int argc, char **argv)
+{
+    PetscInitialize(&argc, &argv, NULL, NULL);
+    PetscFinalize();
+}

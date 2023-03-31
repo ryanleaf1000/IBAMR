@@ -1,0 +1,29 @@
+{
+	"compiler-id" : "GNU",
+	"dir-cur-bld" : "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/ibtk/src",
+	"dir-cur-src" : "/Users/qisun/sfw/ibamr/IBAMR/ibtk/src",
+	"dir-top-bld" : "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug",
+	"dir-top-src" : "/Users/qisun/sfw/ibamr/IBAMR",
+	"include-dirs" : 
+	[
+		"ibtk/include",
+		"/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/include",
+		"/usr/local/Cellar/hdf5/1.12.2_2/include",
+		"/usr/local/opt/libaec/include",
+		"/Users/qisun/sfw/petsc/3.13.4/mac-debug/include",
+		"/Users/qisun/sfw/petsc/3.13.4/include",
+		"/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include",
+		"../ibtk/include",
+		"../ibtk/contrib/muparser/include",
+		"/usr/local/include",
+		"/Users/qisun/anaconda3/include/eigen3"
+	],
+	"language" : "Fortran",
+	"linked-target-dirs" : 
+	[
+		"/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/CMakeFiles/BUNDLED_MUPARSER.dir"
+	],
+	"module-dir" : "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/ibtk/src",
+	"submodule-ext" : ".smod",
+	"submodule-sep" : "@"
+}

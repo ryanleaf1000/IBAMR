@@ -1,0 +1,248 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/adv_diff/ex0/CMakeLists.txt",
+			"examples/adv_diff/ex1/CMakeLists.txt",
+			"examples/adv_diff/ex2/CMakeLists.txt",
+			"examples/adv_diff/ex3/CMakeLists.txt",
+			"examples/adv_diff/ex4/CMakeLists.txt",
+			"examples/adv_diff/ex5/CMakeLists.txt",
+			"examples/adv_diff/ex6/CMakeLists.txt",
+			"examples/adv_diff/ex7/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 104,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 14,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 31,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 5
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 14,
+				"parent" : 7
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 31,
+				"parent" : 7
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 10
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 14,
+				"parent" : 12
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 13
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 14,
+				"parent" : 15
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 16
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 14,
+				"parent" : 18
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 19
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 6,
+				"line" : 14,
+				"parent" : 21
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 22
+			},
+			{
+				"file" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 14,
+				"parent" : 24
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 25
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 31,
+				"parent" : 24
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 27
+			},
+			{
+				"file" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 8,
+				"line" : 14,
+				"parent" : 29
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 30
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "adv_diff-ex0-2d::@cf41d6f2052c7a788ae0"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "adv_diff-ex0-3d::@cf41d6f2052c7a788ae0"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "adv_diff-ex1-2d::@5cd58ee64284d5a41e6b"
+		},
+		{
+			"backtrace" : 11,
+			"id" : "adv_diff-ex1-3d::@5cd58ee64284d5a41e6b"
+		},
+		{
+			"backtrace" : 14,
+			"id" : "adv_diff-ex2::@334a365c213b9b0c109c"
+		},
+		{
+			"backtrace" : 17,
+			"id" : "adv_diff-ex3::@e286467c1daf985a4ac3"
+		},
+		{
+			"backtrace" : 20,
+			"id" : "adv_diff-ex4::@3ee259107805e3953123"
+		},
+		{
+			"backtrace" : 23,
+			"id" : "adv_diff-ex5::@adad025261c6d84f90e5"
+		},
+		{
+			"backtrace" : 26,
+			"id" : "adv_diff-ex6-2d::@35ff127610ab473d0938"
+		},
+		{
+			"backtrace" : 28,
+			"id" : "adv_diff-ex6-3d::@35ff127610ab473d0938"
+		},
+		{
+			"backtrace" : 31,
+			"id" : "adv_diff-ex7::@36bc257100ad00daa295"
+		}
+	],
+	"id" : "examples-adv_diff::@714eac15f71a94114fdf",
+	"name" : "examples-adv_diff",
+	"paths" : 
+	{
+		"build" : "examples",
+		"source" : "examples"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

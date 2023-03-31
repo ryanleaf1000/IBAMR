@@ -1,0 +1,103 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "examples/ConstraintIB/falling_sphere/sphereGen3d"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_EXECUTABLE",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/ConstraintIB/falling_sphere/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 32,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 68,
+				"parent" : 1
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include -Wno-undefined-var-template -Wno-unneeded-internal-declaration -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"id" : "ConstraintIB-spheregen::@4286875f531e3b00557c",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include -Wno-undefined-var-template -Wno-unneeded-internal-declaration -g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/lib/",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "ConstraintIB-spheregen",
+	"nameOnDisk" : "sphereGen3d",
+	"paths" : 
+	{
+		"build" : "examples/ConstraintIB/falling_sphere",
+		"source" : "examples/ConstraintIB/falling_sphere"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "examples/ConstraintIB/falling_sphere/sphereGen3d.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

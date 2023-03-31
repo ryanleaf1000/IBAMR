@@ -44,7 +44,7 @@ NORMALIZE_PRESSURE_JUMP = TRUE
 IB_POINT_DENSITY           = 4                    // approximate density of IB quadrature points for Lagrangian-Eulerian interaction
 START_TIME                 = 0.0e0                  // initial simulation time
 CFL_MAX                    = 0.2                   // maximum CFL number
-DT                         = 0.5*CFL_MAX*DX // maximum timestep size
+DT                         = 0.0000025*CFL_MAX*DX // maximum timestep size
 END_TIME                   = 10 * DT                   // final simulation time
 GROW_DT                    = 2.0e0                  // growth factor for timesteps
 NUM_CYCLES                 = 1                      // number of cycles of fixed-point iteration
@@ -66,7 +66,7 @@ ENABLE_LOGGING             = TRUE
 YC = 0.0
 XC = 0.0
 
-KAPPA_S = 0.002/DT^2 //10000 //0.00001*DX/DT^2 //2.5*DX/DT^2
+KAPPA_S = 202.86632/DX //10000 //0.00001*DX/DT^2 //2.5*DX/DT^2
 ETA_S =0.0/DT
 
 // exact solution function expressions
@@ -83,8 +83,8 @@ SHIFT = SHIFT1 - 0.5*OMEGA1*OMEGA1*0.5*0.5*(DX*DX+DX*DX)
 
 U = "(sqrt(X0*X0 + X1*X1)< R1 ? -omega1*X1 : (sqrt(X0*X0 + X1*X1)> R2 ? 0.0 : -X1*(AA + BB/(X0*X0 + X1*X1))))"
 V = "(sqrt(X0*X0 + X1*X1)< R1 ? omega1*X0 : (sqrt(X0*X0 + X1*X1)> R2 ? 0.0 : X0*(AA + BB/(X0*X0 + X1*X1))))"
-P = "(sqrt(X0*X0 + X1*X1)< R1 ? 0.5*omega1*omega1*(X0*X0 + X1*X1)  + shift : 0.5*AA*AA*(X0*X0 + X1*X1) - 0.5*BB*BB/(X0*X0 + X1*X1) + AA*BB*log(X0*X0 + X1*X1) + 0.5*omega1*omega1*(R1*R1) -(0.5*AA*AA*(R1*R1) - 0.5*BB*BB/(R1*R1) + AA*BB*log(R1*R1))    + shift )"
-
+P = "(sqrt(X0*X0 + X1*X1)< R1 ? 0.5*omega1*omega1*(X0*X0 + X1*X1)  + shift : 0.5*AA*AA*(X0*X0 + X1*X1) - 0.5*BB*BB/(X0*X0 + X1*X1) + AA*BB*log(X0*X0 + X1*X1)  )"
+PRES_CONST = 58.5328                                                                                     //    (\int P dA)/(\int 1 dA)
 VelocityBcCoefs_0 {
     
     MU = MU

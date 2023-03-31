@@ -1,0 +1,631 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "examples/IIM/ex8/main2d"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_EXECUTABLE",
+			"IBAMR_ADD_EXAMPLE",
+			"TARGET_LINK_LIBRARIES",
+			"IBAMR_SETUP_TARGET_LIBRARY"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/IIM/ex8/CMakeLists.txt",
+			"src/CMakeLists.txt",
+			"CMakeLists.txt",
+			"ibtk/src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 68,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 84,
+				"parent" : 1
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 245,
+				"parent" : 4
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 3,
+				"file" : 4,
+				"line" : 258,
+				"parent" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1171,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1174,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1196,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1202,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 1206,
+				"parent" : 7
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include -Wno-undefined-var-template -Wno-unneeded-internal-declaration -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIE"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DNDIM=2"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/ibtk/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/usr/local/Cellar/hdf5/1.12.2_2/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/usr/local/opt/libaec/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/petsc/3.13.4/mac-debug/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/petsc/3.13.4/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/ibtk/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/ibtk/contrib/muparser/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "/usr/local/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "/Users/qisun/anaconda3/include/eigen3"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "BUNDLED_MUPARSER::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "IBTK2d::@0e7a75a8cd22d82e135c"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "IBAMR2d::@145eef247bfb46b6828c"
+		}
+	],
+	"id" : "IIM-ex8-2d::@3d2377d7c6f63fc2adbd",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include -Wno-undefined-var-template -Wno-unneeded-internal-declaration -g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/lib/ -Wl,-rpath,/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "../../../lib/libIBAMR2d.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "../../../lib/libIBTK2d.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_algs.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_appu.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 11,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_geom.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 12,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_hier.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_math_std.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_mesh.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 15,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_pdat_std.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_solv.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI2d_xfer.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "/usr/local/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "/usr/local/lib/libsz.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "/Users/qisun/anaconda3/lib/libz.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libdl.tbd",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libm.tbd",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 19,
+				"fragment" : "../../../lib/libBUNDLED_MUPARSER.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-L/usr/local/Cellar/open-mpi/4.1.5/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-Wl,-rpath,/usr/local/opt/libevent/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-L/usr/local/opt/libevent/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-Wl,-rpath,/Users/qisun/anaconda3/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-L/Users/qisun/anaconda3/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-L/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lpetsc",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lHYPRE",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-llapack",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lblas",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lsilo",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lc++",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi_usempif08",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi_usempi_ignore_tkr",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi_mpifh",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lgfortran",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lquadmath",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib/libmesh_dbg.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-lmesh_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-ltimpi_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-lz",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lpetsc",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lHYPRE",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-llapack",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lblas",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lsilo",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lc++",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi_usempif08",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi_usempi_ignore_tkr",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi_mpifh",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lmpi",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lgfortran",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lquadmath",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 20,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib/libmesh_dbg.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-lmesh_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-ltimpi_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-lz",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "IIM-ex8-2d",
+	"nameOnDisk" : "main2d",
+	"paths" : 
+	{
+		"build" : "examples/IIM/ex8",
+		"source" : "examples/IIM/ex8"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "examples/IIM/ex8/example.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "examples/IIM/ex8/FeedbackForcer.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

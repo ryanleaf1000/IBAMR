@@ -1,0 +1,2336 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "lib/libIBTK3d.dylib"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_LIBRARY",
+			"INSTALL",
+			"TARGET_LINK_LIBRARIES",
+			"IBAMR_SETUP_TARGET_LIBRARY",
+			"TARGET_COMPILE_OPTIONS",
+			"TARGET_INCLUDE_DIRECTORIES",
+			"TARGET_COMPILE_FEATURES",
+			"TARGET_SOURCES"
+		],
+		"files" : 
+		[
+			"ibtk/src/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 262,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 259,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1171,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1174,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1196,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1202,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1206,
+				"parent" : 3
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 839,
+				"parent" : 18
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 1145,
+				"parent" : 3
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 251,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 1169,
+				"parent" : 3
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 1175,
+				"parent" : 3
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 1181,
+				"parent" : 3
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 1203,
+				"parent" : 3
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 1207,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 256,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1186,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1192,
+				"parent" : 3
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 1150,
+				"parent" : 3
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 244,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIC"
+				},
+				{
+					"backtrace" : 20,
+					"fragment" : "-DNDIM=3"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "IBTK3d_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 21,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/ibtk/include"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/include"
+				},
+				{
+					"backtrace" : 23,
+					"path" : "/usr/local/Cellar/hdf5/1.12.2_2/include"
+				},
+				{
+					"backtrace" : 23,
+					"path" : "/usr/local/opt/libaec/include"
+				},
+				{
+					"backtrace" : 24,
+					"path" : "/Users/qisun/sfw/petsc/3.13.4/mac-debug/include"
+				},
+				{
+					"backtrace" : 25,
+					"path" : "/Users/qisun/sfw/petsc/3.13.4/include"
+				},
+				{
+					"backtrace" : 26,
+					"path" : "/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include"
+				},
+				{
+					"backtrace" : 27,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/ibtk/include"
+				},
+				{
+					"backtrace" : 15,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/ibtk/contrib/muparser/include"
+				},
+				{
+					"backtrace" : 28,
+					"isSystem" : true,
+					"path" : "/usr/local/include"
+				},
+				{
+					"backtrace" : 29,
+					"isSystem" : true,
+					"path" : "/Users/qisun/anaconda3/include/eigen3"
+				}
+			],
+			"language" : "Fortran",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -std=c++14 -fmessage-length=0 -isystem /Users/qisun/anaconda3/include -Wno-undefined-var-template -Wno-unneeded-internal-declaration -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -fPIC"
+				},
+				{
+					"backtrace" : 20,
+					"fragment" : "-DNDIM=3"
+				},
+				{
+					"fragment" : "-std=gnu++14"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "IBTK3d_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 21,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/ibtk/include"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/include"
+				},
+				{
+					"backtrace" : 23,
+					"path" : "/usr/local/Cellar/hdf5/1.12.2_2/include"
+				},
+				{
+					"backtrace" : 23,
+					"path" : "/usr/local/opt/libaec/include"
+				},
+				{
+					"backtrace" : 24,
+					"path" : "/Users/qisun/sfw/petsc/3.13.4/mac-debug/include"
+				},
+				{
+					"backtrace" : 25,
+					"path" : "/Users/qisun/sfw/petsc/3.13.4/include"
+				},
+				{
+					"backtrace" : 26,
+					"path" : "/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include"
+				},
+				{
+					"backtrace" : 27,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/ibtk/include"
+				},
+				{
+					"backtrace" : 15,
+					"path" : "/Users/qisun/sfw/ibamr/IBAMR/ibtk/contrib/muparser/include"
+				},
+				{
+					"backtrace" : 28,
+					"isSystem" : true,
+					"path" : "/usr/local/include"
+				},
+				{
+					"backtrace" : 29,
+					"isSystem" : true,
+					"path" : "/Users/qisun/anaconda3/include/eigen3"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					30,
+					15
+				],
+				"standard" : "14"
+			},
+			"sourceIndexes" : 
+			[
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 15,
+			"id" : "BUNDLED_MUPARSER::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "IBTK3d::@0e7a75a8cd22d82e135c",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/Users/qisun/sfw/ibamr/0.12.0/0.12.0-debug"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/qisun/anaconda3/lib -L/Users/qisun/anaconda3/lib",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-L/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-L/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-L/usr/local/Cellar/gcc/12.2.0/lib/gcc/current",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/lib/ -Wl,-rpath,/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_algs.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_appu.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_geom.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_hier.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_math_std.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_mesh.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 11,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_pdat_std.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 12,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_solv.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug/lib/libSAMRAI3d_xfer.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "/usr/local/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "/usr/local/lib/libsz.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "/Users/qisun/anaconda3/lib/libz.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libdl.tbd",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libm.tbd",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 15,
+				"fragment" : "../../lib/libBUNDLED_MUPARSER.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/usr/local/Cellar/open-mpi/4.1.5/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/usr/local/opt/libevent/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/usr/local/opt/libevent/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/Users/qisun/anaconda3/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/Users/qisun/anaconda3/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lpetsc",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lHYPRE",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-llapack",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lblas",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lsilo",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lc++",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi_usempif08",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi_usempi_ignore_tkr",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi_mpifh",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lgfortran",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lquadmath",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lc++",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib/libmesh_dbg.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-L/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-lmesh_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-ltimpi_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/Users/qisun/anaconda3/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/Users/qisun/anaconda3/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/usr/local/Cellar/open-mpi/4.1.5/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-Wl,-rpath,/usr/local/opt/libevent/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-L/usr/local/opt/libevent/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-lz",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lpetsc",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lHYPRE",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-llapack",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lblas",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lsilo",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi_usempif08",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi_usempi_ignore_tkr",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi_mpifh",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lmpi",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lgfortran",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lquadmath",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-lc++",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 19,
+				"fragment" : "/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libsilo.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib/libmesh_dbg.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-lmesh_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-ltimpi_dbg",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-lz",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lgfortran",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lgcc_s.1.1",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lgcc",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lquadmath",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lgcc_s.1.1",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lgcc",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "IBTK3d",
+	"nameOnDisk" : "libIBTK3d.dylib",
+	"paths" : 
+	{
+		"build" : "ibtk/src",
+		"source" : "ibtk/src"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				162,
+				163,
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175,
+				176,
+				177,
+				178,
+				179,
+				180,
+				181,
+				182
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/boundary/cf_interface/fortran/linearcfinterpolation3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/boundary/cf_interface/fortran/quadcfinterpolation3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/boundary/physical_boundary/fortran/cartphysbdryop3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/coarsen_ops/fortran/cubiccoarsen3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/coarsen_ops/fortran/rt0coarsen3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/lagrangian/fortran/lagrangian_interaction3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/curl3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/div3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/flux3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/grad3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/graddetect3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/interp3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/laplace3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/miscmath3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/rot3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/strain3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/vclaplace3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/refine_ops/fortran/divpreservingrefine3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/refine_ops/fortran/cart_side_refine3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/solvers/impls/fortran/patchsmoothers3d.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/utilities/fortran/averaging.f",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/HierarchyGhostCellInterpolation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/cf_interface/CartCellDoubleLinearCFInterpolation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/cf_interface/CartSideDoubleQuadraticCFInterpolation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/cf_interface/CartCellDoubleQuadraticCFInterpolation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/CartCellRobinPhysBdryOp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/StaggeredPhysicalBoundaryHelper.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/CartExtrapPhysBdryOp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/CartSideRobinPhysBdryOp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/PhysicalBoundaryUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/muParserRobinBcCoefs.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/ExtendedRobinBcCoefStrategy.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/boundary/physical_boundary/RobinPhysBdryPatchStrategy.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/coarsen_ops/CartCellDoubleCubicCoarsen.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/coarsen_ops/CartSideDoubleRT0Coarsen.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/coarsen_ops/LMarkerCoarsen.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/coarsen_ops/CartSideDoubleCubicCoarsen.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LDataManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LNode.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LTransaction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LEInteractor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LNodeIndex.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LIndexSetData.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LSet.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LIndexSetDataFactory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LSetData.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LIndexSetVariable.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LSetDataFactory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LInitStrategy.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LSetDataIterator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LMarker.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LSetVariable.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LData.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LMesh.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/LSiloDataWriter.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/math/PETScVecUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/math/HierarchyMathOps.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/math/PoissonUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/math/SAMRAIGhostDataAccumulator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/math/PETScMatUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/math/PatchMathOps.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/refine_ops/CartCellDoubleQuadraticRefine.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/refine_ops/LMarkerRefine.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/refine_ops/CartSideDoubleSpecializedLinearRefine.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/refine_ops/CartCellDoubleBoundsPreservingConservativeLinearRefine.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/refine_ops/CartSideDoubleDivPreservingRefine.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/refine_ops/CartSideDoubleRT0Refine.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/solver_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/FACPreconditionerStrategy.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/LinearOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/JacobianOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/GeneralOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/GeneralSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/KrylovLinearSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/NewtonKrylovSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/interfaces/LinearSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/wrappers/PETScSNESFunctionGOWrapper.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/wrappers/PETScSAMRAIVectorReal.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/wrappers/PETScMatLOWrapper.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/wrappers/PETScSNESJacobianJOWrapper.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/wrappers/PETScPCLSWrapper.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/CCPoissonPETScLevelSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PoissonSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/NewtonKrylovSolverManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/VCSCViscousPETScLevelSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PETScLevelSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/CCPoissonSolverManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PoissonFACPreconditionerStrategy.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/BGaussSeidelPreconditioner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/BJacobiPreconditioner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/SCPoissonPointRelaxationFACOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/KrylovLinearSolverPoissonSolverInterface.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/VCSCViscousOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/FACPreconditioner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PETScMFFDJacobianOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/VCSCViscousOpPointRelaxationFACOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/CCLaplaceOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PETScNewtonKrylovSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/CCPoissonBoxRelaxationFACOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/CCPoissonHypreLevelSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PoissonFACPreconditioner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/CCPoissonLevelRelaxationFACOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PETScKrylovLinearSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/KrylovLinearSolverManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/SCPoissonPETScLevelSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/SCPoissonSolverManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/LaplaceOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/SCLaplaceOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/SCPoissonHypreLevelSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/PETScKrylovPoissonSolver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/solvers/impls/CCPoissonPointRelaxationFACOperator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/RefinePatchStrategySet.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/NodeSynchCopyFillPattern.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/ParallelEdgeMap.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/DebuggingUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/CellNoCornersFillPattern.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/CoarsenPatchStrategySet.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/SideDataSynchronization.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/StandardTagAndInitStrategySet.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/IndexUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/ParallelSet.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/FaceDataSynchronization.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/HierarchyIntegrator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/MergingLoadBalancer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/CopyToRootSchedule.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/AppInitializer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/IBTKInit.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/SAMRAIDataCache.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/FixedSizedStream.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/muParserCartGridFunction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/IBTK_MPI.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/ibtk_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/FaceSynchCopyFillPattern.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/CartGridFunctionSet.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/EdgeDataSynchronization.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/NodeDataSynchronization.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/ParallelMap.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/SideNoCornersFillPattern.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/box_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/Streamable.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/CopyToRootTransaction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/SideSynchCopyFillPattern.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/CartGridFunction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/NormOps.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/EdgeSynchCopyFillPattern.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/SecondaryHierarchy.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/StreamableManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/LMarkerUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/PartitioningBox.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/SnapshotCache.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/snapshot_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/BoxPartitioner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/FEDataInterpolation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/FEDataManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/FEMapping.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/FEProjector.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/FEValues.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/FischerGuess.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/lagrangian/StableCentroidPartitioner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/LibMeshSystemVectors.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/LibMeshSystemIBVectors.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 31,
+			"compileGroupIndex" : 1,
+			"path" : "ibtk/src/utilities/libmesh_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/boundary/cf_interface/fortran/linearcfinterpolation3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/boundary/cf_interface/fortran/quadcfinterpolation3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/boundary/physical_boundary/fortran/cartphysbdryop3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/coarsen_ops/fortran/cubiccoarsen3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/coarsen_ops/fortran/rt0coarsen3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/lagrangian/fortran/lagrangian_interaction3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/curl3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/div3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/flux3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/grad3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/graddetect3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/interp3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/laplace3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/miscmath3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/rot3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/strain3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/math/fortran/vclaplace3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/refine_ops/fortran/divpreservingrefine3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/refine_ops/fortran/cart_side_refine3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/solvers/impls/fortran/patchsmoothers3d.f.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/ibtk/src/utilities/fortran/averaging.f.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

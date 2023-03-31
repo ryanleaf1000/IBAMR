@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/ConstraintIB/impulsively_started_cylinder",
+		"source" : "examples/ConstraintIB/impulsively_started_cylinder"
+	}
+}

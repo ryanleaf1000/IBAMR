@@ -76,6 +76,7 @@ static double OMEGA2 = 0.0;
 static double AA = 0.0;
 static double BB = 0.0;
 static double shift = 0.0;
+static double    pres_const = 58.5328;
 void
 tether_force_function_inner(VectorValue<double>& F,
                             const VectorValue<double>& /*n*/,
@@ -189,6 +190,7 @@ main(int argc, char* argv[])
         fac = input_db->getDouble("FAC");
         Re = input_db->getDouble("Re");
         shift = input_db->getDouble("SHIFT");
+        pres_const = input_db->getDouble("PRES_CONST");
         L = input_db->getDouble("L");
         const double mfac = input_db->getDouble("MFAC");
         const double ds = mfac * dx;
@@ -346,8 +348,9 @@ main(int argc, char* argv[])
         time_integrator->initializePatchHierarchy(patch_hierarchy, gridding_algorithm);
 
         // Deallocate initialization objects.
-        app_initializer.setNull();
-
+        // Print the input database contents to the log file.
+        plog << "Input database:\n";
+        input_db->printClassData(plog);
         // Write out initial visualization data.
         int iteration_num = time_integrator->getIntegratorStep();
         double loop_time = time_integrator->getIntegratorTime();
@@ -488,7 +491,8 @@ main(int argc, char* argv[])
              << "  L2-norm:  " << hier_sc_data_ops.L2Norm(u_idx, wgt_sc_idx) << "\n"
              << "  max-norm: " << hier_sc_data_ops.maxNorm(u_idx, wgt_sc_idx) << "\n"
              << "+++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
+        HierarchyCellDataOpsReal<NDIM, double> hier_cc_data_ops(patch_hierarchy, coarsest_ln, finest_ln);
+        hier_cc_data_ops.subtract(p_idx, p_idx, p_cloned_idx);
         pout << " MU = " << MU << "\n"
              << "  dx:  " << dx << "\n"
              << "  dt: " << dt << "\n";
@@ -624,9 +628,9 @@ velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                     const double u0 = (*u_data)(SideIndex<NDIM>(lower_idx, 0, SideIndex<NDIM>::Lower));
                     const double v0 = (*u_data)(SideIndex<NDIM>(lower_idx, 1, SideIndex<NDIM>::Lower));
                     N_max += 1;
+                    //if (xu < 0.1 * L || xv < 0.1 * L || xu > 0.9 * L || xv > 0.9 * L || yu < 0.1 * L || yv < 0.1 * L || yu > 0.9 * L || yv > 0.9 * L)
                     u_Eulerian_L2_norm += std::abs(u0 - u_ex) * std::abs(u0 - u_ex) * (*wgt_cc_data)(lower_idx);
                     u_Eulerian_L2_norm += std::abs(v0 - v_ex) * std::abs(v0 - v_ex) * (*wgt_cc_data)(lower_idx);
-
                     u_Eulerian_max_norm = std::max(u_Eulerian_max_norm, std::abs(u0 - u_ex));
                     u_Eulerian_max_norm = std::max(u_Eulerian_max_norm, std::abs(v0 - v_ex));
                 }
@@ -640,7 +644,7 @@ velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
 
     u_Eulerian_L2_norm = sqrt(u_Eulerian_L2_norm);
 
-    pout << " u_Eulerian_L2_norm = " << u_Eulerian_L2_norm << "\n\n";
+    pout << " u_Eulerian_L2_norm  = " << u_Eulerian_L2_norm << "\n\n";
     pout << " u_Eulerian_max_norm = " << u_Eulerian_max_norm << "\n\n";
 
     return;
@@ -661,6 +665,7 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
 
     const double X_min[2] = { -0.45 * L, -0.45 * L };
     const double X_max[2] = { 0.45 * L, 0.45 * L };
+    const double normalize_pressure_const =(pres_const)/16;
     // vector<double> pos_values;
     double p_Eulerian_L2_norm = 0.0;
     double p_Eulerian_max_norm = 0.0;
@@ -725,22 +730,20 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                     N_max += 1;
                     if (sqrt(x * x + y * y) <= R1 - fac * patch_dx[0])
                     {
-                        p_ex_qp = 0.5 * OMEGA1 * OMEGA1 * (x * x + y * y) + shift; // p1;
+                        p_ex_qp = 0.5 * OMEGA1 * OMEGA1 * (x * x + y * y) + shift - normalize_pressure_const; // p1;
                     }
                     else if (sqrt(x * x + y * y) > (R1 - fac * patch_dx[0]) &&
                              sqrt(x * x + y * y) < (R1 + fac * patch_dx[0]))
                     {
-                        p_ex_qp = p1;
+                        p_ex_qp = p1 - normalize_pressure_const;
                     }
                     else
                     {
                         p_ex_qp = 0.5 * AA * AA * (x * x + y * y) - 0.5 * BB * BB / (x * x + y * y) +
-                                  AA * BB * log(x * x + y * y) + 0.5 * OMEGA1 * OMEGA1 * R1 * R1 -
-                                  (0.5 * AA * AA * (R1 * R1) - 0.5 * BB * BB / (R1 * R1) + AA * BB * log(R1 * R1)) +
-                                  shift;
+                                  AA * BB * log(x * x + y * y) - normalize_pressure_const;
                     }
 
-                    p_Eulerian_L2_norm += std::abs(p1 - p_ex_qp) * std::abs(p1 - p_ex_qp) * (*wgt_cc_data)(cell_idx);
+                    p_Eulerian_L2_norm += std::abs(p1 - p_ex_qp) * std::abs(p1 - p_ex_qp ) * (*wgt_cc_data)(cell_idx);
                     p_Eulerian_max_norm = std::max(p_Eulerian_max_norm, std::abs(p1 - p_ex_qp));
                 }
             }

@@ -1,0 +1,156 @@
+{
+	"kind" : "toolchains",
+	"toolchains" : 
+	[
+		{
+			"compiler" : 
+			{
+				"id" : "Clang",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/usr/local/Cellar/open-mpi/4.1.5/include",
+						"/Users/qisun/anaconda3/include",
+						"/Users/qisun/anaconda3/lib/clang/11.1.0/include",
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/Users/qisun/anaconda3/lib",
+						"/usr/local/Cellar/open-mpi/4.1.5/lib",
+						"/usr/local/opt/libevent/lib",
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib"
+					],
+					"linkFrameworkDirectories" : 
+					[
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+					],
+					"linkLibraries" : 
+					[
+						"mpi"
+					]
+				},
+				"path" : "/usr/local/bin/mpicc",
+				"version" : "11.1.0"
+			},
+			"language" : "C",
+			"sourceFileExtensions" : 
+			[
+				"c",
+				"m"
+			]
+		},
+		{
+			"compiler" : 
+			{
+				"id" : "Clang",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/usr/local/Cellar/open-mpi/4.1.5/include",
+						"/Users/qisun/anaconda3/include",
+						"/Users/qisun/anaconda3/include/c++/v1",
+						"/Users/qisun/anaconda3/lib/clang/11.1.0/include",
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/Users/qisun/anaconda3/lib",
+						"/usr/local/Cellar/open-mpi/4.1.5/lib",
+						"/usr/local/opt/libevent/lib",
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib"
+					],
+					"linkFrameworkDirectories" : 
+					[
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+					],
+					"linkLibraries" : 
+					[
+						"mpi",
+						"c++"
+					]
+				},
+				"path" : "/usr/local/bin/mpicxx",
+				"version" : "11.1.0"
+			},
+			"language" : "CXX",
+			"sourceFileExtensions" : 
+			[
+				"C",
+				"M",
+				"c++",
+				"cc",
+				"cpp",
+				"cxx",
+				"mm",
+				"mpp",
+				"CPP",
+				"ixx",
+				"cppm"
+			]
+		},
+		{
+			"compiler" : 
+			{
+				"id" : "GNU",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/finclude",
+						"/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/include",
+						"/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12/include-fixed",
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/Users/qisun/anaconda3/lib",
+						"/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc/x86_64-apple-darwin21/12",
+						"/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/gcc",
+						"/usr/local/Cellar/gcc/12.2.0/lib/gcc/current",
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib"
+					],
+					"linkFrameworkDirectories" : 
+					[
+						"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+					],
+					"linkLibraries" : 
+					[
+						"gfortran",
+						"gcc_s.1.1",
+						"gcc",
+						"quadmath",
+						"gcc_s.1.1",
+						"gcc"
+					]
+				},
+				"path" : "/usr/local/bin/gfortran",
+				"version" : "12.2.0"
+			},
+			"language" : "Fortran",
+			"sourceFileExtensions" : 
+			[
+				"f",
+				"F",
+				"fpp",
+				"FPP",
+				"f77",
+				"F77",
+				"f90",
+				"F90",
+				"for",
+				"For",
+				"FOR",
+				"f95",
+				"F95"
+			]
+		}
+	],
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

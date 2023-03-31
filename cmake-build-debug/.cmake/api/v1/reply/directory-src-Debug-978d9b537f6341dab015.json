@@ -1,0 +1,63 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL"
+		],
+		"files" : 
+		[
+			"src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 257,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 258,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "library",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/libIBAMR2d.dylib"
+			],
+			"targetId" : "IBAMR2d::@145eef247bfb46b6828c",
+			"targetIndex" : 45,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "library",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/libIBAMR3d.dylib"
+			],
+			"targetId" : "IBAMR3d::@145eef247bfb46b6828c",
+			"targetIndex" : 46,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "src",
+		"source" : "src"
+	}
+}

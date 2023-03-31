@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "examples/ConstraintIB/falling_sphere",
+		"source" : "examples/ConstraintIB/falling_sphere"
+	}
+}

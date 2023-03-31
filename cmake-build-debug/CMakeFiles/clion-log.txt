@@ -1,0 +1,171 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/local/bin/mpicc -DCMAKE_CXX_COMPILER=/usr/local/bin/mpicxx -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/Users/qisun/sfw/ibamr/0.12.0/0.12.0-debug -DBOOST_ROOT=/usr/local "  " -DPETSC_ROOT=/Users/qisun/sfw/petsc/3.13.4/mac-debug "  " -DHYPRE_ROOT=/Users/qisun/sfw/petsc/3.13.4/mac-debug -DSAMRAI_ROOT=/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug -DHDF5_ROOT=/usr/local "  " -DSILO_ROOT=/Users/qisun/sfw/petsc/3.13.4/mac-debug -DLIBMESH_ROOT=/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug -DLIBMESH_METHOD=DBG \ -S /Users/qisun/sfw/ibamr/IBAMR -B /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug
+CMake Warning:
+  Ignoring extra path from command line:
+
+   "/Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug/  "
+
+
+CMake Warning:
+  Ignoring extra path from command line:
+
+   "\"
+
+
+-- The C compiler identification is Clang 11.1.0
+-- The CXX compiler identification is Clang 11.1.0
+-- The Fortran compiler identification is GNU 12.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/mpicc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/mpicxx - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Checking whether Fortran compiler has -isysroot
+-- Checking whether Fortran compiler has -isysroot - yes
+-- Checking whether Fortran compiler supports OSX deployment target flag
+-- Checking whether Fortran compiler supports OSX deployment target flag - yes
+-- Detecting Fortran compiler ABI info
+-- Detecting Fortran compiler ABI info - done
+-- Check for working Fortran compiler: /usr/local/bin/gfortran - skipped
+-- This is CMake 3.23.2
+-- 
+CMake Warning (dev) at /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CTest.cmake:158 (find_program):
+  Policy CMP0109 is not set: find_program() requires permission to execute
+  but not to read.  Run "cmake --help-policy CMP0109" for policy details.
+  Use the cmake_policy command to set the policy and suppress this warning.
+
+  The file
+
+    /Users/qisun/anaconda3/git
+
+  is readable but not executable.  CMake is using it for compatibility.
+Call Stack (most recent call first):
+  CMakeLists.txt:30 (INCLUDE)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Detecting Fortran/C Interface
+-- Detecting Fortran/C Interface - Found GLOBAL and MODULE mangling
+-- Performing Test IBTK_HAVE_PRAGMA_KEYWORD
+-- Performing Test IBTK_HAVE_PRAGMA_KEYWORD - Success
+-- BOOST_ROOT=/usr/local
+-- EIGEN3_ROOT was not provided to CMake: default search paths will be used.
+-- HDF5_ROOT=/usr/local
+-- HYPRE_ROOT=/Users/qisun/sfw/petsc/3.13.4/mac-debug
+-- MUPARSER_ROOT was not provided to CMake: default search paths will be used.
+-- MPI_ROOT was not provided to CMake: default search paths will be used.
+-- PETSC_ROOT=/Users/qisun/sfw/petsc/3.13.4/mac-debug
+-- SAMRAI_ROOT=/Users/qisun/sfw/samrai/2.4.4/mac-g++-debug
+-- LIBMESH_ROOT=/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug
+-- NUMDIFF_ROOT was not provided to CMake: since this is an optional dependency IBAMR will be configured without this package.
+-- SILO_ROOT=/Users/qisun/sfw/petsc/3.13.4/mac-debug
+-- 
+-- Setting up MPI
+-- Performing Test CXX_COMPILER_SUPPORTS_MPI
+-- Performing Test CXX_COMPILER_SUPPORTS_MPI - Success
+-- CMAKE_CXX_COMPILER=/usr/local/bin/mpicxx is an MPI wrapper
+-- Using MPI compiler wrapper to set MPI_ROOT=/usr/local/bin/../
+-- Setting up MPI at location /usr/local/bin/../
+-- Found MPI_C: /usr/local/bin/mpicc (found version "3.1") 
+-- Found MPI_CXX: /usr/local/bin/mpicxx (found version "3.1") 
+-- Found MPI_Fortran: /usr/local/lib/libmpi_usempif08.dylib (found version "3.1") 
+-- Found MPI: TRUE (found version "3.1")  
+-- MPI_C_INCLUDE_DIRS: 
+-- MPI_C_LIBRARIES: /usr/local/lib/libmpi.dylib
+-- 
+-- Setting up Boost
+-- Found Boost: /usr/local/lib/cmake/Boost-1.81.0/BoostConfig.cmake (found suitable version "1.81.0", minimum required is "1.66")  
+-- Found external boost 1.81.0 at /usr/local/include
+-- Performing Test BOOST_WITH_MULTI_ARRAY
+-- Performing Test BOOST_WITH_MULTI_ARRAY - Success
+-- Performing Test BOOST_WITH_ROUND
+-- Performing Test BOOST_WITH_ROUND - Success
+-- Performing Test BOOST_WITH_ROOTS
+-- Performing Test BOOST_WITH_ROOTS - Success
+-- 
+-- Setting up Eigen3
+-- Found external Eigen3 3.4.0 at /Users/qisun/anaconda3/include/eigen3
+-- 
+-- Setting up muParser
+-- Setting up muParser as a bundled dependency
+-- 
+-- Setting up HDF5
+-- HDF5: Using hdf5 compiler wrapper to determine C configuration
+-- Found HDF5: /usr/local/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib;/usr/local/lib/libsz.dylib;/Users/qisun/anaconda3/lib/libz.dylib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libdl.tbd;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libm.tbd (found version "1.12.2") found components: C 
+-- HDF5_DIR: HDF5_DIR-NOTFOUND
+-- HDF5_DEFINITIONS: 
+-- HDF5_INCLUDE_DIRS: /usr/local/Cellar/hdf5/1.12.2_2/include;/usr/local/opt/libaec/include
+-- HDF5_LIBRARIES: /usr/local/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib;/usr/local/lib/libsz.dylib;/Users/qisun/anaconda3/lib/libz.dylib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libdl.tbd;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libm.tbd
+-- HDF5_HL_LIBRARIES: 
+-- HDF5_C_DEFINITIONS: 
+-- HDF5_C_INCLUDE_DIR: 
+-- HDF5_C_INCLUDE_DIRS: /usr/local/Cellar/hdf5/1.12.2_2/include;/usr/local/opt/libaec/include
+-- HDF5_C_LIBRARY: 
+-- HDF5_C_LIBRARIES: /usr/local/Cellar/hdf5/1.12.2_2/lib/libhdf5.dylib;/usr/local/lib/libsz.dylib;/Users/qisun/anaconda3/lib/libz.dylib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libdl.tbd;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libm.tbd
+-- HDF5_C_HL_LIBRARY: 
+-- HDF5_C_HL_LIBRARIES: 
+-- Defined targets (if any):
+-- ... hdf5::hdf5
+-- 
+-- Setting up HYPRE
+-- HYPRE_INCLUDE_DIRS: /Users/qisun/sfw/petsc/3.13.4/mac-debug/include
+-- HYPRE_LIBRARIES: /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libHYPRE.dylib
+-- 
+-- Setting up SAMRAI
+-- Found SAMRAI 2.4.4 at /Users/qisun/sfw/samrai/2.4.4/mac-g++-debug
+-- Performing Test SAMRAI_WITH_MPI
+-- Performing Test SAMRAI_WITH_MPI - Success
+-- 
+-- Setting up PETSc
+-- Detected PETSc with HYPRE
+-- PETSC LIBRARIES: /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libpetsc.dylib;;-L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib;-Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib;-L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib;-Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib;-L/usr/local/Cellar/open-mpi/4.1.5/lib;-Wl,-rpath,/usr/local/opt/libevent/lib;-L/usr/local/opt/libevent/lib;-Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0;-L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0;-Wl,-rpath,/Users/qisun/anaconda3/lib;-L/Users/qisun/anaconda3/lib;-lpetsc;-lHYPRE;-llapack;-lblas;-lsilo;-lc++;-ldl;-lmpi_usempif08;-lmpi_usempi_ignore_tkr;-lmpi_mpifh;-lmpi;-lgfortran;-lquadmath;-lm;-lc++;-ldl
+-- 
+-- Setting up libMesh
+-- LIBMESH_LIBRARIES: /Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib/libmesh_dbg.dylib;-Wl,-rpath,/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib;-L/Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/lib;-lmesh_dbg;-ltimpi_dbg;-Wl,-rpath,/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib;-L/Users/qisun/sfw/petsc/3.13.4/mac-debug/lib;-Wl,-rpath,/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0;-L/Users/qisun/anaconda3/lib/gcc/x86_64-apple-darwin13.4.0/9.3.0;-Wl,-rpath,/Users/qisun/anaconda3/lib;-L/Users/qisun/anaconda3/lib;-Wl,-rpath,/usr/local/Cellar/open-mpi/4.1.5/lib;-L/usr/local/Cellar/open-mpi/4.1.5/lib;-Wl,-rpath,/usr/local/opt/libevent/lib;-L/usr/local/opt/libevent/lib;-lz;-lpetsc;-lHYPRE;-llapack;-lblas;-lsilo;-lmpi_usempif08;-lmpi_usempi_ignore_tkr;-lmpi_mpifh;-lmpi;-lgfortran;-lquadmath;-lm;-lc++;-ldl
+-- LIBMESH_INCLUDE_DIRS: /Users/qisun/sfw/libmesh/1.6.2/1.6.2-debug/include;/Users/qisun/sfw/petsc/3.13.4/include;/Users/qisun/sfw/petsc/3.13.4/mac-debug/include
+-- Performing Test LIBMESH_WITH_CXX14
+-- Performing Test LIBMESH_WITH_CXX14 - Success
+-- Performing Test LIBMESH_WITH_CXX17
+-- Performing Test LIBMESH_WITH_CXX17 - Failed
+-- Performing Test LIBMESH_WITH_PETSC
+-- Performing Test LIBMESH_WITH_PETSC - Success
+-- Performing Test LIBMESH_WITH_SAME_PETSC
+-- Performing Test LIBMESH_WITH_SAME_PETSC - Success
+-- Performing Test LIBMESH_WITH_MPI
+-- Performing Test LIBMESH_WITH_MPI - Success
+-- Performing Test LIBMESH_WITH_XDR
+-- Performing Test LIBMESH_WITH_XDR - Success
+-- 
+-- Setting up Silo
+-- SILO_INCLUDE_DIRS: /Users/qisun/sfw/petsc/3.13.4/mac-debug/include
+-- SILO_LIBRARIES: /Users/qisun/sfw/petsc/3.13.4/mac-debug/lib/libsilo.dylib
+-- 
+-- Performing Test PETSC_SAME_MPI_COMPILE_TEST
+-- Performing Test PETSC_SAME_MPI_COMPILE_TEST - Success
+-- Performing Test HDF5_SAME_MPI_COMPILE_TEST
+-- Performing Test HDF5_SAME_MPI_COMPILE_TEST - Success
+-- Performing Test HYPRE_SAME_MPI_COMPILE_TEST
+-- Performing Test HYPRE_SAME_MPI_COMPILE_TEST - Success
+-- Performing Test LIBMESH_SAME_MPI_COMPILE_TEST
+-- Performing Test LIBMESH_SAME_MPI_COMPILE_TEST - Success
+-- 
+-- IBAMR dependencies have been successfully set up.
+-- setting up target IBTK2d
+-- Adding flag -DNDIM=2 to target IBTK2d
+-- libMesh expects C++14, so IBTK2d will be built with C++14 as a requirement.
+-- setting up target IBTK3d
+-- Adding flag -DNDIM=3 to target IBTK3d
+-- libMesh expects C++14, so IBTK3d will be built with C++14 as a requirement.
+CMake Warning at tests/CMakeLists.txt:311 (MESSAGE):
+  The configuration script was not able to locate numdiff.  If you want to
+  run the test suite you will need to either edit attest.conf, specify the
+  path to numdiff to attest, or rerun CMake with the argument NUMDIFF_ROOT
+  specifying numdiff's root installation directory.
+
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/qisun/sfw/ibamr/IBAMR/cmake-build-debug

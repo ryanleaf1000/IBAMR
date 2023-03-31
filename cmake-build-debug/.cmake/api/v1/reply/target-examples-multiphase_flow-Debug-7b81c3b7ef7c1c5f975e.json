@@ -1,0 +1,512 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"ADD_CUSTOM_TARGET",
+			"ADD_DEPENDENCIES",
+			"IBAMR_ADD_EXAMPLE"
+		],
+		"files" : 
+		[
+			"examples/CMakeLists.txt",
+			"examples/multiphase_flow/ex8/CMakeLists.txt",
+			"examples/multiphase_flow/ex9/CMakeLists.txt",
+			"examples/multiphase_flow/ex10/CMakeLists.txt",
+			"examples/multiphase_flow/ex11/CMakeLists.txt",
+			"examples/multiphase_flow/ex12/CMakeLists.txt",
+			"examples/multiphase_flow/ex13/CMakeLists.txt",
+			"examples/multiphase_flow/ex0/CMakeLists.txt",
+			"examples/multiphase_flow/ex1/CMakeLists.txt",
+			"examples/multiphase_flow/ex2/CMakeLists.txt",
+			"examples/multiphase_flow/ex3/CMakeLists.txt",
+			"examples/multiphase_flow/ex4/CMakeLists.txt",
+			"examples/multiphase_flow/ex5/CMakeLists.txt",
+			"examples/multiphase_flow/ex6/CMakeLists.txt",
+			"examples/multiphase_flow/ex7/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 104,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 52,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 3
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 34,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 14,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 8
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 14,
+				"parent" : 10
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 11
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 34,
+				"parent" : 10
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 13
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 14,
+				"parent" : 15
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 16
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 36,
+				"parent" : 15
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 18
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 14,
+				"parent" : 20
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 21
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 36,
+				"parent" : 20
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 23
+			},
+			{
+				"command" : 2,
+				"file" : 5,
+				"line" : 58,
+				"parent" : 20
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 25
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 2,
+				"file" : 6,
+				"line" : 14,
+				"parent" : 27
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 28
+			},
+			{
+				"command" : 2,
+				"file" : 6,
+				"line" : 38,
+				"parent" : 27
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 30
+			},
+			{
+				"file" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 14,
+				"parent" : 32
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 33
+			},
+			{
+				"command" : 2,
+				"file" : 7,
+				"line" : 32,
+				"parent" : 32
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 35
+			},
+			{
+				"file" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 8,
+				"line" : 14,
+				"parent" : 37
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 38
+			},
+			{
+				"file" : 9
+			},
+			{
+				"command" : 2,
+				"file" : 9,
+				"line" : 14,
+				"parent" : 40
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 41
+			},
+			{
+				"file" : 10
+			},
+			{
+				"command" : 2,
+				"file" : 10,
+				"line" : 14,
+				"parent" : 43
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 44
+			},
+			{
+				"command" : 2,
+				"file" : 10,
+				"line" : 32,
+				"parent" : 43
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 46
+			},
+			{
+				"file" : 11
+			},
+			{
+				"command" : 2,
+				"file" : 11,
+				"line" : 14,
+				"parent" : 48
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 49
+			},
+			{
+				"file" : 12
+			},
+			{
+				"command" : 2,
+				"file" : 12,
+				"line" : 14,
+				"parent" : 51
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 52
+			},
+			{
+				"command" : 2,
+				"file" : 12,
+				"line" : 33,
+				"parent" : 51
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 54
+			},
+			{
+				"file" : 13
+			},
+			{
+				"command" : 2,
+				"file" : 13,
+				"line" : 14,
+				"parent" : 56
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 57
+			},
+			{
+				"command" : 2,
+				"file" : 13,
+				"line" : 33,
+				"parent" : 56
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 59
+			},
+			{
+				"file" : 14
+			},
+			{
+				"command" : 2,
+				"file" : 14,
+				"line" : 14,
+				"parent" : 61
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 62
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 14,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 64
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 33,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 66
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "multiphase_flow-ex8-spheregen::@e601be3404200eeb80d0"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "multiphase_flow-ex9-cylindergen::@b3f43891d2a32a2867f1"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "multiphase_flow-ex9::@b3f43891d2a32a2867f1"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "multiphase_flow-ex10::@fcdcd81331689b946d10"
+		},
+		{
+			"backtrace" : 14,
+			"id" : "multiphase_flow-ex10-cylindergen::@fcdcd81331689b946d10"
+		},
+		{
+			"backtrace" : 17,
+			"id" : "multiphase_flow-ex11::@2196d3d3661f42d4c5a3"
+		},
+		{
+			"backtrace" : 19,
+			"id" : "multiphase_flow-ex11-bargegen::@2196d3d3661f42d4c5a3"
+		},
+		{
+			"backtrace" : 22,
+			"id" : "multiphase_flow-ex12-2d::@9858ac3ebb4a9517158e"
+		},
+		{
+			"backtrace" : 24,
+			"id" : "multiphase_flow-ex12-3d::@9858ac3ebb4a9517158e"
+		},
+		{
+			"backtrace" : 26,
+			"id" : "multiphase_flow-ex12-wedgegen::@9858ac3ebb4a9517158e"
+		},
+		{
+			"backtrace" : 29,
+			"id" : "multiphase_flow-ex13::@a179478700e8bb911018"
+		},
+		{
+			"backtrace" : 31,
+			"id" : "multiphase_flow-ex13-rectanglegen::@a179478700e8bb911018"
+		},
+		{
+			"backtrace" : 34,
+			"id" : "multiphase_flow-ex0-2d::@707f66ee28cd88369137"
+		},
+		{
+			"backtrace" : 36,
+			"id" : "multiphase_flow-ex0-3d::@707f66ee28cd88369137"
+		},
+		{
+			"backtrace" : 39,
+			"id" : "multiphase_flow-ex1-2d::@dad10be9f8ce4c23621a"
+		},
+		{
+			"backtrace" : 42,
+			"id" : "multiphase_flow-ex2::@3e339b6b92dc0e449b06"
+		},
+		{
+			"backtrace" : 45,
+			"id" : "multiphase_flow-ex3-2d::@ecc8a57ee4614b9b99de"
+		},
+		{
+			"backtrace" : 47,
+			"id" : "multiphase_flow-ex3-3d::@ecc8a57ee4614b9b99de"
+		},
+		{
+			"backtrace" : 50,
+			"id" : "multiphase_flow-ex4::@efbfd3ed7f9357c40f16"
+		},
+		{
+			"backtrace" : 53,
+			"id" : "multiphase_flow-ex5-2d::@3d4159baefb1acc48fa8"
+		},
+		{
+			"backtrace" : 55,
+			"id" : "multiphase_flow-ex5-3d::@3d4159baefb1acc48fa8"
+		},
+		{
+			"backtrace" : 58,
+			"id" : "multiphase_flow-ex6-2d::@074d8babca7c772a3522"
+		},
+		{
+			"backtrace" : 60,
+			"id" : "multiphase_flow-ex6-3d::@074d8babca7c772a3522"
+		},
+		{
+			"backtrace" : 63,
+			"id" : "multiphase_flow-ex7::@89cae51ad01b62e5231e"
+		},
+		{
+			"backtrace" : 65,
+			"id" : "multiphase_flow-ex8-2d::@e601be3404200eeb80d0"
+		},
+		{
+			"backtrace" : 67,
+			"id" : "multiphase_flow-ex8-3d::@e601be3404200eeb80d0"
+		}
+	],
+	"id" : "examples-multiphase_flow::@714eac15f71a94114fdf",
+	"name" : "examples-multiphase_flow",
+	"paths" : 
+	{
+		"build" : "examples",
+		"source" : "examples"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}
