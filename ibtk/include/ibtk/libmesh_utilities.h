@@ -806,6 +806,84 @@ interpolate(libMesh::TypeVector<double>& U,
 } // interpolate
 
 /**
+ * This only works for TRI6 element.
+ * Compute the current solution at reference point pt. Returns the
+ * value instead of taking a reference to it as the first argument.
+ *
+ * @param[in] pt the reference point at which we will compute the
+ * solution value.
+ *
+ * @param[in] U_node Multidimensional array containing finite element solution
+ * coefficients on the current element.
+ *
+ */
+template <class MultiArray>
+inline double
+interpolate_intersection(const libMesh::Point pt, const MultiArray& U_node)
+{
+    IBTK_DISABLE_EXTRA_WARNINGS
+    const auto n_nodes = static_cast<int>(U_node.shape()[0]);
+    IBTK_ENABLE_EXTRA_WARNINGS
+    double U = 0.0;
+    std::array<double,6> phi;
+    double u = pt(0);
+    double v = pt(1);
+    phi[0]=(u-1)*(u-0.5)/((0-1)*(0-0.5))*(v-1)*(v-0.5)/((0-1)*(0-0.5));
+    phi[1]= u*(u-0.5)/((1-0)*(1-0.5))*(v-1)*(v-0.5)/((0-1)*(0-0.5));
+    phi[2]=(u-1)*(u-0.5)/((0-1)*(0-0.5))*(v)*(v-0.5)/((1-0)*(1-0.5));
+    phi[3]=(u-1)*u/((0.5-1)*(0.5-0))*(v-1)*(v-0.5)/((0-1)*(0-0.5));
+    phi[4]=(u-1)*u/((0.5-1)*(0.5-0))*(v-1)*(v)/((0.5-1)*(0.5-0));
+    phi[5]=(u-1)*(u-0.5)/((0-1)*(0-0.5))*(v-1)*(v)/((0.5-1)*(0.5-0));
+    for (int k = 0; k < n_nodes; ++k)
+    {
+        U += U_node[k] * phi[k];
+    }
+    return U;
+} // interpolate
+
+/**
+ * This only works for TRI6 element.
+ * Compute the current solution at reference point pt. This version
+ * of interpolate_intersection() is vector-valued.
+ *
+ * @param[out] U Array containing the output of this function. This function assumes
+ * that this TypeVector has at least <code>U_node.shape()[1]</code> entries.
+ *
+ * @param[in] pt the reference point at which we will compute the
+ * solution value.
+ *
+ * @param[in] U_node Multidimensional array containing finite element solution
+ * coefficients on the current element.
+ *
+ */
+template <class MultiArray>
+inline void
+interpolate_intersection(double* const U, const libMesh::Point pt, const MultiArray& U_node)
+{
+    const int n_nodes = static_cast<int>(U_node.shape()[0]);
+    const int n_vars = static_cast<int>(U_node.shape()[1]);
+    std::fill(U, U + n_vars, 0.0);
+    std::array<double,6> phi;
+    double u = pt(0);
+    double v = pt(1);
+    phi[0]=(u-1)*(u-0.5)/((0-1)*(0-0.5))*(v-1)*(v-0.5)/((0-1)*(0-0.5));
+    phi[1]= u*(u-0.5)/((1-0)*(1-0.5))*(v-1)*(v-0.5)/((0-1)*(0-0.5));
+    phi[2]=(u-1)*(u-0.5)/((0-1)*(0-0.5))*(v)*(v-0.5)/((1-0)*(1-0.5));
+    phi[3]=(u-1)*u/((0.5-1)*(0.5-0))*(v-1)*(v-0.5)/((0-1)*(0-0.5));
+    phi[4]=(u-1)*u/((0.5-1)*(0.5-0))*(v-1)*(v)/((0.5-1)*(0.5-0));
+    phi[5]=(u-1)*(u-0.5)/((0-1)*(0-0.5))*(v-1)*(v)/((0.5-1)*(0.5-0));
+    for (int k = 0; k < n_nodes; ++k)
+    {
+        const double& p = phi[k];
+        for (int i = 0; i < n_vars; ++i)
+        {
+            U[i] += U_node[k][i] * p;
+        }
+    }
+    return;
+} // interpolate
+
+/**
  * Compute the jacobian with respect to the initial configuration in the deformed configuration
  * @p X_node at quadrature point number @qp.
  *
