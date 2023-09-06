@@ -5,6 +5,11 @@ ibtk/contrib/autotools/include
 ibtk/contrib/autotools/lib
 ibtk/contrib/autotools/share
 
+*.log
+*.iml
+*.xml
+# ignore ALL files in ANY directory named temp
+temp/ 
 ### Generated project files
 #
 # To regenerate: intercept-build --override-compiler make CC=intercept-cc CXX=intercept-c++
