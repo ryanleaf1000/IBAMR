@@ -3607,6 +3607,9 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                     if (side_ghost_boxes[axis].contains(i_s))
                                     {
                                         const double C_p = interpolate(0, P_jump_node, phi_P_jump);
+                                        if(d_use_trial_interpolation){
+                                            double C_p = interpolate_intersection<boost::multi_array<double, 1>>(xi,P_jump_node);
+                                        }
                                         const double sgn = n(axis) > 0.0 ? 1.0 : n(axis) < 0.0 ? -1.0 : 0.0;
                                         (*f_data)(i_s) += sgn * (C_p / dx[axis]);
                                     }
@@ -3704,6 +3707,9 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                         double C_u_up = 0;
 
                                         interpolate(&jn(0), 0, DU_jump_node[axis], phi_P_jump);
+                                        if(d_use_trial_interpolation){
+                                            interpolate_intersection<boost::multi_array<double, 2>>(&jn(0),xui,DU_jump_node[axis]);
+                                        }
                                         C_u_up = sdh_up * jn(axis);
                                         C_u_um = sdh_um * jn(axis);
 
@@ -3877,6 +3883,9 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                             double C_u_up = 0;
 
                                             interpolate(&jn(0), 0, DU_jump_node[SideDim[axis][j]], phi_P_jump);
+                                            if(d_use_trial_interpolation){
+                                                 interpolate_intersection<boost::multi_array<double, 2>>(&jn(0), xui,DU_jump_node[SideDim[axis][j]]);
+                                            }
                                             C_u_um = sdh_um * jn(axis);
                                             C_u_up = sdh_up * jn(axis);
 
@@ -4332,6 +4341,8 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
         d_smoothing_eps = db->getDouble("smoothing_eps");
         pout << " smoothing eps: " << d_smoothing_eps;
     }
+    if (db->isBool("use_trial_interpolation"))
+        d_use_trial_interpolation = db->getBool("use_trial_interpolation");
     return;
 } // getFromInput
 
