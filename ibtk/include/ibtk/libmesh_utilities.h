@@ -840,6 +840,26 @@ interpolate_intersection(const libMesh::Point pt, const MultiArray& U_node)
     }
     return U;
 } // interpolate
+template <class MultiArray>
+inline double
+interpolate_intersection_tri3(const libMesh::Point pt, const MultiArray& U_node)
+{
+    IBTK_DISABLE_EXTRA_WARNINGS
+    const auto n_nodes = static_cast<int>(U_node.shape()[0]);
+    IBTK_ENABLE_EXTRA_WARNINGS
+    double U = 0.0;
+    std::array<double,3> phi;
+    double u = pt(0);
+    double v = pt(1);
+    phi[0]=(u-1)/((0-1))*(v-1)/((0-1));
+    phi[1]= u/((1-0))*(v-1)/((0-1));
+    phi[2]=(u-1)/((0-1))*(v)/((1-0));
+    for (int k = 0; k < n_nodes; ++k)
+    {
+        U += U_node[k] * phi[k];
+    }
+    return U;
+} // interpolate
 
 /**
  * This only works for TRI6 element.
@@ -883,6 +903,29 @@ interpolate_intersection(double* const U, const libMesh::Point pt, const MultiAr
     return;
 } // interpolate
 
+template <class MultiArray>
+inline void
+interpolate_intersection_tri3(double* const U, const libMesh::Point pt, const MultiArray& U_node)
+{
+    const int n_nodes = static_cast<int>(U_node.shape()[0]);
+    const int n_vars = static_cast<int>(U_node.shape()[1]);
+    std::fill(U, U + n_vars, 0.0);
+    std::array<double,3> phi;
+    double u = pt(0);
+    double v = pt(1);
+    phi[0]=(u-1)/((0-1))*(v-1)/((0-1));
+    phi[1]= u/((1-0))*(v-1)/((0-1));
+    phi[2]=(u-1)/((0-1))*(v)/((1-0));
+    for (int k = 0; k < n_nodes; ++k)
+    {
+        const double& p = phi[k];
+        for (int i = 0; i < n_vars; ++i)
+        {
+            U[i] += U_node[k][i] * p;
+        }
+    }
+    return;
+} // interpolate
 /**
  * Compute the jacobian with respect to the initial configuration in the deformed configuration
  * @p X_node at quadrature point number @qp.
@@ -1411,6 +1454,92 @@ intersect_line_with_face(std::vector<std::pair<double, libMesh::Point> >& t_vals
     return is_interior_intersection;
 } // intersect_line_with_face
 
+inline bool
+intersect_ray_with_face(std::vector<std::pair<double, libMesh::Point> >& t_vals,
+                        libMesh::Face* elem,
+                        const libMesh::Point r,
+                        libMesh::VectorValue<double> q,
+                        const double tol = 0.0)
+{
+    bool is_interior_intersection = false;
+    t_vals.resize(0);
+    switch (elem->type())
+    {
+    case libMesh::TRI3:
+    {
+        const libMesh::VectorValue<double>& p = r;
+        const libMesh::VectorValue<double>& d = q;
+        const float EPSILON = 0.0000001;
+
+        const libMesh::Point& p0 = *elem->node_ptr(0);
+        const libMesh::Point& p1 = *elem->node_ptr(1);
+        const libMesh::Point& p2 = *elem->node_ptr(2);
+
+        const libMesh::VectorValue<double> e1 = p1 - p0;
+        const libMesh::VectorValue<double> e2 = p2 - p0;
+        const libMesh::VectorValue<double> h = d.cross(e2);
+        double a = e1 * h;
+
+        float f, u, v;
+
+        if (a > -EPSILON && a < EPSILON) break; // This ray is parallel to this triangle.
+        f = 1.0 / a;
+        const libMesh::VectorValue<double> s = p - p0;
+        u = f * (s * h);
+
+        if (u < 0.0 || u > 1.0) break;
+
+        const libMesh::VectorValue<double> q = s.cross(e1);
+        v = f * (d * q);
+        //std::cout<<"e1: "<<e1<<" e2: "<<e2<<std::endl;
+        //std::cout<<"r: "<<r<<std::endl;
+        //std::cout<<"q: "<<q<<std::endl;
+
+
+        if (v < 0.0 || u + v > 1.0) break;
+        //std::cout<<"v_inside"<<std::endl;
+
+        // At this stage we can compute t to find out where the intersection point is on the line.
+        float t = f * (e2 * q);
+
+        if(t>0 && t<1-0.001) {
+            t_vals.push_back(std::make_pair(t, libMesh::Point(u, v, 0.0)));
+            is_interior_intersection = true;
+            std::cout<<"t"<<t<<std::endl;
+        }
+        break;
+    }
+    default:
+    {
+        TBOX_ERROR("intersect_ray_with_face():"
+                   << "  element type " << libMesh::Utility::enum_to_string<libMesh::ElemType>(elem->type())
+                   << " is not supported at this time.\n");
+    }
+    }
+    return is_interior_intersection;
+}
+inline void
+interpolate_intersection_vec_tri3(double* const U, const libMesh::Point pt, const boost::multi_array<double, 2>& U_node)
+{
+    const int n_nodes = static_cast<int>(U_node.shape()[0]);
+    const int n_vars = static_cast<int>(U_node.shape()[1]);
+    std::fill(U, U + n_vars, 0.0);
+    std::array<double,3> phi;
+    double u = pt(0);
+    double v = pt(1);
+    phi[0]=(u-1)/((0-1))*(v-1)/((0-1));
+    phi[1]= u/((1-0))*(v-1)/((0-1));
+    phi[2]=(u-1)/((0-1))*(v)/((1-0));
+    for (int k = 0; k < n_nodes; ++k)
+    {
+        const double& p = phi[k];
+        for (int i = 0; i < n_vars; ++i)
+        {
+            U[i] += U_node[k][i] * p;
+        }
+    }
+    return;
+} // interpolate
 struct DofObjectComp
 {
     inline bool operator()(const libMesh::DofObject* const lhs, const libMesh::DofObject* const rhs) const

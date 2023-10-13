@@ -363,6 +363,10 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
     d_F_half_vecs.resize(d_num_parts);
     d_F_IB_ghost_vecs.resize(d_num_parts);
 
+    d_da_dA_F_systems.resize(d_num_parts);
+    d_da_dA_F_half_vecs.resize(d_num_parts);
+    d_da_dA_F_half_ghost_vecs.resize(d_num_parts);
+
     d_P_jump_systems.resize(d_num_parts);
     d_P_jump_half_vecs.resize(d_num_parts);
     d_P_jump_IB_ghost_vecs.resize(d_num_parts);
@@ -433,6 +437,16 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
         d_F_half_vecs[part] = dynamic_cast<PetscVector<double>*>(d_F_systems[part]->current_local_solution.get());
         d_F_IB_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(
             d_fe_data_managers[part]->buildGhostedSolutionVector(FORCE_SYSTEM_NAME, /*localize_data*/ false));
+
+
+        d_da_dA_F_systems[part] = &d_equation_systems[part]->get_system(FORCE_SYSTEM_NAME);
+        d_da_dA_F_half_vecs[part] = dynamic_cast<PetscVector<double>*>(d_da_dA_F_systems[part]->current_local_solution.get());
+        d_da_dA_F_half_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(d_fe_data_managers[part]->buildGhostedSolutionVector(FORCE_SYSTEM_NAME, /*localize_data*/ false));
+
+        d_da_dA_F_systems.resize(d_num_parts);
+        d_da_dA_F_half_vecs.resize(d_num_parts);
+        d_da_dA_F_half_ghost_vecs.resize(d_num_parts);
+
 
         if (d_use_pressure_jump_conditions)
         {
@@ -514,6 +528,11 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
         *d_U_t_half_vecs[part] = *d_U_t_current_vecs[part];
 
         *d_F_half_vecs[part] = *d_F_systems[part]->solution;
+
+        *d_da_dA_F_half_vecs[part] = *d_da_dA_F_systems[part]->solution;
+
+
+
 
         if (d_use_pressure_jump_conditions)
         {
@@ -604,6 +623,9 @@ IIMethod::postprocessIntegrateData(double /*current_time*/, double /*new_time*/,
         *d_F_systems[part]->solution = *d_F_half_vecs[part];
         *d_F_systems[part]->current_local_solution = *d_F_half_vecs[part];
 
+        *d_da_dA_F_systems[part]->solution = *d_da_dA_F_half_vecs[part];
+        *d_da_dA_F_systems[part]->current_local_solution = *d_da_dA_F_half_vecs[part];
+
         if (d_use_pressure_jump_conditions)
         {
             *d_P_jump_systems[part]->solution = *d_P_jump_half_vecs[part];
@@ -662,6 +684,10 @@ IIMethod::postprocessIntegrateData(double /*current_time*/, double /*new_time*/,
     d_F_systems.clear();
     d_F_half_vecs.clear();
     d_F_IB_ghost_vecs.clear();
+
+    d_da_dA_F_systems.clear();
+    d_da_dA_F_half_vecs.clear();
+    d_da_dA_F_half_ghost_vecs.clear();
 
     d_P_jump_systems.clear();
     d_P_jump_half_vecs.clear();
@@ -780,6 +806,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             *d_fe_data_managers[part]->getDofMapCache(VELOCITY_SYSTEM_NAME);
         System& X_system = equation_systems->get_system(COORDS_SYSTEM_NAME);
         const DofMap& X_dof_map = X_system.get_dof_map();
+        NumericVector<double>& X0_vec = X_system.get_vector("INITIAL_COORDINATES");
         FEDataManager::SystemDofMapCache& X_dof_map_cache =
             *d_fe_data_managers[part]->getDofMapCache(COORDS_SYSTEM_NAME);
         std::vector<std::vector<unsigned int> > U_dof_indices(NDIM);
@@ -871,12 +898,12 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             (d_use_velocity_jump_conditions ? WSS_in_vec->zero_clone() : std::unique_ptr<NumericVector<double> >());
         DenseVector<double> WSS_in_rhs_e[NDIM];
 
-        boost::multi_array<double, 2> x_node;
+        boost::multi_array<double, 2> x_node,X_node;
         std::array<boost::multi_array<double, 2>, NDIM> DU_jump_node;
-        std::vector<double> U_qp, U_in_qp, U_out_qp, WSS_in_qp, WSS_out_qp, n_qp, x_qp, x_in_qp, x_out_qp;
+        std::vector<double> U_qp, U_in_qp, U_out_qp, WSS_in_qp, WSS_out_qp, n_qp, x_qp, x_in_qp, x_out_qp,dA_da_qp;
         std::array<std::vector<double>, NDIM> DU_jump_qp;
-        VectorValue<double> U, WSS_in, WSS_out, U_n, U_t, n;
-        std::array<VectorValue<double>, 2> dx_dxi;
+        VectorValue<double> U, WSS_in, WSS_out, U_n, U_t, n, N;
+        std::array<VectorValue<double>, 2> dx_dxi,dX_dxi;
 
         Pointer<PatchLevel<NDIM> > level =
             d_hierarchy->getPatchLevel(d_fe_data_managers[part]->getFinestPatchLevelNumber());
@@ -923,6 +950,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     X_dof_map_cache.dof_indices(elem, X_dof_indices[axis], axis);
                 }
                 get_values_for_interpolation(x_node, *X_ghost_vec, X_dof_indices);
+
                 FEDataManager::updateInterpQuadratureRule(qrule, d_default_interp_spec, elem, x_node, patch_dx_min);
                 n_qpoints_patch += qrule->n_points();
             }
@@ -937,6 +965,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             x_in_qp.resize(NDIM * n_qpoints_patch);
             x_out_qp.resize(NDIM * n_qpoints_patch);
             n_qp.resize(NDIM * n_qpoints_patch);
+            dA_da_qp.resize(n_qpoints_patch);
             for (unsigned int axis = 0; axis < NDIM; ++axis)
             {
                 DU_jump_qp[axis].resize(NDIM * n_qpoints_patch);
@@ -958,6 +987,8 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     X_dof_map_cache.dof_indices(elem, X_dof_indices[d], d);
                 }
                 get_values_for_interpolation(x_node, *X_ghost_vec, X_dof_indices);
+                get_values_for_interpolation(X_node, X0_vec, X_dof_indices);
+
                 if (d_use_velocity_jump_conditions)
                 {
                     for (unsigned int axis = 0; axis < NDIM; ++axis)
@@ -1030,12 +1061,21 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     for (unsigned int l = 0; l < NDIM - 1; ++l)
                     {
                         interpolate(dx_dxi[l], qp, x_node, *dphi_dxi[l]);
+                        interpolate(dX_dxi[l], qp, X_node, *dphi_dxi[l]);
+
                     }
                     if (NDIM == 2)
                     {
                         dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                        dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                     }
-                    n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                    N = dX_dxi[0].cross(dX_dxi[1]);
+                    const double dA = N.norm();
+                    N = N.unit();
+                    n = dx_dxi[0].cross(dx_dxi[1]);
+                    const double da = n.norm();
+                    n = n.unit();
+                    dA_da_qp[qp_offset + qp]=(dA / da);
                     for (unsigned int d = 0; d < NDIM; ++d)
                     {
                         n_qp[NDIM * (qp_offset + qp) + d] = n(d);
@@ -1198,6 +1238,10 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                 for (int j = 0; j < NDIM; ++j) wrc(j) = wr[j][ic_upper[j] - ic[j]];
 #if (NDIM == 2)
                                 interpCoeff[ic[0]][ic[1]][d] = (norm_vec * wrc) * norm_vec(d);
+
+
+
+
 #endif
 #if (NDIM == 3)
                                 interpCoeff[ic[0]][ic[1]][ic[2]][d] = (norm_vec * wrc) * norm_vec(d);
@@ -1212,10 +1256,30 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                 const Index<NDIM>& ic = b();
                                 for (int j = 0; j < NDIM; ++j) du_jump(j) = DU_jump_qp[d][s * NDIM + j];
 #if (NDIM == 2)
+                                //VectorValue<double> tangent_vec=(1,-norm_vec(0)/-norm_vec(1));
+                                //tangent_vec(0)=1;
+                                //tangent_vec(1)=-norm_vec(0)/norm_vec(1);
+                                //VectorValue<double> tan_vec = tangent_vec.unit();
+                                // dx=norm_vec(0)/norm_vec(1) dy n0dx+n1dy=jump n0(n(0)/n(1))dy+n1dy=jump
+                                // (n(0)^2/n1+n1)dy=jump
+                                // n0dx+n1(n1)/n0dx=jump
+                                // (n0+n1^2/n0)dx=jump
+                                //dx
                                 coeff_vec =
                                     VectorValue<double>(interpCoeff[ic[0]][ic[1]][0], interpCoeff[ic[0]][ic[1]][1]);
-                                Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *
-                                                         (coeff_vec * du_jump);
+                                if (d_use_direct_coupling)
+                                {
+                                    VectorValue<double> du_jump_sub;
+                                    for (int j = 0; j < NDIM; ++j){
+                                        du_jump_sub(j) = (dA_da_qp[s]) *(du_jump(d) - du_jump * norm_vec * norm_vec(d)) * norm_vec(j);}
+                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *(wrc * du_jump_sub);
+                                }
+                                else{
+                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *(coeff_vec * du_jump);
+
+                                }
+
+                               // Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *(wrc(0) * du_jump(d)/(norm_vec(0)+(norm_vec(1)*norm_vec(1))/norm_vec(0))+wrc(1) * du_jump(d)/(norm_vec(1)+(norm_vec(0)*norm_vec(0))/norm_vec(1)));
 #endif
 
 #if (NDIM == 3)
@@ -1240,9 +1304,59 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                 w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] * u_sc_data_array[ic[0]][ic[1]];
                             const double nproj = n_qp[s * NDIM + 0] * wr[0][ic_upper[0] - ic[0]] +
                                                  n_qp[s * NDIM + 1] * wr[1][ic_upper[1] - ic[1]];
-                            if (d_use_velocity_jump_conditions)
+                            if (d_use_velocity_jump_conditions && d_use_velocity_correction)
                             {
-                                const double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][axis] : 0.0;
+                                 double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][axis] : 0.0;
+//                                if (nproj <= 0.0&&nproj>d_back_checking_threshold){
+//                                    //libMesh::Point x_stencil,x_lib_qp;
+//                                    //x_stencil=(x[0]+wr[0][ic_upper[0] - ic[0]]*dx[0],x[1]+wr[1][ic_upper[1] - ic[1]]*dx[1],x[2]+wr[2][ic_upper[2] - ic[2]]*dx[2]);
+//                                    libMesh::Point x_stencil=libMesh::Point(x[0]+wr[0][ic_upper[0] - ic[0]]*dx[0],x[1]+wr[1][ic_upper[1] - ic[1]]*dx[1],x[2]+wr[2][ic_upper[2] - ic[2]]*dx[2]);
+//                                    //std::cout<<"x[1]: "<<x[1]<<" wr[1][ic_upper[1] - ic[1]]: "<<wr[1][ic_upper[1] - ic[1]]<<" dx[1]: "<<dx[1]<<std::endl;
+//                                    //std::cout<<"x[2]: "<<x[2]<<" wr[2][ic_upper[2] - ic[2]]: "<<wr[2][ic_upper[2] - ic[2]]<<" dx[2]: "<<dx[2]<<std::endl;
+//                                    //std::cout<<"x_stencil "<<x_stencil<<std::endl;
+//
+//                                    //recover internal stencil center
+//                                    libMesh::Point x_lib_qp = libMesh::Point(x[0],x[1],x[2]);
+//                                    libMesh::VectorValue<double> ray=x_lib_qp-x_stencil;
+//                                    for (unsigned int e_idx = 0; e_idx < num_active_patch_elems; ++e_idx)
+//                                    {
+//                                        Elem* const elem = patch_elems[e_idx];
+//                                        VectorValue<double>  DU_jump_intersect;
+//                                        std::vector<std::pair<double, libMesh::Point> > intersections;
+//                                        //std::cout<<"before into function x_stencil "<<x_stencil<<std::endl;
+//                                        bool intersect_flag=intersect_ray_with_face(intersections,static_cast<Face*>(elem),x_stencil,ray,0);
+//                                        if (intersect_flag){
+//                                            for (unsigned int axis_inner = 0; axis_inner < NDIM; ++axis_inner)
+//                                            {
+//                                                for (unsigned int d_inner = 0; d_inner < NDIM; ++d_inner)
+//                                                {
+//                                                    DU_jump_dof_map_cache[axis_inner]->dof_indices(elem, DU_jump_dof_indices[axis_inner][d_inner], d_inner);
+//                                                }
+//                                                get_values_for_interpolation(
+//                                                    DU_jump_node[axis_inner], *DU_jump_ghost_vec[axis_inner], DU_jump_dof_indices[axis_inner]);
+//                                            }
+//                                            std::cout<<"afterdouble loop"<<std::endl;
+//
+//                                            const libMesh::Point& xi = intersections[0].second;
+//                                            double t_inner=intersections[0].first;
+//                                            std::vector<libMesh::Point> ref_coords(1, xi);
+//
+//                                            //fe_DU_jump->reinit(elem,&ref_coords);
+//
+//                                            for (unsigned int axis_inner = 0; axis_inner < NDIM; ++axis_inner)
+//                                            {
+//                                                interpolate_intersection_vec_tri3(&DU_jump_intersect(axis_inner), xi, DU_jump_node[axis_inner]);
+//
+//                                                //interpolate(&DU_jump_intersect(axis_inner),0, DU_jump_node[axis_inner], phi_DU_jump);
+//                                            }
+//                                            CC=w[0][ic[0] - ic_lower[0]] *
+//                                                 w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *t_inner*ray*DU_jump_intersect;
+//                                            std::cout<<"CC: "<<CC<<" ray: "<<ray<<" t: "<<t_inner<<std::endl;
+//                                        }
+//                                    }
+//                                }
+                                //CC=0.0;
+
                                 U_axis[s] -= CC / mu;
                             }
 #endif
@@ -1255,7 +1369,55 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                                  n_qp[s * NDIM + 2] * wr[2][ic_upper[2] - ic[2]];
                             if (d_use_velocity_jump_conditions)
                             {
-                                const double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][ic[2]][axis] : 0.0;
+                                double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][ic[2]][axis] : 0.0;
+                                if (nproj <= 0.0&&nproj>d_back_checking_threshold){
+                                    std::cout<<"I am acticated"<<std::endl;
+                                    libMesh::Point x_stencil,x_lib_qp;
+                                    x_stencil=(x[0]+wr[0][ic_upper[0] - ic[0]]*dx[0],x[1]+wr[1][ic_upper[1] - ic[1]]*dx[1],x[2]+wr[2][ic_upper[2] - ic[2]]*dx[2]);
+                                    //recover internal stencil center
+                                    x_lib_qp=(x[0],x[1],x[2]);
+                                    libMesh::VectorValue<double> ray=x_lib_qp-x_stencil;
+                                    for (unsigned int e_idx = 0; e_idx < num_active_patch_elems; ++e_idx)
+                                    {
+                                        Elem* const elem = patch_elems[e_idx];
+                                        VectorValue<double>  DU_jump_intersect;
+                                        std::vector<std::pair<double, libMesh::Point> > intersections;
+                                        // calculate normal
+                                        const libMesh::Point& p0 = *elem->node_ptr(0);
+                                        const libMesh::Point& p1 = *elem->node_ptr(1);
+                                        const libMesh::Point& p2 = *elem->node_ptr(2);
+                                        const libMesh::VectorValue<double> e1 = p1 - p0;
+                                        const libMesh::VectorValue<double> e2 = p2 - p0;
+                                        libMesh::VectorValue<double> nbh_normal=e1.cross(e2)*norm_vec>=0? e1.cross(e2) : -e1.cross(e2);
+                                        //------------------------------------
+
+
+                                        bool intersect_flag=intersect_ray_with_face(intersections,static_cast<Face*>(elem),x_stencil,ray,0);
+                                        if (intersect_flag){
+                                            for (unsigned int axis_inner = 0; axis_inner < NDIM; ++axis)
+                                            {
+                                                for (unsigned int d = 0; d < NDIM; ++d)
+                                                {
+                                                    DU_jump_dof_map_cache[axis_inner]->dof_indices(elem, DU_jump_dof_indices[axis_inner][d], d);
+                                                }
+                                                get_values_for_interpolation(
+                                                    DU_jump_node[axis_inner], *DU_jump_ghost_vec[axis_inner], DU_jump_dof_indices[axis_inner]);
+                                            }
+                                            const libMesh::Point& xi = intersections[0].second;
+                                            double t=intersections[0].first;
+                                            std::vector<libMesh::Point> ref_coords(1, xi);
+                                            fe_DU_jump->reinit(elem,&ref_coords);
+                                            for (unsigned int axis_inner = 0; axis_inner < NDIM; ++axis)
+                                            {
+                                                interpolate(&DU_jump_intersect(axis_inner),0, DU_jump_node[axis_inner], phi_DU_jump);
+                                            }
+                                            VectorValue<double> coeff_vec_nbhd =
+                                                VectorValue<double>(t*(ray*nbh_normal)*nbh_normal(0), t*(ray*nbh_normal)*nbh_normal(1));
+                                            CC=w[0][ic[0] - ic_lower[0]] *
+                                                 w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *(-coeff_vec_nbhd*DU_jump_intersect);
+                                        }
+                                    }
+                                }
                                 U_axis[s] -= CC / mu;
                             }
 #endif
@@ -2662,8 +2824,18 @@ IIMethod::computeLagrangianForce(const double data_time)
 
                 const double P_j = F * n * dA / da;
                 for (unsigned int i = 0; i < NDIM; ++i)
+                {
                     for (unsigned int k = 0; k < NDIM; ++k)
+                    {
+                        if (d_use_direct_coupling)
+                        {
+                            DU[i][k] = -F(k);
+                        }
+                        else{
                         DU[i][k] = -(dA / da) * (F(i) - F * n * n(i)) * n(k); // [Ux] , [Uy], [Uz]
+                         }
+                    }
+                }
 
                 for (unsigned int d = 0; d < NDIM; ++d) F_integral(d) += F(d) * JxW[qp];
 
@@ -3302,6 +3474,8 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
     const DofMap& X_dof_map = X_system.get_dof_map();
     FEDataManager::SystemDofMapCache& X_dof_map_cache = *d_fe_data_managers[part]->getDofMapCache(COORDS_SYSTEM_NAME);
     FEType X_fe_type = X_dof_map.variable_type(0);
+    NumericVector<double>& X0_vec = X_system.get_vector("INITIAL_COORDINATES");
+
     for (unsigned int d = 0; d < NDIM; ++d) TBOX_ASSERT(X_dof_map.variable_type(d) == X_fe_type);
 
     System* P_jump_system;
@@ -3349,10 +3523,10 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
         d_fe_data_managers[part]->getActivePatchElementMap();
     const int level_num = d_fe_data_managers[part]->getFinestPatchLevelNumber();
     boost::multi_array<double, 1> P_jump_node;
-    boost::multi_array<double, 2> x_node;
+    boost::multi_array<double, 2> x_node,X_node;
     std::array<boost::multi_array<double, 2>, NDIM> DU_jump_node;
-    std::array<VectorValue<double>, 2> dx_dxi;
-    VectorValue<double> n, jn;
+    std::array<VectorValue<double>, 2> dx_dxi,dX_dxi;
+    VectorValue<double> n, jn, N;
     std::vector<libMesh::Point> X_node_cache, x_node_cache;
     IBTK::Point x_min, x_max;
     Pointer<PatchLevel<NDIM> > level = d_hierarchy->getPatchLevel(level_num);
@@ -3408,6 +3582,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
             Elem* const elem = patch_elems[e_idx];
             const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
             get_values_for_interpolation(x_node, X_ghost_vec, X_dof_indices);
+            get_values_for_interpolation(X_node, X0_vec, X_dof_indices);
             if (d_use_pressure_jump_conditions)
             {
                 const auto& P_jump_dof_indices = P_jump_dof_map_cache->dof_indices(elem);
@@ -3561,12 +3736,18 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                 for (unsigned int l = 0; l < NDIM - 1; ++l)
                                 {
                                     interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+                                    interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);
                                 }
                                 if (NDIM == 2)
                                 {
+                                    dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                     dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                 }
-                                n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                                n = (dx_dxi[0].cross(dx_dxi[1]));
+                                N = dX_dxi[0].cross(dX_dxi[1]);
+                                const double dA = N.norm();
+                                const double da = n.norm();
+                                n = n.unit();
 
                                 // Make sure we haven't already found this
                                 // intersection.
@@ -3610,6 +3791,11 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                         if(d_use_trial_interpolation){
                                             double C_p = interpolate_intersection<boost::multi_array<double, 1>>(xi,P_jump_node);
                                         }
+                                        if (d_use_direct_coupling)
+                                        {
+                                            interpolate(&jn(0), 0, DU_jump_node[0], phi_P_jump);
+                                            double C_p=-(dA / da) *jn*n;
+                                        }
                                         const double sgn = n(axis) > 0.0 ? 1.0 : n(axis) < 0.0 ? -1.0 : 0.0;
                                         (*f_data)(i_s) += sgn * (C_p / dx[axis]);
                                     }
@@ -3648,12 +3834,18 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                 for (unsigned int l = 0; l < NDIM - 1; ++l)
                                 {
                                     interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+                                    interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);
                                 }
                                 if (NDIM == 2)
                                 {
                                     dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                    dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                 }
-                                n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                                n = (dx_dxi[0].cross(dx_dxi[1]));
+                                N = dX_dxi[0].cross(dX_dxi[1]);
+                                const double dA = N.norm();
+                                const double da = n.norm();
+                                n = n.unit();
 
                                 bool found_same_intersection_point = false;
 
@@ -3709,6 +3901,10 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                         interpolate(&jn(0), 0, DU_jump_node[axis], phi_P_jump);
                                         if(d_use_trial_interpolation){
                                             interpolate_intersection<boost::multi_array<double, 2>>(&jn(0),xui,DU_jump_node[axis]);
+                                        }
+                                        if (d_use_direct_coupling)
+                                        {
+                                            jn(axis)=(dA / da) *(jn(axis)-jn*n*n(axis))*n(axis);
                                         }
                                         C_u_up = sdh_up * jn(axis);
                                         C_u_um = sdh_um * jn(axis);
@@ -3824,12 +4020,19 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                     for (unsigned int l = 0; l < NDIM - 1; ++l)
                                     {
                                         interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+                                        interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);
+
                                     }
                                     if (NDIM == 2)
                                     {
                                         dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                        dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                     }
-                                    n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                                    n = (dx_dxi[0].cross(dx_dxi[1]));
+                                    N = dX_dxi[0].cross(dX_dxi[1]);
+                                    const double dA = N.norm();
+                                    const double da = n.norm();
+                                    n = n.unit();
 
                                     bool found_same_intersection_point = false;
 
@@ -3885,6 +4088,10 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                             interpolate(&jn(0), 0, DU_jump_node[SideDim[axis][j]], phi_P_jump);
                                             if(d_use_trial_interpolation){
                                                  interpolate_intersection<boost::multi_array<double, 2>>(&jn(0), xui,DU_jump_node[SideDim[axis][j]]);
+                                            }
+                                            if (d_use_direct_coupling)
+                                            {
+                                                 jn(axis)=(dA / da) *(jn(SideDim[axis][j])-jn*n*n(SideDim[axis][j]))*n(axis);
                                             }
                                             C_u_um = sdh_um * jn(axis);
                                             C_u_up = sdh_up * jn(axis);
@@ -4318,6 +4525,7 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isBool("use_consistent_mass_matrix"))
         d_use_consistent_mass_matrix = db->getBool("use_consistent_mass_matrix");
     if (db->isBool("use_direct_forcing")) d_use_direct_forcing = db->getBool("use_direct_forcing");
+    if (db->isBool("use_direct_coupling")) d_use_direct_coupling = db->getBool("use_direct_coupling");
 
     // Restart settings.
     if (db->isString("libmesh_restart_file_extension"))
@@ -4341,8 +4549,12 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
         d_smoothing_eps = db->getDouble("smoothing_eps");
         pout << " smoothing eps: " << d_smoothing_eps;
     }
+    if (db->isDouble("back_checking_threshold")){
+        d_back_checking_threshold = db->getDouble("back_checking_threshold");}
     if (db->isBool("use_trial_interpolation"))
         d_use_trial_interpolation = db->getBool("use_trial_interpolation");
+    if (db->isBool("use_velocity_correction")){
+        d_use_velocity_correction = db->getBool("use_velocity_correction");}
     return;
 } // getFromInput
 
