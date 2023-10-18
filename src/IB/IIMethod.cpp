@@ -987,7 +987,9 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     X_dof_map_cache.dof_indices(elem, X_dof_indices[d], d);
                 }
                 get_values_for_interpolation(x_node, *X_ghost_vec, X_dof_indices);
-                get_values_for_interpolation(X_node, X0_vec, X_dof_indices);
+                if(d_use_direct_coupling)
+                {
+                get_values_for_interpolation(X_node, X0_vec, X_dof_indices);}
 
                 if (d_use_velocity_jump_conditions)
                 {
@@ -1061,21 +1063,27 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     for (unsigned int l = 0; l < NDIM - 1; ++l)
                     {
                         interpolate(dx_dxi[l], qp, x_node, *dphi_dxi[l]);
-                        interpolate(dX_dxi[l], qp, X_node, *dphi_dxi[l]);
+                        if(d_use_direct_coupling)
+                        {
+                            interpolate(dX_dxi[l], qp, X_node, *dphi_dxi[l]);
+                        }
 
                     }
                     if (NDIM == 2)
                     {
                         dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
-                        dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                        if(d_use_direct_coupling)
+                        {dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);}
                     }
-                    N = dX_dxi[0].cross(dX_dxi[1]);
-                    const double dA = N.norm();
-                    N = N.unit();
+
                     n = dx_dxi[0].cross(dx_dxi[1]);
                     const double da = n.norm();
                     n = n.unit();
-                    dA_da_qp[qp_offset + qp]=(dA / da);
+                    if(d_use_direct_coupling)
+                    { N = dX_dxi[0].cross(dX_dxi[1]);
+                        const double dA = N.norm();
+                        N = N.unit();
+                        dA_da_qp[qp_offset + qp]=(dA / da);}
                     for (unsigned int d = 0; d < NDIM; ++d)
                     {
                         n_qp[NDIM * (qp_offset + qp) + d] = n(d);
@@ -1254,7 +1262,10 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             for (BoxIterator<NDIM> b(stencil_box); b; b++)
                             {
                                 const Index<NDIM>& ic = b();
-                                for (int j = 0; j < NDIM; ++j) du_jump(j) = DU_jump_qp[d][s * NDIM + j];
+                                for (int j = 0; j < NDIM; ++j){
+                                 du_jump(j) = DU_jump_qp[d][s * NDIM + j];
+                                 wrc(j) = wr[j][ic_upper[j] - ic[j]];
+                                }
 #if (NDIM == 2)
                                 //VectorValue<double> tangent_vec=(1,-norm_vec(0)/-norm_vec(1));
                                 //tangent_vec(0)=1;
@@ -1272,10 +1283,10 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                     VectorValue<double> du_jump_sub;
                                     for (int j = 0; j < NDIM; ++j){
                                         du_jump_sub(j) = (dA_da_qp[s]) *(du_jump(d) - du_jump * norm_vec * norm_vec(d)) * norm_vec(j);}
-                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *(wrc * du_jump_sub);
+                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *(wrc*du_jump_sub);
                                 }
                                 else{
-                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *(coeff_vec * du_jump);
+                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *(wrc * du_jump);
 
                                 }
 
@@ -1286,9 +1297,21 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                 coeff_vec = VectorValue<double>(interpCoeff[ic[0]][ic[1]][ic[2]][0],
                                                                 interpCoeff[ic[0]][ic[1]][ic[2]][1],
                                                                 interpCoeff[ic[0]][ic[1]][ic[2]][2]);
-                                Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
-                                                                w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
-                                                                (coeff_vec * du_jump);
+                                if (d_use_direct_coupling)
+                                {
+                                    VectorValue<double> du_jump_sub;
+                                    for (int j = 0; j < NDIM; ++j){
+                                        du_jump_sub(j) = (dA_da_qp[s]) *(du_jump(d) - du_jump * norm_vec * norm_vec(d)) * norm_vec(j);}
+                                    Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
+                                                                    w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
+                                                                    (wrc *  du_jump_sub);
+                                }
+                                else{
+                                    Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
+                                                                    w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
+                                                                    (wrc * du_jump);
+                                }
+
 #endif
                             }
                         }
@@ -1367,7 +1390,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             const double nproj = n_qp[s * NDIM + 0] * wr[0][ic_upper[0] - ic[0]] +
                                                  n_qp[s * NDIM + 1] * wr[1][ic_upper[1] - ic[1]] +
                                                  n_qp[s * NDIM + 2] * wr[2][ic_upper[2] - ic[2]];
-                            if (d_use_velocity_jump_conditions)
+                            if (d_use_velocity_jump_conditions && d_use_velocity_correction)
                             {
                                 double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][ic[2]][axis] : 0.0;
                                 if (nproj <= 0.0&&nproj>d_back_checking_threshold){
@@ -3582,7 +3605,8 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
             Elem* const elem = patch_elems[e_idx];
             const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
             get_values_for_interpolation(x_node, X_ghost_vec, X_dof_indices);
-            get_values_for_interpolation(X_node, X0_vec, X_dof_indices);
+            if(d_use_direct_coupling){
+            get_values_for_interpolation(X_node, X0_vec, X_dof_indices);}
             if (d_use_pressure_jump_conditions)
             {
                 const auto& P_jump_dof_indices = P_jump_dof_map_cache->dof_indices(elem);
@@ -3736,7 +3760,8 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                 for (unsigned int l = 0; l < NDIM - 1; ++l)
                                 {
                                     interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
-                                    interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);
+                                    if(d_use_direct_coupling){
+                                        interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);}
                                 }
                                 if (NDIM == 2)
                                 {
@@ -3744,8 +3769,10 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                     dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                 }
                                 n = (dx_dxi[0].cross(dx_dxi[1]));
-                                N = dX_dxi[0].cross(dX_dxi[1]);
-                                const double dA = N.norm();
+                                double dA =0;
+                                if(d_use_direct_coupling){
+                                    N = dX_dxi[0].cross(dX_dxi[1]);
+                                const double dA = N.norm();}
                                 const double da = n.norm();
                                 n = n.unit();
 
@@ -3834,16 +3861,22 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                 for (unsigned int l = 0; l < NDIM - 1; ++l)
                                 {
                                     interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
-                                    interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);
+                                    if (d_use_direct_coupling)
+                                    {
+                                    interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);}
                                 }
                                 if (NDIM == 2)
                                 {
                                     dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
-                                    dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                    if (d_use_direct_coupling)
+                                    {dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);}
                                 }
                                 n = (dx_dxi[0].cross(dx_dxi[1]));
+                                double dA =0;
+                                if (d_use_direct_coupling)
+                                {
                                 N = dX_dxi[0].cross(dX_dxi[1]);
-                                const double dA = N.norm();
+                                const double dA = N.norm();}
                                 const double da = n.norm();
                                 n = n.unit();
 
@@ -3904,7 +3937,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                         }
                                         if (d_use_direct_coupling)
                                         {
-                                            jn(axis)=(dA / da) *(jn(axis)-jn*n*n(axis))*n(axis);
+                                            jn(axis)=(jn(axis)-jn*n*n(axis))*n(axis);
                                         }
                                         C_u_up = sdh_up * jn(axis);
                                         C_u_um = sdh_um * jn(axis);
@@ -4020,17 +4053,23 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                     for (unsigned int l = 0; l < NDIM - 1; ++l)
                                     {
                                         interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
-                                        interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);
-
+                                        if (d_use_direct_coupling)
+                                        {
+                                        interpolate(dX_dxi[l], 0, X_node, *dphi_dxi[l]);}
                                     }
                                     if (NDIM == 2)
                                     {
                                         dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
-                                        dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                        if (d_use_direct_coupling)
+                                        {
+                                        dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);}
                                     }
                                     n = (dx_dxi[0].cross(dx_dxi[1]));
+                                    double dA =0;
+                                    if (d_use_direct_coupling)
+                                    {
                                     N = dX_dxi[0].cross(dX_dxi[1]);
-                                    const double dA = N.norm();
+                                    const double dA = N.norm();}
                                     const double da = n.norm();
                                     n = n.unit();
 
@@ -4091,7 +4130,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                             }
                                             if (d_use_direct_coupling)
                                             {
-                                                 jn(axis)=(dA / da) *(jn(SideDim[axis][j])-jn*n*n(SideDim[axis][j]))*n(axis);
+                                                 jn(axis)=(dA / da)*(jn(SideDim[axis][j])-jn*n*n(SideDim[axis][j]))*n(axis);
                                             }
                                             C_u_um = sdh_um * jn(axis);
                                             C_u_up = sdh_up * jn(axis);
