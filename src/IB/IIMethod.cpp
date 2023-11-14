@@ -2588,7 +2588,10 @@ IIMethod::computeLagrangianForce(const double data_time)
         // Setup global and elemental right-hand-side vectors.
         NumericVector<double>* F_vec = d_F_half_vecs[part];
         std::unique_ptr<NumericVector<double> > F_rhs_vec = F_vec->zero_clone();
+        std::unique_ptr<NumericVector<double> > Normal_rhs_vec = F_vec->zero_clone();
+        std::unique_ptr<NumericVector<double> > Normal_vec = F_vec->zero_clone();
         std::array<DenseVector<double>, NDIM> F_rhs_e;
+        std::array<DenseVector<double>, NDIM> Normal_rhs_e;
         VectorValue<double>& F_integral = d_lag_surface_force_integral[part];
         F_integral.zero();
 
@@ -2719,14 +2722,80 @@ IIMethod::computeLagrangianForce(const double data_time)
             surface_pressure_grad_var_data;
 
         // Loop over the elements to compute the right-hand side vector.
-        boost::multi_array<double, 2> X_node, x_node;
+        boost::multi_array<double, 2> X_node, x_node, Normal_node;
         double DU[NDIM][NDIM];
         TensorValue<double> FF;
-        VectorValue<double> F, F_b, F_s, F_qp, N, X, n, x;
+        VectorValue<double> F, F_b, F_s, F_qp, N, X, n, x, Normal_qp, normal;
         std::array<VectorValue<double>, 2> dX_dxi, dx_dxi;
         std::vector<libMesh::dof_id_type> dof_id_scratch;
         const auto el_begin = mesh.active_local_elements_begin();
         const auto el_end = mesh.active_local_elements_end();
+        /////////////////////smoothing normal /////////////
+        if(d_use_smoothed_normal)
+        {
+            for (auto el_it = el_begin; el_it != el_end; ++el_it)
+            {
+                auto elem = *el_it;
+                const auto& Normal_dof_indices = F_dof_map_cache.dof_indices(elem);
+                const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
+
+                for (unsigned int d = 0; d < NDIM; ++d)
+                {
+                    Normal_rhs_e[d].resize(static_cast<int>(Normal_dof_indices[d].size()));
+                }
+                fe_X->reinit(elem);
+
+                fe_interpolator.reinit(elem);
+                fe_interpolator.collectDataForInterpolation(elem);
+                fe_interpolator.interpolate(elem);
+                get_values_for_interpolation(x_node, *X_vec, X_dof_indices);
+                const unsigned int n_qpoints = qrule->n_points();
+                const size_t n_basis = phi_X.size();
+                const size_t n_basis2 = phi_jump.size();
+                for (unsigned int qp = 0; qp < n_qpoints; ++qp)
+                {
+                    interpolate(x, qp, x_node, phi_X);
+                    for (unsigned int k = 0; k < NDIM - 1; ++k)
+                    {
+                        interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
+                    }
+                    if (NDIM == 2)
+                    {
+                        dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                    }
+
+                    n = dx_dxi[0].cross(dx_dxi[1]);
+                    const double da = n.norm();
+
+                    n = n.unit();
+                    // Add the boundary forces to the right-hand-side vector.
+                    for (unsigned int k = 0; k < n_basis; ++k)
+                    {
+                        Normal_qp = n * phi_X[k][qp] * JxW[qp];
+                        for (unsigned int i = 0; i < NDIM; ++i)
+                        {
+                            Normal_rhs_e[i](k) += Normal_qp(i);
+                        }
+                    }
+                }
+                // Apply constraints (e.g., enforce periodic boundary conditions)
+                // and add the elemental contributions to the global vector.
+                for (unsigned int i = 0; i < NDIM; ++i)
+                {
+                    copy_dof_ids_to_vector(i, Normal_dof_indices, dof_id_scratch);
+                    F_dof_map.constrain_element_vector(Normal_rhs_e[i], dof_id_scratch);
+                    Normal_rhs_vec->add_vector(Normal_rhs_e[i], dof_id_scratch);
+                }
+            }
+            SAMRAI_MPI::sumReduction(&F_integral(0), NDIM);
+            // Solve for F.
+            Normal_rhs_vec->close();
+            d_fe_data_managers[part]->computeL2Projection(
+                *Normal_vec, *Normal_rhs_vec, FORCE_SYSTEM_NAME);
+            Normal_vec->close();
+        }
+
+        ///////////////////////////////////////////////////
         for (auto el_it = el_begin; el_it != el_end; ++el_it)
         {
             auto elem = *el_it;
@@ -2765,6 +2834,9 @@ IIMethod::computeLagrangianForce(const double data_time)
             {
                 fe_jump->reinit(elem);
             }
+            if(d_use_smoothed_normal){
+                get_values_for_interpolation(Normal_node, *Normal_vec, F_dof_indices);
+            }
 
             get_values_for_interpolation(x_node, *X_vec, X_dof_indices);
             get_values_for_interpolation(X_node, X0_vec, X_dof_indices);
@@ -2780,6 +2852,9 @@ IIMethod::computeLagrangianForce(const double data_time)
                     interpolate(dX_dxi[k], qp, X_node, *dphi_dxi_X[k]);
                     interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
                 }
+                if(d_use_smoothed_normal){
+                    interpolate(normal, qp, Normal_node, phi_X);
+                }
                 if (NDIM == 2)
                 {
                     dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
@@ -2794,6 +2869,10 @@ IIMethod::computeLagrangianForce(const double data_time)
                 n = dx_dxi[0].cross(dx_dxi[1]);
                 const double da = n.norm();
                 n = n.unit();
+                if(d_use_smoothed_normal){
+                    n=normal;
+                    n=n.unit();
+                }
 
                 F.zero();
 
@@ -4594,6 +4673,10 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
         d_use_trial_interpolation = db->getBool("use_trial_interpolation");
     if (db->isBool("use_velocity_correction")){
         d_use_velocity_correction = db->getBool("use_velocity_correction");}
+    if (db->isBool("use_smoothed_normal"))
+    {
+        d_use_smoothed_normal= db->getBool("use_smoothed_normal");
+    }
     return;
 } // getFromInput
 
