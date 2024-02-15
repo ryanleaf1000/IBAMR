@@ -117,6 +117,8 @@ IBHierarchyIntegrator {
    dt_max              = DT
    error_on_dt_change  = ERROR_ON_DT_CHANGE
    enable_logging      = ENABLE_LOGGING
+   num_cycles = 10
+   time_stepping_type = BACKWARD_EULER
 }
 
 IIMethod {

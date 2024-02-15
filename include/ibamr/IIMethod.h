@@ -104,6 +104,7 @@ class IIMethod : public IBStrategy
 public:
     static const std::string COORD_MAPPING_SYSTEM_NAME;
     static const std::string COORDS_SYSTEM_NAME;
+    static const std::string X_PREVIOUS_SYSTEM_NAME;
     static const std::string FORCE_SYSTEM_NAME;
     static const std::string NORMAL_VELOCITY_SYSTEM_NAME;
     static const std::string PRESSURE_IN_SYSTEM_NAME;
@@ -367,6 +368,12 @@ public:
     void trapezoidalStep(double current_time, double new_time) override;
 
     /*!
+     * Advance the positions of the Lagrangian structure using the (explicit)
+     * bacward euler method.
+     */
+    void backwardEulerStep( double current_time, double new_time) override;
+
+    /*!
      * Compute the Lagrangian force at the specified time within the current
      * time interval.
      */
@@ -612,11 +619,11 @@ protected:
     std::vector<IBTK::FEDataManager*> d_fe_data_managers;
     SAMRAI::hier::IntVector<NDIM> d_ghosts = 0;
     std::vector<libMesh::System*> d_X_systems, d_U_systems, d_U_n_systems, d_U_t_systems, d_F_systems, d_P_jump_systems,
-        d_WSS_in_systems, d_WSS_out_systems, d_P_in_systems, d_P_out_systems, d_TAU_in_systems, d_TAU_out_systems;
+        d_WSS_in_systems, d_WSS_out_systems, d_P_in_systems, d_P_out_systems, d_TAU_in_systems, d_TAU_out_systems,d_X_previous_systems;
     std::vector<std::array<libMesh::System*, NDIM> > d_DU_jump_systems;
     std::vector<libMesh::PetscVector<double>*> d_F_half_vecs, d_F_IB_ghost_vecs;
     std::vector<libMesh::PetscVector<double>*> d_X_current_vecs, d_X_new_vecs, d_X_half_vecs, d_X0_vecs,
-        d_X_IB_ghost_vecs;
+        d_X_IB_ghost_vecs,d_X_previous_vecs ;
     std::vector<libMesh::PetscVector<double>*> d_U_current_vecs, d_U_new_vecs, d_U_half_vecs;
     std::vector<libMesh::PetscVector<double>*> d_U_n_current_vecs, d_U_n_new_vecs, d_U_n_half_vecs;
     std::vector<libMesh::PetscVector<double>*> d_U_t_current_vecs, d_U_t_new_vecs, d_U_t_half_vecs;
@@ -657,6 +664,7 @@ protected:
     double d_wss_calc_width = 1.05;
     double d_p_calc_width = 1.3;
     double d_smoothing_eps = 0;
+    bool d_QI_RULE = false;
 
     /*
      * Functions used to compute the initial coordinates of the Lagrangian mesh.

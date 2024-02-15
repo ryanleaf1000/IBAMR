@@ -154,6 +154,7 @@ libmesh_restart_file_name(const std::string& restart_dump_dirname,
 
 const std::string IIMethod::COORDS_SYSTEM_NAME = "coordinates system";
 const std::string IIMethod::COORD_MAPPING_SYSTEM_NAME = "coordinate mapping system";
+const std::string IIMethod::X_PREVIOUS_SYSTEM_NAME = "X previous system";
 const std::string IIMethod::FORCE_SYSTEM_NAME = "IB force system";
 const std::string IIMethod::VELOCITY_SYSTEM_NAME = "velocity system";
 const std::string IIMethod::NORMAL_VELOCITY_SYSTEM_NAME = "normal velocity system";
@@ -363,6 +364,9 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
     d_F_half_vecs.resize(d_num_parts);
     d_F_IB_ghost_vecs.resize(d_num_parts);
 
+    d_X_previous_systems.resize(d_num_parts);
+    d_X_previous_vecs.resize(d_num_parts);
+
     d_P_jump_systems.resize(d_num_parts);
     d_P_jump_half_vecs.resize(d_num_parts);
     d_P_jump_IB_ghost_vecs.resize(d_num_parts);
@@ -433,6 +437,9 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
         d_F_half_vecs[part] = dynamic_cast<PetscVector<double>*>(d_F_systems[part]->current_local_solution.get());
         d_F_IB_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(
             d_fe_data_managers[part]->buildGhostedSolutionVector(FORCE_SYSTEM_NAME, /*localize_data*/ false));
+
+        d_X_previous_systems[part] = &d_equation_systems[part]->get_system(X_PREVIOUS_SYSTEM_NAME);
+        d_X_previous_vecs[part] = dynamic_cast<PetscVector<double>*>(d_X_previous_systems[part]->current_local_solution.get());
 
         if (d_use_pressure_jump_conditions)
         {
@@ -515,6 +522,7 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
 
         *d_F_half_vecs[part] = *d_F_systems[part]->solution;
 
+        *d_X_previous_vecs[part] = *d_X_previous_systems[part]->solution;
         if (d_use_pressure_jump_conditions)
         {
             *d_P_jump_half_vecs[part] = *d_P_jump_systems[part]->solution;
@@ -547,7 +555,7 @@ IIMethod::postprocessIntegrateData(double /*current_time*/, double /*new_time*/,
 {
     IBAMR_TIMER_START(t_postprocess_integrate_data);
     std::vector<std::vector<libMesh::PetscVector<double>*> > vec_collection_update = {
-        d_U_new_vecs, d_X_new_vecs, d_U_n_new_vecs, d_U_t_new_vecs, d_F_half_vecs
+        d_U_new_vecs, d_X_new_vecs, d_U_n_new_vecs, d_U_t_new_vecs, d_F_half_vecs, d_X_previous_vecs
     };
 
     if (d_use_pressure_jump_conditions)
@@ -583,6 +591,9 @@ IIMethod::postprocessIntegrateData(double /*current_time*/, double /*new_time*/,
         // Reset time-dependent Lagrangian data.
         *d_X_systems[part]->solution = *d_X_new_vecs[part];
         *d_X_systems[part]->current_local_solution = *d_X_new_vecs[part];
+        *d_X_previous_systems[part]->solution = *d_X_current_vecs[part];
+        *d_X_previous_systems[part]->current_local_solution = *d_X_current_vecs[part];
+
         delete d_X_new_vecs[part];
         delete d_X_half_vecs[part];
 
@@ -662,6 +673,9 @@ IIMethod::postprocessIntegrateData(double /*current_time*/, double /*new_time*/,
     d_F_systems.clear();
     d_F_half_vecs.clear();
     d_F_IB_ghost_vecs.clear();
+
+    d_X_previous_systems.clear();
+    d_X_previous_vecs.clear();
 
     d_P_jump_systems.clear();
     d_P_jump_half_vecs.clear();
@@ -2307,8 +2321,13 @@ IIMethod::forwardEulerStep(const double current_time, const double new_time)
         }
         else
         {
+            if (d_QI_RULE && current_time!=0)
+            {ierr =
+                    VecWAXPY(d_X_new_vecs[part]->vec(), 2*dt, d_U_current_vecs[part]->vec(), d_X_previous_vecs[part]->vec());
+            }
+            else{
             ierr =
-                VecWAXPY(d_X_new_vecs[part]->vec(), dt, d_U_current_vecs[part]->vec(), d_X_current_vecs[part]->vec());
+                VecWAXPY(d_X_new_vecs[part]->vec(), dt, d_U_current_vecs[part]->vec(), d_X_current_vecs[part]->vec());}
             IBTK_CHKERRQ(ierr);
         }
         ierr = VecAXPBYPCZ(
@@ -2389,11 +2408,25 @@ IIMethod::trapezoidalStep(const double current_time, const double new_time)
 } // trapezoidalStep
 
 void
+IIMethod::backwardEulerStep(const double current_time, const double new_time)
+{
+    return;
+} // forwardEulerStep
+
+void
 IIMethod::computeLagrangianForce(const double data_time)
 {
     IBAMR_TIMER_START(t_compute_lagrangian_force);
-    TBOX_ASSERT(MathUtilities<double>::equalEps(data_time, d_half_time));
-    batch_vec_ghost_update(d_X_half_vecs, INSERT_VALUES, SCATTER_FORWARD);
+
+    if (MathUtilities<double>::equalEps(data_time, d_new_time)){
+        batch_vec_ghost_update(d_X_new_vecs, INSERT_VALUES, SCATTER_FORWARD);
+    }
+    else if(MathUtilities<double>::equalEps(data_time, d_half_time)){
+    batch_vec_ghost_update(d_X_half_vecs, INSERT_VALUES, SCATTER_FORWARD);}
+    else if(MathUtilities<double>::equalEps(data_time, d_current_time)){
+    batch_vec_ghost_update(d_X_current_vecs, INSERT_VALUES, SCATTER_FORWARD);}
+    else{
+    TBOX_ASSERT(MathUtilities<double>::equalEps(data_time, d_half_time));}
     for (unsigned part = 0; part < d_num_parts; ++part)
     {
         EquationSystems* equation_systems = d_fe_data_managers[part]->getEquationSystems();
@@ -2406,11 +2439,20 @@ IIMethod::computeLagrangianForce(const double data_time)
         std::array<DenseVector<double>, NDIM> F_rhs_e;
         VectorValue<double>& F_integral = d_lag_surface_force_integral[part];
         F_integral.zero();
+        NumericVector<double>* X_vec;
+        if (MathUtilities<double>::equalEps(data_time, d_new_time)){
+             X_vec = d_X_new_vecs[part];
+        }
+        else if(MathUtilities<double>::equalEps(data_time, d_half_time)){
+            X_vec = d_X_half_vecs[part];}
+        else if(MathUtilities<double>::equalEps(data_time, d_current_time)){
+            X_vec = d_X_current_vecs[part];
+        }
 
-        NumericVector<double>* X_vec = d_X_half_vecs[part];
         double surface_area = 0.0;
-
         NumericVector<double>* P_jump_vec = d_use_pressure_jump_conditions ? d_P_jump_half_vecs[part] : nullptr;
+
+
         std::unique_ptr<NumericVector<double> > P_jump_rhs_vec;
         DenseVector<double> P_jump_rhs_e;
         if (d_use_pressure_jump_conditions)
@@ -2424,6 +2466,7 @@ IIMethod::computeLagrangianForce(const double data_time)
         std::array<std::array<DenseVector<double>, NDIM>, NDIM> DU_jump_rhs_e;
         if (d_use_velocity_jump_conditions)
         {
+
             for (unsigned int d = 0; d < NDIM; ++d)
             {
                 DU_jump_vec[d] = d_DU_jump_half_vecs[part][d];
@@ -2540,10 +2583,12 @@ IIMethod::computeLagrangianForce(const double data_time)
         VectorValue<double> F, F_b, F_s, F_qp, N, X, n, x;
         std::array<VectorValue<double>, 2> dX_dxi, dx_dxi;
         std::vector<libMesh::dof_id_type> dof_id_scratch;
+
         const auto el_begin = mesh.active_local_elements_begin();
         const auto el_end = mesh.active_local_elements_end();
         for (auto el_it = el_begin; el_it != el_end; ++el_it)
         {
+
             auto elem = *el_it;
             const auto& F_dof_indices = F_dof_map_cache.dof_indices(elem);
             const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
@@ -2582,12 +2627,15 @@ IIMethod::computeLagrangianForce(const double data_time)
             }
 
             get_values_for_interpolation(x_node, *X_vec, X_dof_indices);
+
             get_values_for_interpolation(X_node, X0_vec, X_dof_indices);
+
             const unsigned int n_qpoints = qrule->n_points();
             const size_t n_basis = phi_X.size();
             const size_t n_basis2 = phi_jump.size();
             for (unsigned int qp = 0; qp < n_qpoints; ++qp)
             {
+
                 interpolate(X, qp, X_node, phi_X);
                 interpolate(x, qp, x_node, phi_X);
                 for (unsigned int k = 0; k < NDIM - 1; ++k)
@@ -2595,6 +2643,7 @@ IIMethod::computeLagrangianForce(const double data_time)
                     interpolate(dX_dxi[k], qp, X_node, *dphi_dxi_X[k]);
                     interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
                 }
+
                 if (NDIM == 2)
                 {
                     dX_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
@@ -2773,6 +2822,7 @@ IIMethod::computeLagrangianForce(const double data_time)
             }
         }
     }
+
     IBAMR_TIMER_STOP(t_compute_lagrangian_force);
     return;
 } // computeLagrangianForce
@@ -2783,12 +2833,16 @@ IIMethod::spreadForce(const int f_data_idx,
                       const std::vector<Pointer<RefineSchedule<NDIM> > >& /*f_prolongation_scheds*/,
                       const double data_time)
 {
-    TBOX_ASSERT(MathUtilities<double>::equalEps(data_time, d_half_time));
     IBAMR_TIMER_START(t_spread_force);
 
     std::vector<std::vector<libMesh::PetscVector<double>*> > vec_collection_update = {
-        d_X_IB_ghost_vecs, d_X_half_vecs, d_F_IB_ghost_vecs, d_F_half_vecs
+        d_X_IB_ghost_vecs, d_F_IB_ghost_vecs, d_F_half_vecs //d_X_half_vecs, d_F_IB_ghost_vecs, d_F_half_vecs
     };
+    if (MathUtilities<double>::equalEps(data_time, d_new_time)){vec_collection_update.push_back(d_X_new_vecs);}
+    else if (MathUtilities<double>::equalEps(data_time, d_half_time)){vec_collection_update.push_back(d_X_half_vecs);}
+    else if (MathUtilities<double>::equalEps(data_time, d_current_time)){vec_collection_update.push_back(d_X_current_vecs);}
+    else{    TBOX_ASSERT(MathUtilities<double>::equalEps(data_time, d_half_time));
+    }
 
     if (d_use_pressure_jump_conditions)
     {
@@ -2811,14 +2865,19 @@ IIMethod::spreadForce(const int f_data_idx,
 
     for (unsigned int part = 0; part < d_num_parts; ++part)
     {
-        PetscVector<double>* X_vec = d_X_half_vecs[part];
+        PetscVector<double>* X_vec;
+        if (MathUtilities<double>::equalEps(data_time, d_new_time)){X_vec= d_X_new_vecs[part];}
+        else if (MathUtilities<double>::equalEps(data_time, d_half_time)){X_vec= d_X_half_vecs[part];}
+        else if (MathUtilities<double>::equalEps(data_time, d_current_time)){X_vec= d_X_current_vecs[part];}
+
         PetscVector<double>* X_ghost_vec = d_X_IB_ghost_vecs[part];
         PetscVector<double>* F_vec = d_F_half_vecs[part];
         PetscVector<double>* F_ghost_vec = d_F_IB_ghost_vecs[part];
         X_vec->localize(*X_ghost_vec);
         F_vec->localize(*F_ghost_vec);
+        if(!(d_use_pressure_jump_conditions&&d_use_velocity_jump_conditions)){
         d_fe_data_managers[part]->spread(
-            f_data_idx, *F_ghost_vec, *X_ghost_vec, FORCE_SYSTEM_NAME, f_phys_bdry_op, data_time);
+            f_data_idx, *F_ghost_vec, *X_ghost_vec, FORCE_SYSTEM_NAME, f_phys_bdry_op, data_time);}
         PetscVector<double>* P_jump_vec;
         PetscVector<double>* P_jump_ghost_vec = NULL;
         std::array<PetscVector<double>*, NDIM> DU_jump_ghost_vec;
@@ -2940,8 +2999,8 @@ IIMethod::initializeFEEquationSystems()
             std::vector<std::string> vector_system_names
                 {COORDS_SYSTEM_NAME, COORD_MAPPING_SYSTEM_NAME,
                  VELOCITY_SYSTEM_NAME, NORMAL_VELOCITY_SYSTEM_NAME,
-                 TANGENTIAL_VELOCITY_SYSTEM_NAME, FORCE_SYSTEM_NAME};
-            std::vector<std::string> vector_variable_prefixes {"X", "dX", "U", "U_n", "U_t", "F"};
+                 TANGENTIAL_VELOCITY_SYSTEM_NAME, FORCE_SYSTEM_NAME, X_PREVIOUS_SYSTEM_NAME};
+            std::vector<std::string> vector_variable_prefixes {"X", "dX", "U", "U_n", "U_t", "F", "X_previous"};
             std::vector<libMesh::FEFamily> vector_fe_family(vector_system_names.size(), d_fe_family[part]);
 
             if (d_use_velocity_jump_conditions)
@@ -3043,6 +3102,7 @@ IIMethod::initializeFEData()
         auto& U_n_system = equation_systems->get_system<System>(NORMAL_VELOCITY_SYSTEM_NAME);
         auto& U_t_system = equation_systems->get_system<System>(TANGENTIAL_VELOCITY_SYSTEM_NAME);
         auto& F_system = equation_systems->get_system<System>(FORCE_SYSTEM_NAME);
+        auto& X_previous_system = equation_systems->get_system<System>(X_PREVIOUS_SYSTEM_NAME);
 
         X_system.assemble_before_solve = false;
         X_system.assemble();
@@ -3062,6 +3122,8 @@ IIMethod::initializeFEData()
         F_system.assemble_before_solve = false;
         F_system.assemble();
 
+        X_previous_system.assemble_before_solve = false;
+        X_previous_system.assemble();
         if (d_use_pressure_jump_conditions)
         {
             System& P_jump_system = equation_systems->get_system<System>(PRESSURE_JUMP_SYSTEM_NAME);
@@ -4309,6 +4371,7 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isBool("use_consistent_mass_matrix"))
         d_use_consistent_mass_matrix = db->getBool("use_consistent_mass_matrix");
     if (db->isBool("use_direct_forcing")) d_use_direct_forcing = db->getBool("use_direct_forcing");
+    if (db->isBool("QI_RULE")) d_QI_RULE = db->getBool("QI_RULE");
 
     // Restart settings.
     if (db->isString("libmesh_restart_file_extension"))

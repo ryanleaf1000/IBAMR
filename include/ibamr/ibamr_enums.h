@@ -256,6 +256,7 @@ enum TimeSteppingType
     TRAPEZOIDAL_RULE,
     SSPRK2,
     SSPRK3,
+    QI_RULE,
     UNKNOWN_TIME_STEPPING_TYPE = -1
 };
 
@@ -272,6 +273,7 @@ string_to_enum<TimeSteppingType>(const std::string& val)
     if (strcasecmp(val.c_str(), "SSPRK1") == 0) return FORWARD_EULER;
     if (strcasecmp(val.c_str(), "SSPRK2") == 0) return SSPRK2;
     if (strcasecmp(val.c_str(), "SSPRK3") == 0) return SSPRK3;
+    if (strcasecmp(val.c_str(), "QI_RULE") == 0) return QI_RULE;
     return UNKNOWN_TIME_STEPPING_TYPE;
 } // string_to_enum
 

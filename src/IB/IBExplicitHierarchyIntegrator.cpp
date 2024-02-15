@@ -148,6 +148,7 @@ IBExplicitHierarchyIntegrator::preprocessIntegrateHierarchy(const double current
     case TRAPEZOIDAL_RULE:
         if (d_enable_logging) plog << d_object_name << "::preprocessIntegrateHierarchy(): computing Lagrangian force\n";
         d_ib_method_ops->computeLagrangianForce(current_time);
+
         if (d_enable_logging)
             plog << d_object_name
                  << "::preprocessIntegrateHierarchy(): spreading Lagrangian force "
@@ -161,6 +162,10 @@ IBExplicitHierarchyIntegrator::preprocessIntegrateHierarchy(const double current
         if (d_f_current_idx != invalid_index) d_hier_velocity_data_ops->copyData(d_f_current_idx, d_f_idx);
         break;
     case MIDPOINT_RULE:
+        // intentionally blank
+        break;
+    case QI_RULE:
+        std::cout<<"Qi rule activacted"<<std::endl;
         // intentionally blank
         break;
     default:
@@ -237,6 +242,18 @@ IBExplicitHierarchyIntegrator::integrateHierarchy(const double current_time, con
             d_hier_velocity_data_ops->linearSum(d_f_idx, 0.5, d_f_current_idx, 0.5, d_f_idx);
         }
         break;
+    case QI_RULE:
+        if (d_enable_logging) plog << d_object_name << "::integrateHierarchy(): computing Lagrangian force\n";
+        d_ib_method_ops->computeLagrangianForce(new_time);
+        if (d_enable_logging)
+            plog << d_object_name << "::integrateHierarchy(): spreading Lagrangian force to the Eulerian grid\n";
+        d_hier_velocity_data_ops->setToScalar(d_f_idx, 0.0);
+        d_u_phys_bdry_op->setPatchDataIndex(d_f_idx);
+        d_u_phys_bdry_op->setHomogeneousBc(true);
+        d_ib_method_ops->spreadForce(
+            d_f_idx, d_u_phys_bdry_op, getProlongRefineSchedules(d_object_name + "::f"), new_time);
+        d_u_phys_bdry_op->setHomogeneousBc(false);
+        break;
     default:
         TBOX_ERROR(
             d_object_name
@@ -277,6 +294,7 @@ IBExplicitHierarchyIntegrator::integrateHierarchy(const double current_time, con
         TBOX_ASSERT(d_current_num_cycles == 1);
 #endif
         const int ins_num_cycles = d_ins_hier_integrator->getNumberOfCycles();
+        std::cout<<"NS cycle number:"<<ins_num_cycles <<std::endl;
         for (int ins_cycle_num = 0; ins_cycle_num < ins_num_cycles; ++ins_cycle_num)
         {
             d_ins_hier_integrator->integrateHierarchy(current_time, new_time, ins_cycle_num);
@@ -327,6 +345,19 @@ IBExplicitHierarchyIntegrator::integrateHierarchy(const double current_time, con
                                              getGhostfillRefineSchedules(d_object_name + "::u"),
                                              new_time);
         break;
+    case QI_RULE:
+        d_hier_velocity_data_ops->copyData(d_u_idx, u_new_idx);
+        if (d_enable_logging)
+            plog << d_object_name
+                 << "::integrateHierarchy(): interpolating Eulerian velocity to "
+                    "the Lagrangian mesh\n";
+        d_u_phys_bdry_op->setPatchDataIndex(d_u_idx);
+        d_u_phys_bdry_op->setHomogeneousBc(false);
+        d_ib_method_ops->interpolateVelocity(d_u_idx,
+                                             getCoarsenSchedules(d_object_name + "::u::CONSERVATIVE_COARSEN"),
+                                             getGhostfillRefineSchedules(d_object_name + "::u"),
+                                             new_time);
+        break;
     default:
         TBOX_ERROR(
             d_object_name
@@ -360,6 +391,9 @@ IBExplicitHierarchyIntegrator::integrateHierarchy(const double current_time, con
             if (d_enable_logging)
                 plog << d_object_name << "::integrateHierarchy(): performing Lagrangian trapezoidal-rule step\n";
             d_ib_method_ops->trapezoidalStep(current_time, new_time);
+            break;
+        case QI_RULE:
+                d_ib_method_ops->backwardEulerStep(current_time, new_time);
             break;
         default:
             TBOX_ERROR(d_object_name << "::integrateHierarchy():\n"
