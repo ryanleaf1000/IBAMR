@@ -8,7 +8,7 @@
 #include <map>
 #include <numeric>
 #include <cmath>
-#include "NeuralNetwork.h"
+#include "ibamr/NeuralNetwork.h"
 
 std::vector<std::vector<float>> load_csv_data(std::string filename);
 std::vector<float> evaluate_network(std::vector<std::vector<float>> dataset, int n_folds, float l_rate, int n_epoch, int n_hidden);
@@ -25,7 +25,7 @@ float accuracy_metric(std::vector<int> expect, std::vector<int> predict);
 * 
 * (See at the bottom for a second main function that's for displaying and testing a very small network.)
 */
-int main(int argc, char* argv[]) {
+int run_neural_network(int argc, char* argv[]) {
 	std::cout << "Neural Network with Backpropagation in C++ from scratch" << std::endl;
 
 	std::vector<std::vector<float>> csv_data;

@@ -488,7 +488,7 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
 {
     TetherData tether_data(input_db);
     void* const tether_data_ptr = reinterpret_cast<void*>(&tether_data);
-
+    std::cout<<"Am I called"<<std::endl;
     const unsigned int dim = mesh.mesh_dimension();
     double F_integral[NDIM];
     double T_integral[NDIM];
@@ -543,7 +543,9 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
     boost::multi_array<double, 2> x_node, X_node, U_node, TAU_node;
 
     VectorValue<double> F, N, U, n, x, X, TAU;
-
+    std::ofstream smoothed_velocit_output;
+    if(true){
+        smoothed_velocit_output.open("test-smoothed-velocity "+std::to_string(loop_time)+" .csv");}
     const auto el_begin = mesh.active_local_elements_begin();
     const auto el_end = mesh.active_local_elements_end();
     for (auto el_it = el_begin; el_it != el_end; ++el_it)
@@ -561,6 +563,7 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
         if (compute_fluid_traction) get_values_for_interpolation(TAU_node, *TAU_ghost_vec, dof_indices);
 
         const unsigned int n_qp = qrule->n_points();
+        std::cout<<"quadrature point number"<<n_qp<<std::endl;
         for (unsigned int qp = 0; qp < n_qp; ++qp)
         {
             interpolate(X, qp, X_node, phi);
@@ -579,6 +582,16 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
                 F_integral[d] += F(d) * JxW[qp];
                 if (compute_fluid_traction) T_integral[d] += TAU(d) * JxW[qp];
             }
+            if(true){
+                if (NDIM == 2) {
+                    // error_output << x_qp[NDIM * (qp_offset + qp)] << " "<< x_qp[NDIM * (qp_offset + qp)+1] << " "<< U_correction_qp[NDIM * (qp_offset + qp)] << "\n";
+                    smoothed_velocit_output << x(0) << " "<< x(1) << " "<< U(0) << "\n";
+
+                }
+                else{
+                    //error_output << x_qp[NDIM * (qp_offset + qp)] << " "<< x_qp[NDIM * (qp_offset + qp)+1] << " "<< x_qp[NDIM * (qp_offset + qp)+2] << " "<< U_correction_qp[NDIM * (qp_offset + qp)] << "\n";
+                    smoothed_velocit_output << x(0) << " "<< x(1) << " "<< x(2) << " "<< U(0) << "\n";
+                }}
         }
     }
     SAMRAI_MPI::sumReduction(F_integral, NDIM);
@@ -595,6 +608,9 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
             drag_TAU_stream << loop_time << " " << T_integral[0] / (0.5 * rho * U_max * U_max * D) << endl;
             lift_TAU_stream << loop_time << " " << T_integral[1] / (0.5 * rho * U_max * U_max * D) << endl;
         }
+        smoothed_velocit_output.close();
+
     }
+
     return;
 } // postprocess_data

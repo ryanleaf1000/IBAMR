@@ -1010,8 +1010,8 @@ public:
                              bool consistent_mass_matrix = true,
                              bool close_U = true,
                              bool close_F = true,
-                             double tol = 1.0e-6,
-                             unsigned int max_its = 100);
+                             double tol = 1.0e-14,
+                             unsigned int max_its = 1000);
 
     /*!
      * \brief Set U to be the stabilized L2 projection of F.
@@ -1023,7 +1023,7 @@ public:
                                        bool close_U = true,
                                        bool close_F = true,
                                        double tol = 1.0e-6,
-                                       unsigned int max_its = 100);
+                                       unsigned int max_its = 1000);
 
     /*!
      * \brief Set U to be the smoothed L2 projection of F.
@@ -1034,8 +1034,8 @@ public:
                                      double epsilon,
                                      bool close_U = true,
                                      bool close_F = true,
-                                     double tol = 1.0e-6,
-                                     unsigned int max_its = 100);
+                                     double tol = 1.0e-14,
+                                     unsigned int max_its = 1000);
 
     /*!
      * Update the quadrature rule for the current element.  If the provided

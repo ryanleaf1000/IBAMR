@@ -647,6 +647,7 @@ protected:
     libMesh::FEFamily d_pressure_jump_fe_family = libMesh::LAGRANGE;
     bool d_use_velocity_jump_conditions = false;
     libMesh::FEFamily d_velocity_jump_fe_family = libMesh::LAGRANGE;
+    libMesh::FEFamily d_force_fe_family = libMesh::LAGRANGE;
     bool d_compute_fluid_traction = false;
     libMesh::FEFamily d_wss_fe_family = libMesh::LAGRANGE;
     libMesh::FEFamily d_tau_fe_family = libMesh::LAGRANGE;
@@ -662,16 +663,18 @@ protected:
     double d_wss_calc_width = 1.05;
     double d_p_calc_width = 1.3;
     double d_force_stabilization_eps = 0.0, d_velocity_stabilization_eps = 0.0, d_wss_stabilization_eps = 0.0, d_tau_stabilization_eps = 0.0, d_normal_stabilization_eps = 0.0;
-    bool d_use_velocity_correction =false;
+    bool d_use_velocity_correction = true;
     bool d_use_smoothed_normal = false;
     bool d_use_analytic_normal =false;
     bool d_Q2_mesh_correction=false;
+    bool d_output_training_data = false;
     double d_Q2_correction_end_time = 0.0;
     double d_analytical_raduis =0.0;
     bool d_use_direct_coupling_smoothed_normal = false;
     bool d_use_direct_coupling_smoothed_normal_for_velocity = false;
     bool d_F_trial = false;
     bool d_use_Qi_scheme = false;
+    bool d_use_incorrected_velocity_interpoaltion_for_force_predictor = false;
 
     /*
      * Functions used to compute the initial coordinates of the Lagrangian mesh.

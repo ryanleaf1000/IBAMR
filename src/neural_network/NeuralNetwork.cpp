@@ -1,5 +1,4 @@
-#include "NeuralNetwork.h"
-
+#include "ibamr/NeuralNetwork.h"
 #include <iostream>
 #include <cstdlib>
 #include <cmath>

@@ -25,6 +25,7 @@
 #include <libmesh/mesh.h>
 #include <libmesh/mesh_generation.h>
 #include <libmesh/mesh_triangle_interface.h>
+#include <libmesh/gmsh_io.h>
 
 // Headers for application-specific algorithm/data structure objects
 #include <ibamr/IBExplicitHierarchyIntegrator.h>
@@ -139,7 +140,7 @@ using namespace ModelData;
 
 // Function prototypes
 static ofstream drag_F_stream, lift_F_stream, drag_TAU_stream, lift_TAU_stream, U_L1_norm_stream, U_L2_norm_stream,
-    U_max_norm_stream;
+        U_max_norm_stream,lift_F_y_stream,lift_F_z_stream;
 
 void postprocess_data(Pointer<Database> input_db,
                       Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
@@ -252,7 +253,7 @@ main(int argc, char* argv[])
                        << "       but Triangle is required for TRI3 or TRI6 elements.\n");
 #endif
         }
-        else
+        else if(!input_db->isString("MESH_FILENAME"))
         {
             // NOTE: number of segments along boundary is 4*2^r.
             const double num_circum_segments = 2.0 * M_PI * R / ds;
@@ -260,6 +261,7 @@ main(int argc, char* argv[])
             MeshTools::Generation::build_sphere(solid_mesh, R, r, Utility::string_to_enum<ElemType>(elem_type));
         }
 
+       if(!input_db->isString("MESH_FILENAME")){
         // Ensure nodes on the surface are on the analytic boundary.
         MeshBase::element_iterator el_end = solid_mesh.elements_end();
         for (MeshBase::element_iterator el = solid_mesh.elements_begin(); el != el_end; ++el)
@@ -276,7 +278,7 @@ main(int argc, char* argv[])
                     n = R * n.unit();
                 }
             }
-        }
+        }}
         solid_mesh.prepare_for_use();
 
         BoundaryMesh boundary_mesh(solid_mesh.comm(), solid_mesh.mesh_dimension() - 1);
@@ -286,7 +288,17 @@ main(int argc, char* argv[])
 
         compute_fluid_traction = input_db->getBoolWithDefault("COMPUTE_FLUID_TRACTION", false);
 
-        Mesh& mesh = boundary_mesh;
+        Mesh loaded_mesh(init.comm(), NDIM-1);
+
+        if(input_db->isString("MESH_FILENAME")) {
+            libMesh::GmshIO gmsh_io(loaded_mesh);
+            gmsh_io.read(input_db->getString("MESH_FILENAME")); //"cylinder.msh");
+            std::cout<<"I am good after mesh loading "<<std::endl;
+        }
+        loaded_mesh.prepare_for_use();
+        Mesh& mesh = input_db->isString("MESH_FILENAME")? loaded_mesh : boundary_mesh;
+
+        std::cout<<"I am good after mesh setting "<<std::endl;
 
         // Create major algorithm and data objects that comprise the
         // application. These objects are configured from the input database
@@ -440,6 +452,8 @@ main(int argc, char* argv[])
         {
             drag_F_stream.open("C_F_D.curve", ios_base::out | ios_base::trunc);
             lift_F_stream.open("C_F_L.curve", ios_base::out | ios_base::trunc);
+            lift_F_y_stream.open("C_F_L_y.curve", ios_base::out | ios_base::trunc);
+            lift_F_z_stream.open("C_F_L_z.curve", ios_base::out | ios_base::trunc);
             drag_TAU_stream.open("C_T_D.curve", ios_base::out | ios_base::trunc);
             lift_TAU_stream.open("C_T_L.curve", ios_base::out | ios_base::trunc);
             U_L1_norm_stream.open("U_L1.curve", ios_base::out | ios_base::trunc);
@@ -448,6 +462,8 @@ main(int argc, char* argv[])
 
             drag_F_stream.precision(10);
             lift_F_stream.precision(10);
+            lift_F_y_stream.precision(10);
+            lift_F_z_stream.precision(10);
             drag_TAU_stream.precision(10);
             lift_TAU_stream.precision(10);
             U_L1_norm_stream.precision(10);
@@ -526,6 +542,8 @@ main(int argc, char* argv[])
         {
             drag_F_stream.close();
             lift_F_stream.close();
+            lift_F_y_stream.close();
+            lift_F_z_stream.close();
             drag_TAU_stream.close();
             lift_TAU_stream.close();
             U_L1_norm_stream.close();
@@ -654,8 +672,22 @@ postprocess_data(Pointer<Database> input_db,
     static const double D = 1.0;
     if (SAMRAI_MPI::getRank() == 0)
     {
-        drag_F_stream << loop_time << " " << -F_integral[0] / (0.5 * rho * U_max * U_max * D) << endl;
-        lift_F_stream << loop_time << " " << -F_integral[1] / (0.5 * rho * U_max * U_max * D) << endl;
+        if (NDIM ==2)
+        {
+           // drag_F_stream << loop_time << " " << F_integral[0] << endl;
+            //lift_F_stream << loop_time << " " << F_integral[1] << endl;
+            drag_F_stream << loop_time << " " << -F_integral[0] / (0.5 * rho * U_max * U_max * D) << endl;
+            lift_F_stream << loop_time << " " << -F_integral[1] / (0.5 * rho * U_max * U_max * D) << endl;
+        }
+        else if (NDIM ==3)
+        {
+    //        drag_F_stream << loop_time << " " << F_integral[0]<< endl;
+   //         lift_F_y_stream << loop_time << " " << F_integral[1] << endl;
+  //          lift_F_z_stream << loop_time << " " << F_integral[2]<< endl;
+            drag_F_stream << loop_time << " " << -2*F_integral[0] / (pi*0.25) << endl;
+            lift_F_y_stream << loop_time << " " << -2*F_integral[1] / (pi*0.25) << endl;
+            lift_F_z_stream << loop_time << " " << -2*F_integral[2] / (pi*0.25) << endl;
+        }
         if (compute_fluid_traction)
         {
             drag_TAU_stream << loop_time << " " << T_integral[0] / (0.5 * rho * U_max * U_max * D) << endl;

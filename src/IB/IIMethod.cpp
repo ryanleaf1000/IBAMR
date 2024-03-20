@@ -750,6 +750,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
     const double mu = getINSHierarchyIntegrator()->getStokesSpecifications()->getMu();
     const int finest_ln = d_hierarchy->getFinestLevelNumber();
     const int coarsest_ln = 0;
+    bool use_correction_for_force_predict = true;
     for (int ln = finest_ln; ln > coarsest_ln; --ln)
     {
         if (ln < static_cast<int>(u_synch_scheds.size()) && u_synch_scheds[ln])
@@ -806,6 +807,9 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             X_vec = d_X_half_vecs[part];}
             else{
                 X_vec = d_X_new_vecs[part];
+            }
+            if(d_use_incorrected_velocity_interpoaltion_for_force_predictor){
+                use_correction_for_force_predict = false;
             }
            // U_vec = d_U_new_vecs[part];
             //U_n_vec = d_U_n_new_vecs[part];
@@ -950,10 +954,14 @@ IIMethod::interpolateVelocity(const int u_data_idx,
 
         boost::multi_array<double, 2> x_node,Normal_node,smoothed_normal_node,F_node;
         std::array<boost::multi_array<double, 2>, NDIM> DU_jump_node;
-        std::vector<double> U_qp, U_in_qp, U_out_qp, WSS_in_qp, WSS_out_qp, n_qp, x_qp, x_in_qp, x_out_qp,F_trial_qp;
+        std::vector<double> U_qp, U_in_qp, U_out_qp, WSS_in_qp, WSS_out_qp, n_qp, x_qp, x_in_qp, x_out_qp,F_trial_qp,U_correction_qp;
         std::array<std::vector<double>, NDIM> DU_jump_qp;
         VectorValue<double> U, WSS_in, WSS_out, U_n, U_t, n,X_corrected, Normal_qp, normal, x_dub;
         std::array<VectorValue<double>, 2> dx_dxi;
+
+        std::ofstream error_output;
+        if(d_output_training_data){
+        error_output.open("test "+std::to_string(data_time)+" .csv");}
 
         Pointer<PatchLevel<NDIM> > level =
             d_hierarchy->getPatchLevel(d_fe_data_managers[part]->getFinestPatchLevelNumber());
@@ -1183,6 +1191,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
 
             if (!n_qpoints_patch) continue;
             U_qp.resize(NDIM * n_qpoints_patch);
+            U_correction_qp.resize(NDIM * n_qpoints_patch);
             WSS_in_qp.resize(NDIM * n_qpoints_patch);
             WSS_out_qp.resize(NDIM * n_qpoints_patch);
             U_in_qp.resize(NDIM * n_qpoints_patch);
@@ -1197,10 +1206,12 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 DU_jump_qp[axis].resize(NDIM * n_qpoints_patch);
             }
             std::fill(U_qp.begin(), U_qp.end(), 0.0);
+            std::fill(U_correction_qp.begin(), U_correction_qp.end(), 0.0);
             std::fill(U_in_qp.begin(), U_in_qp.end(), 0.0);
             std::fill(U_out_qp.begin(), U_out_qp.end(), 0.0);
             std::fill(WSS_in_qp.begin(), WSS_in_qp.end(), 0.0);
             std::fill(WSS_out_qp.begin(), WSS_out_qp.end(), 0.0);
+
 
             // Loop over the elements and compute the positions of the quadrature points.
             qrule.reset();
@@ -1404,6 +1415,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 hier::Index<NDIM> ic_lower, ic_upper, ic_center;
                 std::array<std::array<double, 2>, NDIM> w, wr;
                 std::vector<double> U_axis(n_qpoints_patch, 0.0);
+                std::vector<double> U_correction(n_qpoints_patch, 0.0);
                 std::vector<double> U_axis_o(n_qpoints_patch, 0.0);
                 Box<NDIM> side_boxes[NDIM];
 
@@ -1584,6 +1596,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                         }
                         // Accumulate the value of U at the current location.
                         U_axis[s] = 0.0;
+                        U_correction[s] = 0.0;
                         //std::cout<<":forces I want forces:"<<std::endl;
 
                         for (BoxIterator<NDIM> b(stencil_box); b; b++)
@@ -1599,6 +1612,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             {
                                 const double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][axis] : 0.0;
                                 U_axis[s] -= CC / mu;
+                                U_correction[s] -= CC / mu;
                             }
 #endif
 #if (NDIM == 3)
@@ -1612,6 +1626,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             {
                                 const double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][ic[2]][axis] : 0.0;
                                 U_axis[s] -= CC / mu;
+                                U_correction[s] -= CC / mu;
                             }
 #endif
                         }
@@ -1621,6 +1636,8 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                         for (unsigned int k = 0; k < local_indices.size(); ++k)
                         {
                             U_qp[NDIM * local_indices[k] + axis] = U_axis[local_indices[k]];
+                            U_correction_qp[NDIM * local_indices[k] + axis] =U_correction[local_indices[k]];
+
                             if (dh != 0.0)
                             {
                                 WSS_in_qp[NDIM * local_indices[k] + axis] =
@@ -1649,6 +1666,8 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     }
                 }
             }
+
+//            std::copy(U_correction_qp.begin(), U_correction_qp.end(), std::ostream_iterator<double>(std::cout, "\n"));
             // Loop over the elements and accumulate the right-hand-side values.
             qrule.reset();
             qp_offset = 0;
@@ -1703,10 +1722,20 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                         dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                     }
                     n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                    if(d_output_training_data){
+                    if (NDIM == 2) {
+                        error_output << x_qp[NDIM * (qp_offset + qp)] << " "<< x_qp[NDIM * (qp_offset + qp)+1] << " "<< U_correction_qp[NDIM * (qp_offset + qp)] << "\n";
+                        //error_output << x_qp[NDIM * (qp_offset + qp)] << " "<< x_qp[NDIM * (qp_offset + qp)+1] << " "<< U_qp[NDIM * (qp_offset + qp)] << "\n";
 
+                    }
+                    else{
+                        error_output << x_qp[NDIM * (qp_offset + qp)] << " "<< x_qp[NDIM * (qp_offset + qp)+1] << " "<< x_qp[NDIM * (qp_offset + qp)+2] << " "<< U_correction_qp[NDIM * (qp_offset + qp)] << "\n";
+                        //error_output << x_qp[NDIM * (qp_offset + qp)] << " "<< x_qp[NDIM * (qp_offset + qp)+1] << " "<< x_qp[NDIM * (qp_offset + qp)+2] << " "<< U_qp[NDIM * (qp_offset + qp)] << "\n";
+                    }}
                     for (unsigned int d = 0; d < NDIM; ++d)
                     {
                         U(d) = U_qp[NDIM * (qp_offset + qp) + d];
+
                         if(data_time<d_Q2_correction_end_time&&d_Q2_mesh_correction)
                         {
                             const double radius = d_analytical_raduis;
@@ -1823,6 +1852,9 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             for (unsigned int d = 0; d < NDIM; ++d) d_DU_jump_IB_ghost_vecs[part][d]->close();
         }
         d_X_IB_ghost_vecs[part]->close();
+
+        error_output.close();
+
     }
     IBAMR_TIMER_STOP(t_interpolate_velocity);
     return;
@@ -2796,6 +2828,8 @@ IIMethod::computeLagrangianForce(const double data_time)
     TBOX_ASSERT(MathUtilities<double>::equalEps(data_time, d_half_time));
     batch_vec_ghost_update(d_X_half_vecs, INSERT_VALUES, SCATTER_FORWARD);
    // std::cout<<"lag"<<std::endl;
+
+    std::ofstream smoothed_velocit_output;
 
     for (unsigned part = 0; part < d_num_parts; ++part)
     {
@@ -4866,6 +4900,8 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     // Force computation settings.
     if (db->isBool("use_pressure_jump_conditions"))
         d_use_pressure_jump_conditions = db->getBool("use_pressure_jump_conditions");
+    if (db->isString("force_fe_family"))
+        d_force_fe_family = Utility::string_to_enum<FEFamily>(db->getString("force_fe_family"));
     if (d_use_pressure_jump_conditions)
     {
         if (db->isString("pressure_jump_fe_family"))
@@ -4934,35 +4970,40 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     {
     d_use_analytic_normal= db->getBool("use_analytic_normal");
     }
-    if (db->isBool("Q2_mesh_correction"))
-    {
-        d_Q2_mesh_correction= db->getBool("Q2_mesh_correction");
-    }
+//    if (db->isBool("Q2_mesh_correction"))
+//    {
+//        d_Q2_mesh_correction= db->getBool("Q2_mesh_correction");
+//    }
 
     if (db->isBool("use_direct_coupling_smoothed_normal"))
     {
         d_use_direct_coupling_smoothed_normal= db->getBool("use_direct_coupling_smoothed_normal");
     }
-    if (db->isBool("use_direct_coupling_smoothed_normal_for_velocity"))
+
+//    if (db->isBool("F_trial"))
+//    {
+//        d_F_trial= db->getBool("F_trial");
+//    }
+//    if (db->isBool("use_Qi_scheme"))
+//    {
+//        d_use_Qi_scheme= db->getBool("use_Qi_scheme");
+//    }
+    if (db->isBool("output_training_data"))
     {
-        d_use_direct_coupling_smoothed_normal_for_velocity= db->getBool("use_direct_coupling_smoothed_normal_for_velocity");
+        d_output_training_data= db->getBool("output_training_data");
     }
-    if (db->isBool("F_trial"))
-    {
-        d_F_trial= db->getBool("F_trial");
-    }
-    if (db->isBool("use_Qi_scheme"))
-    {
-        d_use_Qi_scheme= db->getBool("use_Qi_scheme");
-    }
-    if (db->isDouble("Q2_correction_end_time"))
-    {
-        d_Q2_correction_end_time = db->getDouble("Q2_correction_end_time");
-    }
-        if (db->isDouble("analytical_raduis"))
-    {
-        d_analytical_raduis = db->getDouble("analytical_raduis");
-    }
+//    if (db->isBool("use_incorrected_velocity_interpoaltion_for_force_predictor"))
+//    {
+//        d_use_incorrected_velocity_interpoaltion_for_force_predictor= db->getBool("use_incorrected_velocity_interpoaltion_for_force_predictor");
+//    }
+//    if (db->isDouble("Q2_correction_end_time"))
+//    {
+//        d_Q2_correction_end_time = db->getDouble("Q2_correction_end_time");
+//    }
+//        if (db->isDouble("analytical_raduis"))
+//    {
+//        d_analytical_raduis = db->getDouble("analytical_raduis");
+//    }
     if (db->keyExists("do_log"))
         d_do_log = db->getBool("do_log");
     else if (db->keyExists("enable_logging"))

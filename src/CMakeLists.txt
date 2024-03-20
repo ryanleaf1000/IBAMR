@@ -211,8 +211,8 @@ SET(CXX_SRC
   utilities/ConvectiveOperator.cpp
 
    # Neural Net
-   #neural_network/NeuralNetwork.cpp
-  # neural_network/NN_evaluation.cpp
+   neural_network/NeuralNetwork.cpp
+   neural_network/NN_evaluation.cpp
   )
 
 IF(${IBAMR_HAVE_LIBMESH})
