@@ -7,7 +7,7 @@ U_MAX = 2.0
 // grid spacing parameters
 MAX_LEVELS = 1                                      // maximum number of levels in locally refined grid
 REF_RATIO  = 1                                      // refinement ratio between levels
-N =128	                                        // actual    number of grid cells on coarsest grid level
+N =2048	                                        // actual    number of grid cells on coarsest grid level
 FAC = 1.0
 //SHIFT1 = -2.802674913495818  //N=32
 //SHIFT1 = -2.831419340910775   ////N=64
@@ -45,7 +45,7 @@ IB_POINT_DENSITY           = 4                    // approximate density of IB q
 START_TIME                 = 0.0e0                  // initial simulation time
 CFL_MAX                    = 0.2                   // maximum CFL number
 DT                         = 0.5*CFL_MAX*DX // maximum timestep size
-END_TIME                   = 10 * DT                   // final simulation time
+END_TIME                   = 4.673004150390625e-04 //10 * DT                   // final simulation time
 GROW_DT                    = 2.0e0                  // growth factor for timesteps
 NUM_CYCLES                 = 1                      // number of cycles of fixed-point iteration
 CONVECTIVE_TS_TYPE         = "ADAMS_BASHFORTH"      // convective time stepping type
@@ -67,7 +67,7 @@ YC = 0.0
 XC = 0.0
 
 KAPPA_S = 0.002/DT^2 //10000 //0.00001*DX/DT^2 //2.5*DX/DT^2
-ETA_S =0.0/DT
+ETA_S =0.1/DT
 
 // exact solution function expressions
 // wss= (2.0*R1*R1*R2*R2*MU*OMEGA1)/(R2*R2 - R1*R1)
@@ -197,6 +197,7 @@ IIMethod {
    min_ghost_cell_width = 6
    normalize_pressure_jump = NORMALIZE_PRESSURE_JUMP
    enable_logging_solver_iterations = FALSE
+   use_direct_forcing = TRUE
 }
 
 

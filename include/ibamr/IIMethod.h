@@ -669,13 +669,14 @@ protected:
     bool d_Q2_mesh_correction=false;
     bool d_output_training_data = false;
     double d_Q2_correction_end_time = 0.0;
+    int d_num_smooth_cycles =0;
     double d_analytical_raduis =0.0;
     bool d_use_direct_coupling_smoothed_normal = false;
     bool d_use_direct_coupling_smoothed_normal_for_velocity = false;
     bool d_F_trial = false;
     bool d_use_Qi_scheme = false;
     bool d_use_incorrected_velocity_interpoaltion_for_force_predictor = false;
-
+    bool d_use_smoothed_normal_for_traction = false;
     /*
      * Functions used to compute the initial coordinates of the Lagrangian mesh.
      */

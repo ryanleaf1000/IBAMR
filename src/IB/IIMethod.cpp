@@ -1290,7 +1290,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                         {
                             x_qp[NDIM * (qp_offset + qp) + d] += x_node[k][d] * p;
                         }
-                        if(d_use_direct_coupling_smoothed_normal){ //(d_smoothed)
+                        if(d_use_direct_coupling_smoothed_normal || d_use_smoothed_normal_for_traction){ //(d_smoothed)
                             const double& p_smoothed_normal = phi_X[k][qp];
                             for (unsigned int d = 0; d < NDIM; ++d)
                             {
@@ -1339,14 +1339,16 @@ IIMethod::interpolateVelocity(const int u_data_idx,
 
                     for (unsigned int d = 0; d < NDIM; ++d)
                     {
-                        if(!d_use_direct_coupling_smoothed_normal){
-                        n_qp[NDIM * (qp_offset + qp) + d] = n(d);}
-                        else{
+
+                        if(d_use_direct_coupling_smoothed_normal || d_use_smoothed_normal_for_traction){
                             double n_magnitude =0;
                             if(NDIM==2){ n_magnitude=sqrt(n_qp[NDIM * (qp_offset + qp)]*n_qp[NDIM * (qp_offset + qp)]+n_qp[NDIM * (qp_offset + qp)+1]*n_qp[NDIM * (qp_offset + qp)+1]);}
                             if(NDIM==3){ n_magnitude=sqrt(n_qp[NDIM * (qp_offset + qp)]*n_qp[NDIM * (qp_offset + qp)]+n_qp[NDIM * (qp_offset + qp)+1]*n_qp[NDIM * (qp_offset + qp)+1]+n_qp[NDIM * (qp_offset + qp)+2]*n_qp[NDIM * (qp_offset + qp)+2]);}
                             n_qp[NDIM * (qp_offset + qp) + d]/=n_magnitude;
+                            n(d)= n_qp[NDIM * (qp_offset + qp) + d];
                         }
+                        else{
+                            n_qp[NDIM * (qp_offset + qp) + d] = n(d);}
                         x_in_qp[NDIM * (qp_offset + qp) + d] = x_qp[NDIM * (qp_offset + qp) + d] - n(d) * dh;
                         x_out_qp[NDIM * (qp_offset + qp) + d] = x_qp[NDIM * (qp_offset + qp) + d] + n(d) * dh;
                     }
@@ -1608,7 +1610,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                 w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] * u_sc_data_array[ic[0]][ic[1]];
                             const double nproj = n_qp[s * NDIM + 0] * wr[0][ic_upper[0] - ic[0]] +
                                                  n_qp[s * NDIM + 1] * wr[1][ic_upper[1] - ic[1]];
-                            if (d_use_velocity_jump_conditions && d_use_velocity_correction)//&& !MathUtilities<double>::equalEps(data_time, d_new_time))
+                            if (d_use_velocity_jump_conditions && d_use_velocity_correction && use_correction_for_force_predict)//&& !MathUtilities<double>::equalEps(data_time, d_new_time))
                             {
                                 const double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][axis] : 0.0;
                                 U_axis[s] -= CC / mu;
@@ -1622,7 +1624,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             const double nproj = n_qp[s * NDIM + 0] * wr[0][ic_upper[0] - ic[0]] +
                                                  n_qp[s * NDIM + 1] * wr[1][ic_upper[1] - ic[1]] +
                                                  n_qp[s * NDIM + 2] * wr[2][ic_upper[2] - ic[2]];
-                            if (d_use_velocity_jump_conditions && d_use_velocity_correction)// && !MathUtilities<double>::equalEps(data_time, d_new_time))
+                            if (d_use_velocity_jump_conditions && d_use_velocity_correction && use_correction_for_force_predict)// && !MathUtilities<double>::equalEps(data_time, d_new_time))
                             {
                                 const double CC = (nproj > 0.0) ? Ujump[ic[0]][ic[1]][ic[2]][axis] : 0.0;
                                 U_axis[s] -= CC / mu;
@@ -1928,6 +1930,14 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
     const unsigned int dim = mesh.mesh_dimension();
     std::unique_ptr<QBase> qrule;
 
+    System* smoothed_normal_system = &equation_systems->get_system(SMOOTHED_NORMAL_SYSTEM_NAME);
+    const DofMap* smoothed_normal_dof_map = &smoothed_normal_system->get_dof_map();
+    FEType smoothed_normal_fe_type = smoothed_normal_dof_map->variable_type(0);
+    std::unique_ptr<FEBase> fe_smoothed_normal = FEBase::build(dim, smoothed_normal_fe_type);
+    FEDataManager::SystemDofMapCache& smoothed_normal_dof_map_cache =
+            *d_fe_data_managers[part]->getDofMapCache(SMOOTHED_NORMAL_SYSTEM_NAME);
+
+
     System& X_system = equation_systems->get_system(COORDS_SYSTEM_NAME);
     const DofMap& X_dof_map = X_system.get_dof_map();
     FEDataManager::SystemDofMapCache& X_dof_map_cache = *d_fe_data_managers[part]->getDofMapCache(COORDS_SYSTEM_NAME);
@@ -2012,11 +2022,16 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
     std::unique_ptr<NumericVector<double> > X0_vec = X_petsc_vec->clone();
     copy_and_synch(X_system.get_vector("INITIAL_COORDINATES"), *X0_vec);
     X0_vec->close();
+    NumericVector<double>* Smoothed_Normal_vec = d_smoothed_normal[part];
+    std::unique_ptr<NumericVector<double> > Smoothed_Normal_rhs_vec = Smoothed_Normal_vec->zero_clone();
+    std::array<DenseVector<double>, NDIM> Smoothed_Normal_rhs_e;
+    VectorValue<double> Smoothed_Normal_qp;
 
+    VectorValue<double> Smoothed_normal;
     const std::vector<std::vector<Elem*> >& active_patch_element_map =
         d_fe_data_managers[part]->getActivePatchElementMap();
 
-    boost::multi_array<double, 2> x_node, X_node, WSS_in_node, WSS_out_node, n_qp_node;
+    boost::multi_array<double, 2> x_node, X_node, WSS_in_node, WSS_out_node, n_qp_node,Smoothed_Normal_node;
     boost::multi_array<double, 1> P_in_node, P_out_node;
     std::vector<double> x_in_qp, x_out_qp, x_qp;
     std::vector<double> P_in_qp, P_out_qp, Normal_qp, WSS_in_qp, WSS_out_qp, TAU_in_qp, TAU_out_qp;
@@ -2069,6 +2084,86 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
         std::fill(TAU_in_qp.begin(), TAU_in_qp.end(), 0.0);
         std::fill(TAU_out_qp.begin(), TAU_out_qp.end(), 0.0);
 
+
+
+        if(d_use_smoothed_normal_for_traction)
+        {
+            std::vector<libMesh::dof_id_type> dof_id_scratch;
+            qrule.reset();
+            unsigned int qp_offset = 0;
+            for (auto el_it = 0; el_it != num_active_patch_elems; ++el_it)
+            {
+
+                Elem* const elem = patch_elems[el_it];
+                const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
+                const auto& Normal_dof_indices = smoothed_normal_dof_map_cache.dof_indices(elem);//F_dof_map_cache.dof_indices(elem);
+//                for (unsigned int d = 0; d < NDIM; ++d)
+//                {
+//                    X_dof_map.dof_indices(elem, X_dof_indices[d], d);
+//                }
+
+                for (unsigned int d = 0; d < NDIM; ++d)
+                {
+                    Smoothed_Normal_rhs_e[d].resize(static_cast<int>(Normal_dof_indices[d].size()));
+                }
+                const bool qrule_changed =
+                        FEDataManager::updateInterpQuadratureRule(qrule, d_default_interp_spec, elem, x_node, patch_dx_min);
+                if (qrule_changed)
+                {
+                    fe_X->attach_quadrature_rule(qrule.get());
+                }
+                fe_X->reinit(elem);
+
+                //  fe_interpolator.reinit(elem);
+                // fe_interpolator.collectDataForInterpolation(elem);
+                // fe_interpolator.interpolate(elem);
+                get_values_for_interpolation(x_node, *X_ghost_vec, X_dof_indices);
+                const unsigned int n_qpoints = qrule->n_points();
+
+                if (qrule_changed)
+                {
+                    fe_X->attach_quadrature_rule(qrule.get());
+                }
+                const size_t n_basis = phi_X.size();
+                const size_t n_basis2 = phi_X.size();
+                for (unsigned int qp = 0; qp < n_qpoints; ++qp)
+                {
+                    for (unsigned int k = 0; k < NDIM - 1; ++k)
+                    {
+                        interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
+                    }
+                    if (NDIM == 2)
+                    {
+                        dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                    }
+
+                    n = dx_dxi[0].cross(dx_dxi[1]);
+                    n = n.unit();
+                    // Add the boundary forces to the right-hand-side vector.
+                    for (unsigned int k = 0; k < n_basis; ++k)
+                    {
+                        Smoothed_Normal_qp = n * phi_X[k][qp] * JxW[qp];//n * phi_X[k][qp] * JxW[qp];
+                        for (unsigned int i = 0; i < NDIM; ++i)
+                        {
+                            Smoothed_Normal_rhs_e[i](k) += Smoothed_Normal_qp(i);
+                        }
+                    }
+                }
+                // Apply constraints (e.g., enforce periodic boundary conditions)
+                // and add the elemental contributions to the global vector.
+                for (unsigned int i = 0; i < NDIM; ++i)
+                {
+                    copy_dof_ids_to_vector(i, Normal_dof_indices, dof_id_scratch);
+                    smoothed_normal_dof_map->constrain_element_vector(Smoothed_Normal_rhs_e[i], dof_id_scratch);// F_dof_map.constrain_element_vector(Normal_rhs_e[i], dof_id_scratch);
+                    Smoothed_Normal_rhs_vec->add_vector(Smoothed_Normal_rhs_e[i], dof_id_scratch);
+                }
+            }
+            //SAMRAI_MPI::sumReduction(&F_integral(0), NDIM);
+            Smoothed_Normal_rhs_vec->close();
+            d_fe_data_managers[part]->computeSmoothedL2Projection(
+                    *Smoothed_Normal_vec, *Smoothed_Normal_rhs_vec, SMOOTHED_NORMAL_SYSTEM_NAME, d_normal_stabilization_eps);
+            Smoothed_Normal_vec->close();
+        }
         // Loop over the elements and compute the positions of the quadrature points.
         qrule.reset();
         unsigned int qp_offset = 0;
@@ -2081,6 +2176,7 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
             const auto& WSS_out_dof_indices = WSS_out_dof_map_cache.dof_indices(elem);
             const auto& P_in_dof_indices = P_in_dof_map_cache.dof_indices(elem);
             const auto& P_out_dof_indices = P_out_dof_map_cache.dof_indices(elem);
+            const auto& smoothed_normal_dof_indices = smoothed_normal_dof_map_cache.dof_indices(elem);
             get_values_for_interpolation(x_node, *X_petsc_vec, X_local_soln, X_dof_indices);
             get_values_for_interpolation(WSS_in_node, *WSS_in_ghost_vec, WSS_in_dof_indices);
             get_values_for_interpolation(WSS_out_node, *WSS_out_ghost_vec, WSS_out_dof_indices);
@@ -2099,7 +2195,9 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
             }
             fe_X->reinit(elem);
             fe_P->reinit(elem);
-
+            if(d_use_smoothed_normal_for_traction){
+                get_values_for_interpolation(Smoothed_Normal_node, *Smoothed_Normal_vec,smoothed_normal_dof_indices);
+            }
             const unsigned int n_node = elem->n_nodes();
             const unsigned int n_qp = qrule->n_points();
 
@@ -2141,7 +2239,9 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
                 {
                     dX_dxi[1] = dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                 }
-
+                if(d_use_smoothed_normal_for_traction){
+                    interpolate(Smoothed_normal, qp, Smoothed_Normal_node, phi_X);
+                }
                 // Construct unit vectors in the reference and current
                 // configurations.
                 N = dX_dxi[0].cross(dX_dxi[1]);
@@ -2150,7 +2250,10 @@ IIMethod::computeFluidTraction(const double data_time, unsigned int part)
                 n = dx_dxi[0].cross(dx_dxi[1]);
                 const double da = n.norm();
                 n = n.unit();
-        
+                if(d_use_smoothed_normal_for_traction){
+                    n=Smoothed_normal;
+                    n=n.unit();
+                }
 
                 for (unsigned int i = 0; i < NDIM; ++i)
                 {
@@ -2337,6 +2440,7 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
         X_vec = d_X_new_vecs[part];
     }
     copy_and_synch(*X_vec, *X_ghost_vec);
+    NumericVector<double>* Normal_vec = d_smoothed_normal[part];
 
     // Extract the FE systems and DOF maps, and setup the FE object.
     EquationSystems* equation_systems = d_fe_data_managers[part]->getEquationSystems();
@@ -2344,8 +2448,19 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
     const unsigned int dim = mesh.mesh_dimension();
     std::unique_ptr<QBase> qrule;
 
+
+    System* smoothed_normal_system = &equation_systems->get_system(SMOOTHED_NORMAL_SYSTEM_NAME);
+    const DofMap* smoothed_normal_dof_map = &smoothed_normal_system->get_dof_map();
+    FEType smoothed_normal_fe_type = smoothed_normal_dof_map->variable_type(0);
+    std::unique_ptr<FEBase> fe_smoothed_normal = FEBase::build(dim, smoothed_normal_fe_type);
+    FEDataManager::SystemDofMapCache& smoothed_normal_dof_map_cache =
+            *d_fe_data_managers[part]->getDofMapCache(SMOOTHED_NORMAL_SYSTEM_NAME);
+
+
     System& X_system = equation_systems->get_system(COORDS_SYSTEM_NAME);
     DofMap& X_dof_map = X_system.get_dof_map();
+    FEDataManager::SystemDofMapCache& X_dof_map_cache =
+            *d_fe_data_managers[part]->getDofMapCache(COORDS_SYSTEM_NAME);
     std::vector<std::vector<unsigned int> > X_dof_indices(NDIM);
     FEType X_fe_type = X_dof_map.variable_type(0);
     for (unsigned int d = 0; d < NDIM; ++d)
@@ -2382,12 +2497,16 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
     const std::vector<std::vector<Elem*> >& active_patch_element_map =
         d_fe_data_managers[part]->getActivePatchElementMap();
 
-    boost::multi_array<double, 2> x_node;
+    boost::multi_array<double, 2> x_node, Normal_node;
     std::vector<double> x_qp, x_in_qp, x_out_qp;
+    VectorValue<double> Normal_qp;
+    VectorValue<double> Smoothed_normal;
     boost::multi_array<double, 1> P_jump_node;
     std::vector<double> P_i_qp, P_o_qp, P_in_qp, P_out_qp, P_jump_qp, N_qp;
     std::array<VectorValue<double>, 2> dx_dxi;
-
+    std::array<DenseVector<double>, NDIM> Normal_rhs_e;
+    std::unique_ptr<NumericVector<double> > Normal_rhs_vec = (*Normal_vec).zero_clone();
+    Normal_rhs_vec->zero();
     Pointer<PatchLevel<NDIM> > level =
         d_hierarchy->getPatchLevel(d_fe_data_managers[part]->getFinestPatchLevelNumber());
     const Pointer<CartesianGridGeometry<NDIM> > grid_geom = level->getGridGeometry();
@@ -2473,8 +2592,107 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
         std::fill(P_out_qp.begin(), P_out_qp.end(), 0.0);
         std::fill(P_jump_qp.begin(), P_jump_qp.end(), 0.0);
         std::fill(N_qp.begin(), N_qp.end(), 0.0);
-
         // Loop over the elements and compute the positions of the quadrature points.
+
+
+        if(d_use_smoothed_normal_for_traction)
+        {
+            //std::cout<<"1"<<std::endl;
+            std::vector<libMesh::dof_id_type> dof_id_scratch;
+            qrule.reset();
+            unsigned int qp_offset = 0;
+
+            for (unsigned int el_it = 0; el_it < num_active_patch_elems; ++el_it)
+            {
+                //std::cout<<"2"<<std::endl;
+
+                Elem* const elem = patch_elems[el_it];
+                const auto& Normal_dof_indices = smoothed_normal_dof_map_cache.dof_indices(elem);//F_dof_map_cache.dof_indices(elem);
+               // const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
+
+                for (unsigned int d = 0; d < NDIM; ++d)
+                {
+
+                    X_dof_map.dof_indices(elem, X_dof_indices[d], d);
+                }
+                for (unsigned int d = 0; d < NDIM; ++d)
+                {
+                    Normal_rhs_e[d].resize(static_cast<int>(Normal_dof_indices[d].size()));
+                }
+                //std::cout<<"3"<<std::endl;
+
+
+              //  fe_interpolator.reinit(elem);
+               // fe_interpolator.collectDataForInterpolation(elem);
+               // fe_interpolator.interpolate(elem);
+                get_values_for_interpolation(x_node, *X_ghost_vec, X_dof_indices);
+                const bool qrule_changed =
+                        FEDataManager::updateInterpQuadratureRule(qrule, d_default_interp_spec, elem, x_node, patch_dx_min);
+
+                //std::cout<<"4"<<std::endl;
+
+                if (qrule_changed)
+                {
+                    fe_X->attach_quadrature_rule(qrule.get());
+                }
+                fe_X->reinit(elem);
+                const unsigned int n_qpoints = qrule->n_points();
+
+               // std::cout<<"5"<<std::endl;
+
+                const size_t n_basis = phi_X.size();
+                const size_t n_basis2 = phi_X.size();
+                for (unsigned int qp = 0; qp < n_qpoints; ++qp)
+                {
+
+                    for (unsigned int k = 0; k < NDIM - 1; ++k)
+                    {
+                        interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
+                    }
+                    if (NDIM == 2)
+                    {
+                        dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                    }
+
+                    n = dx_dxi[0].cross(dx_dxi[1]);
+                    n = n.unit();
+                    // Add the boundary forces to the right-hand-side vector.
+                    for (unsigned int k = 0; k < n_basis; ++k)
+                    {
+                        Normal_qp = n * phi_X[k][qp] * JxW[qp];//n * phi_X[k][qp] * JxW[qp];
+                        for (unsigned int i = 0; i < NDIM; ++i)
+                        {
+                            Normal_rhs_e[i](k) += Normal_qp(i);
+                        }
+                    }
+                }
+                //std::cout<<"6"<<std::endl;
+
+                // Apply constraints (e.g., enforce periodic boundary conditions)
+                // and add the elemental contributions to the global vector.
+                for (unsigned int i = 0; i < NDIM; ++i)
+                {
+                    copy_dof_ids_to_vector(i, Normal_dof_indices, dof_id_scratch);
+                    smoothed_normal_dof_map->constrain_element_vector(Normal_rhs_e[i], dof_id_scratch);// F_dof_map.constrain_element_vector(Normal_rhs_e[i], dof_id_scratch);
+                    Normal_rhs_vec->add_vector(Normal_rhs_e[i], dof_id_scratch);
+                }
+                //std::cout<<"7"<<std::endl;
+
+            }
+            //std::cout<<"8"<<std::endl;
+
+            //SAMRAI_MPI::sumReduction(&F_integral(0), NDIM);
+            Normal_rhs_vec->close();
+            //std::cout<<"9"<<std::endl;
+
+            d_fe_data_managers[part]->computeSmoothedL2Projection(
+                    *Normal_vec, *Normal_rhs_vec, SMOOTHED_NORMAL_SYSTEM_NAME, d_normal_stabilization_eps);
+            Normal_vec->close();
+            //std::cout<<"10"<<std::endl;
+
+            d_smoothed_normal[part]->close();
+        }
+
         qrule.reset();
         unsigned int qp_offset = 0;
         for (unsigned int e_idx = 0; e_idx < num_active_patch_elems; ++e_idx)
@@ -2485,6 +2703,7 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
                 X_dof_map.dof_indices(elem, X_dof_indices[d], d);
             }
             get_values_for_interpolation(x_node, *X_ghost_vec, X_dof_indices);
+            const auto& smoothed_normal_dof_indices = smoothed_normal_dof_map_cache.dof_indices(elem);
 
             P_jump_dof_map_cache.dof_indices(elem, P_jump_dof_indices);
             get_values_for_interpolation(P_jump_node, *P_jump_ghost_vec, P_jump_dof_indices);
@@ -2499,7 +2718,9 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
             }
             fe_X->reinit(elem);
             fe_P->reinit(elem);
-
+            if(d_use_smoothed_normal_for_traction){
+                get_values_for_interpolation(Normal_node, *Normal_vec,smoothed_normal_dof_indices);
+            }
             const unsigned int n_node = elem->n_nodes();
             const unsigned int n_qp = qrule->n_points();
 
@@ -2526,12 +2747,18 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
                 {
                     interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
                 }
+                if(d_use_smoothed_normal_for_traction){
+                    interpolate(Smoothed_normal, qp, Normal_node, phi_X);
+                }
                 if (NDIM == 2)
                 {
                     dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                 }
                 n = (dx_dxi[0].cross(dx_dxi[1])).unit();
-   
+                if(d_use_smoothed_normal_for_traction){
+                    n=Smoothed_normal;
+                    n=n.unit();
+                }
                 for (unsigned int i = 0; i < NDIM; ++i)
                 {
                     for (unsigned int k = 0; k < n_node; ++k)
@@ -2984,10 +3211,10 @@ IIMethod::computeLagrangianForce(const double data_time)
             surface_pressure_grad_var_data;
 
         // Loop over the elements to compute the right-hand side vector.
-        boost::multi_array<double, 2> X_node, x_node, Normal_node;
+        boost::multi_array<double, 2> X_node, x_node, Normal_node,Smoothed_Normal_node;
         double DU[NDIM][NDIM];
         TensorValue<double> FF;
-        VectorValue<double> F, F_b, F_s, F_qp, N, X, n, x, Normal_qp, normal;
+        VectorValue<double> F, F_b, F_s, F_qp, N, X, n, x, Normal_qp, normal,Smoothed_Normal;
         std::array<VectorValue<double>, 2> dX_dxi, dx_dxi;
         std::vector<libMesh::dof_id_type> dof_id_scratch;
         const auto el_begin = mesh.active_local_elements_begin();
@@ -3057,7 +3284,74 @@ IIMethod::computeLagrangianForce(const double data_time)
             Normal_vec->close();
         }
         ///////////////////////////////////////////////////
-        
+        /////////////////////smoothing normal second round /////////////
+        for (int i=0; i<d_num_smooth_cycles;++i){
+        if(d_use_smoothed_normal || d_use_direct_coupling_smoothed_normal)
+        {
+            std::cout<<"smoothed number"<< i<<std::endl;
+            for (auto el_it = el_begin; el_it != el_end; ++el_it)
+            {
+                auto elem = *el_it;
+                const auto& Normal_dof_indices = smoothed_normal_dof_map_cache.dof_indices(elem);//F_dof_map_cache.dof_indices(elem);
+                const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
+
+                for (unsigned int d = 0; d < NDIM; ++d)
+                {
+                    Normal_rhs_e[d].resize(static_cast<int>(Normal_dof_indices[d].size()));
+                }
+                fe_X->reinit(elem);
+
+                fe_interpolator.reinit(elem);
+                fe_interpolator.collectDataForInterpolation(elem);
+                fe_interpolator.interpolate(elem);
+                get_values_for_interpolation(x_node, *X_vec, X_dof_indices);
+                get_values_for_interpolation(Smoothed_Normal_node, *Normal_vec, Normal_dof_indices);
+                const unsigned int n_qpoints = qrule->n_points();
+                const size_t n_basis = phi_X.size();
+                const size_t n_basis2 = phi_jump.size();
+                for (unsigned int qp = 0; qp < n_qpoints; ++qp)
+                {
+                    interpolate(x, qp, x_node, phi_X);
+                    interpolate(Smoothed_Normal, qp, Smoothed_Normal_node, phi_X);
+                    for (unsigned int k = 0; k < NDIM - 1; ++k)
+                    {
+                        interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
+                    }
+                    if (NDIM == 2)
+                    {
+                        dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                    }
+
+                    n = dx_dxi[0].cross(dx_dxi[1]);
+                    const double da = n.norm();
+
+                    n = Smoothed_Normal.unit();
+                    // Add the boundary forces to the right-hand-side vector.
+                    for (unsigned int k = 0; k < n_basis; ++k)
+                    {
+                        Normal_qp = n * phi_X[k][qp] * JxW[qp];//n * phi_X[k][qp] * JxW[qp];
+                        for (unsigned int i = 0; i < NDIM; ++i)
+                        {
+                            Normal_rhs_e[i](k) += Normal_qp(i);
+                        }
+                    }
+                }
+                // Apply constraints (e.g., enforce periodic boundary conditions)
+                // and add the elemental contributions to the global vector.
+                for (unsigned int i = 0; i < NDIM; ++i)
+                {
+                    copy_dof_ids_to_vector(i, Normal_dof_indices, dof_id_scratch);
+                    smoothed_normal_dof_map->constrain_element_vector(Normal_rhs_e[i], dof_id_scratch);// F_dof_map.constrain_element_vector(Normal_rhs_e[i], dof_id_scratch);
+                    Normal_rhs_vec->add_vector(Normal_rhs_e[i], dof_id_scratch);
+                }
+            }
+            //SAMRAI_MPI::sumReduction(&F_integral(0), NDIM);
+            Normal_rhs_vec->close();
+            d_fe_data_managers[part]->computeSmoothedL2Projection(
+                    *Normal_vec, *Normal_rhs_vec, SMOOTHED_NORMAL_SYSTEM_NAME, d_normal_stabilization_eps);
+            Normal_vec->close();
+        }}
+        ///////////////////////////////////////////////////
         for (auto el_it = el_begin; el_it != el_end; ++el_it)
         {
             auto elem = *el_it;
@@ -3196,7 +3490,7 @@ IIMethod::computeLagrangianForce(const double data_time)
                 const double P_j = F * n * dA / da;
                 for (unsigned int i = 0; i < NDIM; ++i)
                     for (unsigned int k = 0; k < NDIM; ++k){
-                       // F(0)=1;
+                        //F(0)=1;
                         //F(1)=1;
                         //F(2)=1;
                         if (d_use_direct_coupling)
@@ -3205,6 +3499,7 @@ IIMethod::computeLagrangianForce(const double data_time)
                         }
                         else{
                         DU[i][k] = -(dA / da) * (F(i) - F * n * n(i)) * n(k); // [Ux] , [Uy], [Uz]
+                          //  DU[i][k] = (F(i) - F * n * n(i));
                          }
                         //////test///////
                        // DU[i][k] = x(k);//-(dA / da) * (F(i) - F * n * n(i)) * n(k);
@@ -3226,6 +3521,8 @@ IIMethod::computeLagrangianForce(const double data_time)
                 if (d_use_pressure_jump_conditions && d_use_velocity_jump_conditions && !d_F_trial)
                 {
                     F = 0.0;
+                   // F = (F * n) * n;
+
                 }
                 if(d_F_trial){
                     F = (dA / da)*F;
@@ -4965,6 +5262,7 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isBool("use_smoothed_normal"))
     {
       d_use_smoothed_normal= db->getBool("use_smoothed_normal");
+        d_use_smoothed_normal_for_traction= db->getBool("use_smoothed_normal");
     }
     if (db->isBool("use_analytic_normal"))
     {
@@ -4984,18 +5282,18 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
 //    {
 //        d_F_trial= db->getBool("F_trial");
 //    }
-//    if (db->isBool("use_Qi_scheme"))
-//    {
-//        d_use_Qi_scheme= db->getBool("use_Qi_scheme");
-//    }
+    if (db->isBool("use_Qi_scheme"))
+    {
+        d_use_Qi_scheme= db->getBool("use_Qi_scheme");
+    }
     if (db->isBool("output_training_data"))
     {
         d_output_training_data= db->getBool("output_training_data");
     }
-//    if (db->isBool("use_incorrected_velocity_interpoaltion_for_force_predictor"))
-//    {
-//        d_use_incorrected_velocity_interpoaltion_for_force_predictor= db->getBool("use_incorrected_velocity_interpoaltion_for_force_predictor");
-//    }
+    if (db->isBool("use_incorrected_velocity_interpoaltion_for_force_predictor"))
+    {
+        d_use_incorrected_velocity_interpoaltion_for_force_predictor= db->getBool("use_incorrected_velocity_interpoaltion_for_force_predictor");
+    }
 //    if (db->isDouble("Q2_correction_end_time"))
 //    {
 //        d_Q2_correction_end_time = db->getDouble("Q2_correction_end_time");
@@ -5004,6 +5302,10 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
 //    {
 //        d_analytical_raduis = db->getDouble("analytical_raduis");
 //    }
+    if (db->isDouble("num_smooth_cycles"))
+    {
+        d_num_smooth_cycles = db->getDouble("num_smooth_cycles");
+    }
     if (db->keyExists("do_log"))
         d_do_log = db->getBool("do_log");
     else if (db->keyExists("enable_logging"))
