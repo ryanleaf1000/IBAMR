@@ -125,6 +125,7 @@ IIMethod {
    velocity_jump_fe_family = "L2_LAGRANGE"
    wss_fe_family = "L2_LAGRANGE"
    tau_fe_family = "L2_LAGRANGE"
+
 }
 
 INSStaggeredHierarchyIntegrator {

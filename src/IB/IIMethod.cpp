@@ -3211,10 +3211,13 @@ IIMethod::computeLagrangianForce(const double data_time)
             surface_pressure_grad_var_data;
 
         // Loop over the elements to compute the right-hand side vector.
-        boost::multi_array<double, 2> X_node, x_node, Normal_node,Smoothed_Normal_node;
+        boost::multi_array<double, 2> X_node, x_node, Normal_node,Smoothed_Normal_node, F_node;
+        boost::multi_array<double, 1> P_jump_node;
         double DU[NDIM][NDIM];
         TensorValue<double> FF;
         VectorValue<double> F, F_b, F_s, F_qp, N, X, n, x, Normal_qp, normal,Smoothed_Normal;
+        //boost::multi_array<double, 1> P_jump;
+        double P_jump;
         std::array<VectorValue<double>, 2> dX_dxi, dx_dxi;
         std::vector<libMesh::dof_id_type> dof_id_scratch;
         const auto el_begin = mesh.active_local_elements_begin();
@@ -3486,7 +3489,9 @@ IIMethod::computeLagrangianForce(const double data_time)
                                                            d_lag_surface_force_fcn_data[part].ctx);
                     F += F_s;
                 }
-
+//                F(0)=1;
+//                F(1)=1;
+                //F(2)=1;
                 const double P_j = F * n * dA / da;
                 for (unsigned int i = 0; i < NDIM; ++i)
                     for (unsigned int k = 0; k < NDIM; ++k){
@@ -3520,9 +3525,10 @@ IIMethod::computeLagrangianForce(const double data_time)
                 }
                 if (d_use_pressure_jump_conditions && d_use_velocity_jump_conditions && !d_F_trial)
                 {
-                    F = 0.0;
-                   // F = (F * n) * n;
-
+                    if(d_use_post_processed_pressure_jump){F = (dA / da)*F;
+                        }
+                    else{
+                    F = 0.0;}
                 }
                 if(d_F_trial){
                     F = (dA / da)*F;
@@ -3615,6 +3621,137 @@ IIMethod::computeLagrangianForce(const double data_time)
                 DU_jump_vec[d]->close();
             }
         }
+        if(d_use_post_processed_pressure_jump)
+        {
+            std::array<std::array<DenseVector<double>, NDIM>, NDIM> DU_jump_postprocess_rhs_e;
+            F_rhs_vec = F_vec->zero_clone();
+            if (d_use_velocity_jump_conditions)
+            {
+                for (unsigned int d = 0; d < NDIM; ++d)
+                {
+                    DU_jump_rhs_vec[d] = DU_jump_vec[d]->zero_clone();
+                }
+            }
+            for (auto el_it = el_begin; el_it != el_end; ++el_it)
+            {
+                auto elem = *el_it;
+                const auto& P_jump_dof_indices = P_jump_dof_map_cache->dof_indices(elem);
+                const auto& F_dof_indices = F_dof_map_cache.dof_indices(elem);
+                const auto& X_dof_indices = X_dof_map_cache.dof_indices(elem);
+                const auto& smoothed_normal_dof_indices = smoothed_normal_dof_map_cache.dof_indices(elem);
+
+
+                if (d_use_velocity_jump_conditions)
+                {
+                    for (unsigned int d = 0; d < NDIM; ++d)
+                    {
+                        const auto& DU_jump_dof_indices = DU_jump_dof_map_cache[d]->dof_indices(elem);
+                        for (unsigned int k = 0; k < NDIM; ++k)
+                        {
+                            DU_jump_postprocess_rhs_e[d][k].resize(static_cast<int>(DU_jump_dof_indices[k].size()));
+                        }
+                    }
+                }
+                fe_X->reinit(elem);
+
+                fe_interpolator.reinit(elem);
+                fe_interpolator.collectDataForInterpolation(elem);
+                fe_interpolator.interpolate(elem);
+                get_values_for_interpolation(x_node, *X_vec, X_dof_indices);
+                if(d_use_smoothed_normal){
+                    get_values_for_interpolation(Smoothed_Normal_node, *Normal_vec, smoothed_normal_dof_indices);}
+                if (d_use_pressure_jump_conditions)
+                {
+                    copy_dof_ids_to_vector(0, P_jump_dof_indices, dof_id_scratch);
+                    get_values_for_interpolation(P_jump_node, *P_jump_vec, dof_id_scratch);
+                }
+                get_values_for_interpolation(F_node, *F_vec, F_dof_indices);
+
+                if (d_use_pressure_jump_conditions || d_use_velocity_jump_conditions)
+                {
+                    fe_jump->reinit(elem);
+                }
+                const unsigned int n_qpoints = qrule->n_points();
+                const size_t n_basis = phi_X.size();
+                const size_t n_basis2 = phi_jump.size();
+                for (unsigned int qp = 0; qp < n_qpoints; ++qp)
+                {
+                    interpolate(x, qp, x_node, phi_X);
+
+                    if(d_use_smoothed_normal) {
+                        interpolate(Smoothed_Normal, qp, Smoothed_Normal_node, phi_X);
+                    }
+                    interpolate(F, qp, F_node, phi_X);
+                    const double P_jump = interpolate( qp, P_jump_node, phi_jump);
+
+                    for (unsigned int k = 0; k < NDIM - 1; ++k)
+                    {
+                        interpolate(dx_dxi[k], qp, x_node, *dphi_dxi_X[k]);
+                    }
+                    if (NDIM == 2)
+                    {
+                        dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                    }
+
+                    n = dx_dxi[0].cross(dx_dxi[1]);
+                    n = n.unit();
+                    if(d_use_smoothed_normal) {
+                    n = Smoothed_Normal.unit();}
+
+                    for (unsigned int i = 0; i < NDIM; ++i){
+                    for (unsigned int k = 0; k < NDIM; ++k){
+                                DU[i][k] =  - (F(i) - P_jump * n(i)) * n(k); // [Ux] , [Uy], [Uz]
+                           }
+                    }
+                    // Add the boundary forces to the right-hand-side vector.
+                    for (unsigned int k = 0; k < n_basis2; ++k)
+                    {
+                        if (d_use_velocity_jump_conditions)
+                        {
+                            for (unsigned int i = 0; i < NDIM; ++i)
+                            {
+                                for (unsigned int j = 0; j < NDIM; ++j)
+                                {
+                                    DU_jump_postprocess_rhs_e[i][j](k) += DU[i][j] * phi_jump[k][qp] * JxW[qp];
+                                }
+                            }
+                        }
+                    }
+                }
+                // Apply constraints (e.g., enforce periodic boundary conditions)
+                // and add the elemental contributions to the global vector.
+              //   Solve for F.
+//                F_rhs_vec->close();
+//                d_fe_data_managers[part]->computeSmoothedL2Projection(
+//                        *F_vec, *F_rhs_vec, FORCE_SYSTEM_NAME, d_force_stabilization_eps);
+//                F_vec->close();
+                for (unsigned int i = 0; i < NDIM; ++i)
+                {
+                    if (d_use_velocity_jump_conditions)
+                    {
+                        const auto& DU_jump_dof_indices = DU_jump_dof_map_cache[i]->dof_indices(elem);
+                        for (unsigned int k = 0; k < NDIM; ++k)
+                        {
+                            copy_dof_ids_to_vector(k, DU_jump_dof_indices, dof_id_scratch);
+                            DU_jump_dof_map[i]->constrain_element_vector(DU_jump_postprocess_rhs_e[i][k], dof_id_scratch);
+                            DU_jump_rhs_vec[i]->add_vector(DU_jump_postprocess_rhs_e[i][k], dof_id_scratch);
+                        }
+                    }
+                }
+            }
+            //SAMRAI_MPI::sumReduction(&F_integral(0), NDIM);
+            if (d_use_velocity_jump_conditions)
+            {
+                for (unsigned int d = 0; d < NDIM; ++d)
+                {
+                    DU_jump_rhs_vec[d]->close();
+                    d_fe_data_managers[part]->computeSmoothedL2Projection(
+                            *DU_jump_vec[d], *DU_jump_rhs_vec[d], VELOCITY_JUMP_SYSTEM_NAME[d], d_force_stabilization_eps);
+                    DU_jump_vec[d]->close();
+                }
+            }
+        }
+
     }
     IBAMR_TIMER_STOP(t_compute_lagrangian_force);
     return;
@@ -4448,7 +4585,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                     dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                 }
                                 n = (dx_dxi[0].cross(dx_dxi[1])).unit();
-                                if(false){//d_use_direct_coupling_smoothed_normal){
+                                if(d_use_direct_coupling_smoothed_normal){
                                     interpolate(n, 0, smoothed_normal_node, phi_X);
                                     n=n.unit();
                                 }
@@ -4550,7 +4687,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                     dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                 }
                                 n = (dx_dxi[0].cross(dx_dxi[1])).unit();
-                                if(false){ //d_use_direct_coupling_smoothed_normal){
+                                if(d_use_direct_coupling_smoothed_normal){
                                     interpolate(n, 0, smoothed_normal_node, phi_X);
                                     n=n.unit();
                                 }
@@ -4734,7 +4871,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                         dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
                                     }
                                     n = (dx_dxi[0].cross(dx_dxi[1])).unit();
-                                    if(false){ //d_use_direct_coupling_smoothed_normal){
+                                    if(d_use_direct_coupling_smoothed_normal){
                                         interpolate(n, 0, smoothed_normal_node, phi_X);
                                         n=n.unit();
                                     }
@@ -5262,7 +5399,10 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isBool("use_smoothed_normal"))
     {
       d_use_smoothed_normal= db->getBool("use_smoothed_normal");
-        d_use_smoothed_normal_for_traction= db->getBool("use_smoothed_normal");
+    }
+    if (db->isBool("use_smoothed_normal_for_traction"))
+    {
+        d_use_smoothed_normal_for_traction= db->getBool("use_smoothed_normal_for_traction");
     }
     if (db->isBool("use_analytic_normal"))
     {
@@ -5276,6 +5416,10 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isBool("use_direct_coupling_smoothed_normal"))
     {
         d_use_direct_coupling_smoothed_normal= db->getBool("use_direct_coupling_smoothed_normal");
+    }
+
+    if(db->isBool("use_post_processed_pressure_jump")){
+        d_use_post_processed_pressure_jump = db->getBool("use_post_processed_pressure_jump");
     }
 
 //    if (db->isBool("F_trial"))

@@ -677,6 +677,7 @@ protected:
     bool d_use_Qi_scheme = false;
     bool d_use_incorrected_velocity_interpoaltion_for_force_predictor = false;
     bool d_use_smoothed_normal_for_traction = false;
+    bool d_use_post_processed_pressure_jump = false;
     /*
      * Functions used to compute the initial coordinates of the Lagrangian mesh.
      */

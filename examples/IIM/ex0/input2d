@@ -121,6 +121,8 @@ IIMethod {
    wss_calc_width               = WSS_CALC_WIDTH
    compute_fluid_traction       = COMPUTE_FLUID_TRACTION
    min_ghost_cell_width         = 6
+   use_smoothed_normal = TRUE
+   use_post_processed_pressure_jump = TRUE
 }
 
 INSCollocatedHierarchyIntegrator {
@@ -180,7 +182,7 @@ Main {
 
 // visualization dump parameters
    viz_writer                  = "VisIt","ExodusII"
-   viz_dump_interval           = int(1/DT)
+   viz_dump_interval           = 1 //int(1/DT)
    viz_dump_dirname            = "viz_IIM_2d"
    visit_number_procs_per_file = 1
 

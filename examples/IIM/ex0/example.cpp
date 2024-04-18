@@ -220,8 +220,11 @@ main(int argc, char* argv[])
         const double ds = input_db->getDouble("MFAC") * dx;
         string elem_type = input_db->getString("ELEM_TYPE");
         const double R = input_db->getDouble("R");
-        const int non_uniform_index = input_db->getInteger("non_uniform_index");
-        const double interface_mesh_nouniform_bound = input_db->getDouble("interface_mesh_nouniform_bound");
+         int non_uniform_index =0;
+         double interface_mesh_nouniform_bound =0 ;
+        if(input_db->isInteger("non_uniform_index")){
+            non_uniform_index = input_db->getInteger("non_uniform_index");
+         interface_mesh_nouniform_bound = input_db->getDouble("interface_mesh_nouniform_bound");}
         if (NDIM == 2 && (elem_type == "TRI3" || elem_type == "TRI6"))
         {
 #ifdef LIBMESH_HAVE_TRIANGLE
