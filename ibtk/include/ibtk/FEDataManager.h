@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2011 - 2023 by the IBAMR developers
+// Copyright (c) 2011 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -1010,8 +1010,32 @@ public:
                              bool consistent_mass_matrix = true,
                              bool close_U = true,
                              bool close_F = true,
-                             double tol = 1.0e-6,
-                             unsigned int max_its = 100);
+                             double tol = 1.0e-14,
+                             unsigned int max_its = 1000);
+
+    /*!
+     * \brief Set U to be the stabilized L2 projection of F.
+     */
+    bool computeStabilizedL2Projection(libMesh::NumericVector<double>& U,
+                                       libMesh::NumericVector<double>& F,
+                                       const std::string& system_name,
+                                       double epsilon,
+                                       bool close_U = true,
+                                       bool close_F = true,
+                                       double tol = 1.0e-6,
+                                       unsigned int max_its = 1000);
+
+    /*!
+     * \brief Set U to be the smoothed L2 projection of F.
+     */
+    bool computeSmoothedL2Projection(libMesh::NumericVector<double>& U,
+                                     libMesh::NumericVector<double>& F,
+                                     const std::string& system_name,
+                                     double epsilon,
+                                     bool close_U = true,
+                                     bool close_F = true,
+                                     double tol = 1.0e-14,
+                                     unsigned int max_its = 1000);
 
     /*!
      * Update the quadrature rule for the current element.  If the provided

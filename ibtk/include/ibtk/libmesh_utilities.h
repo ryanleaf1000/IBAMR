@@ -1162,6 +1162,51 @@ intersect_line_with_edge(std::vector<std::pair<double, libMesh::Point> >& t_vals
     return is_interior_intersection;
 } // intersect_line_with_edge
 
+
+inline void
+intersect_line_with_flat_triangle(std::vector<std::pair<double, libMesh::Point> >& t_vals,
+                                  libMesh::Face* elem,
+                                  const int ref_p0,
+                                  const int ref_p1,
+                                  const int ref_p2,
+                                  std::array<libMesh::Point,6> ref_coordinate,
+                                  libMesh::Point p,
+                                  libMesh::VectorValue<double> d,
+                                  const double tol = 0.0)
+{
+    // Linear interpolation:
+    //
+    //    (1-u-v)*p0 + u*p1 + v*p2 = p + t*d
+    //
+    // https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
+    // http://www.lighthouse3d.com/tutorials/maths/ray-triangle-intersection/
+    const libMesh::Point& p0 = *elem->node_ptr(ref_p0);
+    const libMesh::Point& p1 = *elem->node_ptr(ref_p1);
+    const libMesh::Point& p2 = *elem->node_ptr(ref_p2);
+    const libMesh::VectorValue<double> e1 = p1 - p0;
+    const libMesh::VectorValue<double> e2 = p2 - p0;
+    const libMesh::VectorValue<double> h = d.cross(e2);
+    double a = e1 * h;
+    if (std::abs(a) > std::numeric_limits<double>::epsilon())
+    {
+
+        double f = 1.0 / a;
+        const libMesh::VectorValue<double> s = p - p0;
+        double u = f * (s * h);
+        if (u >= -tol && u <= 1.0 + tol)
+        {
+            const libMesh::VectorValue<double> q = s.cross(e1);
+            double v = f * (d * q);
+            if (v >= tol && (u + v) <= 1.0 + tol)
+            {
+                double t = f * (e2 * q);
+                libMesh::Point cell_ref_coordinate=(1-u-v)*ref_coordinate[ref_p0] + u*ref_coordinate[ref_p1] + v*ref_coordinate[ref_p2];
+                t_vals.push_back(std::make_pair(t, libMesh::Point(cell_ref_coordinate(0), cell_ref_coordinate(1), 0.0)));
+            }
+        }
+    }
+}
+
 // WARNING: This code is specialized to the case in which q is a unit vector
 // aligned with the coordinate axes.
 inline bool
@@ -1210,6 +1255,25 @@ intersect_line_with_face(std::vector<std::pair<double, libMesh::Point> >& t_vals
                 }
             }
         }
+        break;
+    }
+    case libMesh::TRI6:
+    {
+        std::array<libMesh::Point, 6> ref_coordinate;
+        ref_coordinate[0] = libMesh::Point(0.0, 0.0, 0.0);
+        ref_coordinate[1] = libMesh::Point(1.0, 0.0, 0.0);
+        ref_coordinate[2] = libMesh::Point(0, 1, 0.0);
+        ref_coordinate[3] = libMesh::Point(0.5, 0.0, 0.0);
+        ref_coordinate[4] = libMesh::Point(0.5, 0.5, 0.0);
+        ref_coordinate[5] = libMesh::Point(0.0, 0.5, 0.0);
+        const libMesh::VectorValue<double>& p = r;
+        const libMesh::VectorValue<double>& d = q;
+
+        intersect_line_with_flat_triangle(t_vals,elem,0,3,5,ref_coordinate,p,d);
+        intersect_line_with_flat_triangle(t_vals,elem,3,4,1,ref_coordinate,p,d);
+        intersect_line_with_flat_triangle(t_vals,elem,5,4,3,ref_coordinate,p,d);
+        intersect_line_with_flat_triangle(t_vals,elem,2,5,4,ref_coordinate,p,d);
+        //ref_coordinate[0]*(u-1)*(u-0.5)*(v-1)*(v-0.5)/(0-1)*(0-0.5)*(0-1)*(0-0.5)+
         break;
     }
     case libMesh::QUAD4:

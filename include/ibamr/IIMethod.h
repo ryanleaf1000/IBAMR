@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2018 - 2023 by the IBAMR developers
+// Copyright (c) 2018 - 2021 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -34,6 +34,7 @@
 #include "libmesh/enum_quadrature_type.h"
 #include "libmesh/vector_value.h"
 
+#include <deque>
 #include <limits>
 #include <memory>
 #include <set>
@@ -105,6 +106,8 @@ public:
     static const std::string COORD_MAPPING_SYSTEM_NAME;
     static const std::string COORDS_SYSTEM_NAME;
     static const std::string FORCE_SYSTEM_NAME;
+    static const std::string SMOOTHED_NORMAL_SYSTEM_NAME;
+    static const std::string HALF_X_SYSTEM_NAME;
     static const std::string NORMAL_VELOCITY_SYSTEM_NAME;
     static const std::string PRESSURE_IN_SYSTEM_NAME;
     static const std::string PRESSURE_JUMP_SYSTEM_NAME;
@@ -113,6 +116,7 @@ public:
     static const std::string TAU_IN_SYSTEM_NAME;
     static const std::string TAU_OUT_SYSTEM_NAME;
     static const std::string VELOCITY_SYSTEM_NAME;
+    static const std::string VELOCITY_OLD_SYSTEM_NAME;
     static const std::string WSS_IN_SYSTEM_NAME;
     static const std::string WSS_OUT_SYSTEM_NAME;
     static const std::array<std::string, NDIM> VELOCITY_JUMP_SYSTEM_NAME;
@@ -169,37 +173,14 @@ public:
     };
 
     /*!
-     * Register relevant part to use discontinuous element type family
-     * for the calculation of jumps plus traction quantities. This option should be used for geometries with sharp
-     * corners. The acceptable options are CONSTANT MONOMIAL,  FIRST order MONOMIAL, or FIRST order L2_LAGRANGE.
+     * Register relevant part to use discontinuous element type family (L2_LAGRANGE or MONOMIAL)
+     * for the calculation of jump/traction quantities. This option should be used for geometries with
+     * sharp corners.
      *
      *
-     * \note The relveant FE family is provided while registering a part in the application code.
-     * The default value is set to regular LAGRANGE.
+     * \note The relveant FE family is provided via input file. The default value is set to regular LAGRANGE).
      */
-    void
-    registerDisconElemFamilyForPressureJump(unsigned int part, libMesh::FEFamily fe_family, libMesh::Order fe_order);
-    /*!
-     * Register relevant part to use discontinuous element type family
-     * for the calculation of jumps plus traction quantities. This option should be used for geometries with sharp
-     * corners. The acceptable options are CONSTANT MONOMIAL,  FIRST order MONOMIAL, or FIRST order L2_LAGRANGE.
-     *
-     *
-     * \note The relveant FE family is provided while registering a part in the application code.
-     * The default value is set to regular LAGRANGE.
-     */
-    void
-    registerDisconElemFamilyForViscousJump(unsigned int part, libMesh::FEFamily fe_family, libMesh::Order fe_order);
-    /*!
-     * Register relevant part to use discontinuous element type family
-     * for the calculation of jumps plus traction quantities. This option should be used for geometries with sharp
-     * corners. The acceptable options are CONSTANT MONOMIAL,  FIRST order MONOMIAL, or FIRST order L2_LAGRANGE.
-     *
-     *
-     * \note The relveant FE family is provided while registering a part in the application code.
-     * The default value is set to regular LAGRANGE.
-     */
-    void registerDisconElemFamilyForTraction(unsigned int part, libMesh::FEFamily fe_family, libMesh::Order fe_order);
+    void registerDisconElemFamilyForJumps(unsigned int part = 0);
 
     /*!
      * Register relevant part to only use the tangential component of the Lagrangian velocity
@@ -372,6 +353,15 @@ public:
     void calculateInterfacialFluidForces(int p_data_idx, double data_time);
 
     /*!
+     * Indicate that multistep time stepping will be used.
+     *
+     * A default implementation is provided that emits an unrecoverable
+     * exception.
+     */
+    void setUseMultistepTimeStepping(int n_steps = 1) override;
+
+
+    /*!
      * Advance the positions of the Lagrangian structure using the forward Euler
      * method.
      */
@@ -388,6 +378,13 @@ public:
      * trapezoidal rule.
      */
     void trapezoidalStep(double current_time, double new_time) override;
+
+
+    /*!
+     * Advance the positions of the Lagrangian structure using the standard
+     * 2nd-order Adams-Bashforth rule.
+     */
+    void AB2Step(double current_time, double new_time) override;
 
     /*!
      * Compute the Lagrangian force at the specified time within the current
@@ -547,6 +544,8 @@ protected:
                               libMesh::PetscVector<double>& P_jump_ghost_vec,
                               std::array<libMesh::PetscVector<double>*, NDIM>& DU_jump_ghost_vec,
                               libMesh::PetscVector<double>& X_ghost_vec,
+                              libMesh::PetscVector<double>& smoothed_normal_ghost_vec,
+                              libMesh::PetscVector<double>& F_ghost_vec,
                               const double data_time,
                               const unsigned int part);
 
@@ -634,13 +633,13 @@ protected:
     const unsigned int d_num_parts = 1;
     std::vector<IBTK::FEDataManager*> d_fe_data_managers;
     SAMRAI::hier::IntVector<NDIM> d_ghosts = 0;
-    std::vector<libMesh::System*> d_X_systems, d_U_systems, d_U_n_systems, d_U_t_systems, d_F_systems, d_P_jump_systems,
-        d_WSS_in_systems, d_WSS_out_systems, d_P_in_systems, d_P_out_systems, d_TAU_in_systems, d_TAU_out_systems;
+    std::vector<libMesh::System*> d_X_systems, d_U_systems,d_U_old_systems, d_U_n_systems, d_U_t_systems, d_F_systems, d_P_jump_systems,
+        d_WSS_in_systems, d_WSS_out_systems, d_P_in_systems, d_P_out_systems, d_TAU_in_systems, d_TAU_out_systems,d_smoothed_normal_systems,d_half_X_systems;
     std::vector<std::array<libMesh::System*, NDIM> > d_DU_jump_systems;
     std::vector<libMesh::PetscVector<double>*> d_F_half_vecs, d_F_IB_ghost_vecs;
     std::vector<libMesh::PetscVector<double>*> d_X_current_vecs, d_X_new_vecs, d_X_half_vecs, d_X0_vecs,
-        d_X_IB_ghost_vecs;
-    std::vector<libMesh::PetscVector<double>*> d_U_current_vecs, d_U_new_vecs, d_U_half_vecs;
+        d_X_IB_ghost_vecs,d_half_X_vecs ;
+    std::vector<libMesh::PetscVector<double>*> d_U_current_vecs, d_U_new_vecs,d_U_old_vecs, d_U_half_vecs ,d_smoothed_normal,d_smoothed_normal_ghost;
     std::vector<libMesh::PetscVector<double>*> d_U_n_current_vecs, d_U_n_new_vecs, d_U_n_half_vecs;
     std::vector<libMesh::PetscVector<double>*> d_U_t_current_vecs, d_U_t_new_vecs, d_U_t_half_vecs;
     std::vector<std::array<libMesh::PetscVector<double>*, NDIM> > d_DU_jump_half_vecs, d_DU_jump_IB_ghost_vecs;
@@ -663,28 +662,42 @@ protected:
     std::vector<IBTK::FEDataManager::InterpSpec> d_interp_spec;
     std::vector<IBTK::FEDataManager::SpreadSpec> d_spread_spec;
     bool d_use_pressure_jump_conditions = false;
+    libMesh::FEFamily d_pressure_jump_fe_family = libMesh::LAGRANGE;
     bool d_use_velocity_jump_conditions = false;
-    bool d_use_u_interp_correction = false;
+    libMesh::FEFamily d_velocity_jump_fe_family = libMesh::LAGRANGE;
+    libMesh::FEFamily d_force_fe_family = libMesh::LAGRANGE;
     bool d_compute_fluid_traction = false;
+    libMesh::FEFamily d_wss_fe_family = libMesh::LAGRANGE;
+    libMesh::FEFamily d_tau_fe_family = libMesh::LAGRANGE;
+    libMesh::FEFamily d_smoothed_normal_fe_family = libMesh::LAGRANGE;
     bool d_perturb_fe_mesh_nodes = true;
     std::vector<libMesh::FEFamily> d_fe_family;
-    std::vector<libMesh::FEFamily> d_viscous_jump_fe_family;
-    std::vector<libMesh::FEFamily> d_pressure_jump_fe_family;
-    std::vector<libMesh::FEFamily> d_traction_fe_family;
     std::vector<libMesh::Order> d_fe_order;
-    std::vector<libMesh::Order> d_viscous_jump_fe_order;
-    std::vector<libMesh::Order> d_pressure_jump_fe_order;
-    std::vector<libMesh::Order> d_traction_fe_order;
+    libMesh::Order d_smoothed_normal_fe_order = libMesh::FIRST;
     std::vector<libMesh::QuadratureType> d_default_quad_type;
     std::vector<libMesh::Order> d_default_quad_order;
     bool d_use_consistent_mass_matrix = true;
     bool d_use_direct_forcing = false;
+    bool d_use_direct_coupling = false;
     double d_exterior_calc_coef = 1.0;
     double d_wss_calc_width = 1.05;
     double d_p_calc_width = 1.3;
-    double d_fuzzy_tol = 1e-5;
-    double d_mesh_perturb_tol = 1e-4;
-
+    double d_force_stabilization_eps = 0.0, d_velocity_stabilization_eps = 0.0, d_coordinate_stabilization_eps =0.0, d_wss_stabilization_eps = 0.0, d_tau_stabilization_eps = 0.0, d_normal_stabilization_eps = 0.0;
+    bool d_use_velocity_correction = true;
+    bool d_use_smoothed_normal = false;
+    bool d_use_analytic_normal =false;
+    bool d_Q2_mesh_correction=false;
+    bool d_output_training_data = false;
+    double d_Q2_correction_end_time = 0.0;
+    int d_num_smooth_cycles =0;
+    double d_analytical_raduis =0.0;
+    bool d_use_direct_coupling_smoothed_normal = false;
+    bool d_use_direct_coupling_smoothed_normal_for_velocity = false;
+    bool d_F_trial = false;
+    bool d_use_Qi_scheme = false;
+    bool d_use_incorrected_velocity_interpoaltion_for_force_predictor = false;
+    bool d_use_smoothed_normal_for_traction = false;
+    bool d_use_post_processed_pressure_jump = false;
     /*
      * Functions used to compute the initial coordinates of the Lagrangian mesh.
      */
@@ -737,6 +750,11 @@ protected:
      */
     std::string d_libmesh_restart_file_extension = "xdr";
 
+    /*!
+     * Data related to multi-step time stepping.
+     */
+    int d_multistep_n_steps = 0;
+    std::deque<double> d_dt_old;
 private:
     /*!
      * \brief Default constructor.
@@ -791,4 +809,4 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // #ifndef included_IBAMR_IIMethod
+#endif //#ifndef included_IBAMR_IIMethod

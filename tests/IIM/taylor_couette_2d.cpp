@@ -85,19 +85,23 @@ tether_force_function_inner(VectorValue<double>& F,
                             const libMesh::Point& X,
                             Elem* const /*elem*/,
                             const unsigned short /*side*/,
-                            const vector<const vector<double>*>& /*var_data*/,
+                            const vector<const vector<double>*>& var_data/*var_data*/,
                             const vector<const vector<VectorValue<double> >*>& /*grad_var_data*/,
                             double time,
                             void* /*ctx*/)
 {
-    F(0) = kappa_s * (X(0) * cos(OMEGA1 * time) - X(1) * sin(OMEGA1 * time) - x(0));
-    F(1) = kappa_s * (X(0) * sin(OMEGA1 * time) + X(1) * cos(OMEGA1 * time) - x(1));
+    const std::vector<double>& U = *var_data[0];
+    F(0) = kappa_s * (X(0) * cos(OMEGA1 * time) - X(1) * sin(OMEGA1 * time) - x(0))- eta_s * (U[0]-(-OMEGA1* 0.5*sin(OMEGA1*time)));
+    F(1) = kappa_s * (X(0) * sin(OMEGA1 * time) + X(1) * cos(OMEGA1 * time) - x(1))- eta_s * (U[1]-(OMEGA1* 0.5*cos(OMEGA1*time)));
+    //F(0) = kappa_s * (X(0)  - x(0));
+    //F(1) = kappa_s * (X(1) - x(1));
 
     return;
 } // tether_force_function
 
 } // namespace ModelData
 using namespace ModelData;
+static ofstream pressure_stream, velocity_stream;
 
 void velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                           const int u_idx,
@@ -148,7 +152,7 @@ main(int argc, char* argv[])
     SAMRAIManager::startup();
 
     PetscOptionsSetValue(nullptr, "-ksp_rtol", "1e-16");
-    PetscOptionsSetValue(nullptr, "-stokes_ksp_atol", "1e-10");
+    PetscOptionsSetValue(nullptr, "-stokes_ksp_atol", "1e-12");
 
     { // cleanup dynamically allocated objects prior to shutdown
 
@@ -188,7 +192,6 @@ main(int argc, char* argv[])
         MU = input_db->getDouble("MU");
         fac = input_db->getDouble("FAC");
         Re = input_db->getDouble("Re");
-        shift = input_db->getDouble("SHIFT");
         L = input_db->getDouble("L");
         const double mfac = input_db->getDouble("MFAC");
         const double ds = mfac * dx;
@@ -365,7 +368,13 @@ main(int argc, char* argv[])
                     inner_exodus_filename, *inner_equation_systems, iteration_num / viz_dump_interval + 1, loop_time);
             }
         }
-
+        if (SAMRAI_MPI::getRank() == 0)
+        {
+            pressure_stream.open("pressure.curve", ios_base::out | ios_base::trunc);
+            velocity_stream.open("velocity_magnitude.curve", ios_base::out | ios_base::trunc);
+            pressure_stream.precision(10);
+            velocity_stream.precision(10);
+        }
         // Main time step loop.
         double loop_time_end = time_integrator->getEndTime();
         double dt = 0.0;
@@ -445,8 +454,17 @@ main(int argc, char* argv[])
                 compute_velocity_profile(patch_hierarchy, u_idx, loop_time, postproc_data_dump_dirname);
                 compute_pressure_profile(patch_hierarchy, p_idx, loop_time, postproc_data_dump_dirname);
             }
-        }
 
+            pressure_convergence(patch_hierarchy, p_idx, loop_time, postproc_data_dump_dirname);
+
+            velocity_convergence(patch_hierarchy, u_idx, loop_time, postproc_data_dump_dirname);
+
+        }
+        if (SAMRAI_MPI::getRank() == 0)
+        {
+            velocity_stream.close();
+            pressure_stream.close();
+        }
         // Determine the accuracy of the computed solution.
         pout << "\n"
              << "+++++++++++++++++++++++++++++++++++++++++++++++++++\n"
@@ -519,7 +537,7 @@ main(int argc, char* argv[])
 void
 velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                      const int u_idx,
-                     const double /*data_time*/,
+                     const double data_time/*data_time*/,
                      const string& /*data_dump_dirname*/)
 {
     const int coarsest_ln = 0;
@@ -639,7 +657,7 @@ velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
     SAMRAI_MPI::maxReduction(&u_Eulerian_max_norm, 1);
 
     u_Eulerian_L2_norm = sqrt(u_Eulerian_L2_norm);
-
+    velocity_stream<< data_time << " " <<u_Eulerian_L2_norm << endl;
     pout << " u_Eulerian_L2_norm = " << u_Eulerian_L2_norm << "\n\n";
     pout << " u_Eulerian_max_norm = " << u_Eulerian_max_norm << "\n\n";
 
@@ -649,9 +667,12 @@ velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
 void
 pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                      const int p_idx,
-                     const double /*data_time*/,
+                     const double data_time /*data_time*/,
                      const string& /*data_dump_dirname*/)
 {
+    //    static ofstream pressure_stream, velocity_stream;
+    //pressure_stream.open("pressure_error"+std::to_string(data_time)+".csv", ios_base::out | ios_base::trunc);
+    //pressure_stream.precision(10);
     const int coarsest_ln = 0;
     const int finest_ln = patch_hierarchy->getFinestLevelNumber();
 
@@ -661,6 +682,98 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
 
     const double X_min[2] = { -0.45 * L, -0.45 * L };
     const double X_max[2] = { 0.45 * L, 0.45 * L };
+    // vector<double> pos_values;
+    double p_inner_constant = 0.0;
+    double p_inner_exact_constant =0.0;
+    double p_outer_constant = 0.0;
+    double p_outer_exact_constant =0.0;
+    double circle_area =0 ;
+    double inner_area =0 ;
+    for (int ln = finest_ln; ln >= coarsest_ln; --ln)
+    {
+        Pointer<PatchLevel<NDIM> > level = patch_hierarchy->getPatchLevel(ln);
+        for (PatchLevel<NDIM>::Iterator p(level); p; p++)
+        {
+            Pointer<Patch<NDIM> > patch = level->getPatch(p());
+            const Box<NDIM>& patch_box = patch->getBox();
+            const CellIndex<NDIM>& patch_lower = patch_box.lower();
+            const CellIndex<NDIM>& patch_upper = patch_box.upper();
+
+            const Pointer<CartesianPatchGeometry<NDIM> > patch_geom = patch->getPatchGeometry();
+            const double* const patch_x_lower = patch_geom->getXLower();
+            const double* const patch_x_upper = patch_geom->getXUpper();
+            const double* const patch_dx = patch_geom->getDx();
+
+            // Entire box containing the required data.
+            Box<NDIM> box(IndexUtilities::getCellIndex(
+                              &X_min[0], patch_x_lower, patch_x_upper, patch_dx, patch_lower, patch_upper),
+                          IndexUtilities::getCellIndex(
+                              &X_max[0], patch_x_lower, patch_x_upper, patch_dx, patch_lower, patch_upper));
+            // Part of the box on this patch
+            Box<NDIM> trim_box = patch_box * box;
+            BoxList<NDIM> iterate_box_list = trim_box;
+
+            // Trim the box covered by the finer region
+            BoxList<NDIM> covered_boxes;
+            if (ln < finest_ln)
+            {
+                BoxArray<NDIM> refined_region_boxes;
+                Pointer<PatchLevel<NDIM> > next_finer_level = patch_hierarchy->getPatchLevel(ln + 1);
+                refined_region_boxes = next_finer_level->getBoxes();
+                refined_region_boxes.coarsen(next_finer_level->getRatioToCoarserLevel());
+                for (int i = 0; i < refined_region_boxes.getNumberOfBoxes(); ++i)
+                {
+                    const Box<NDIM> refined_box = refined_region_boxes[i];
+                    const Box<NDIM> covered_box = trim_box * refined_box;
+                    covered_boxes.unionBoxes(covered_box);
+                }
+            }
+            iterate_box_list.removeIntersections(covered_boxes);
+            // Loop over the boxes and store the location and interpolated value.
+            const Pointer<CellData<NDIM, double> > p_data = patch->getPatchData(p_idx);
+            const Pointer<CellData<NDIM, double> > wgt_cc_data = patch->getPatchData(wgt_cc_idx);
+            for (BoxList<NDIM>::Iterator lit(iterate_box_list); lit; lit++)
+            {
+                const Box<NDIM>& iterate_box = *lit;
+                for (Box<NDIM>::Iterator bit(iterate_box); bit; bit++)
+                {
+                    const CellIndex<NDIM>& cell_idx = *bit;
+
+                    const double y = patch_x_lower[1] + patch_dx[1] * (cell_idx(1) - patch_lower(1) + 0.5);
+                    const double x = patch_x_lower[0] + patch_dx[0] * (cell_idx(0) - patch_lower(0) + 0.5);
+
+                    double p_ex_qp;
+                    const double p1 = (*p_data)(cell_idx);
+                    if (sqrt(x * x + y * y) <= R1 - fac * patch_dx[0])
+                    {
+                        p_ex_qp = 0.5 * OMEGA1 * OMEGA1 * (x * x + y * y) ; // p1;
+                        p_inner_constant += p1 * (*wgt_cc_data)(cell_idx);
+                        p_inner_exact_constant += p_ex_qp * (*wgt_cc_data)(cell_idx);
+                        inner_area += (*wgt_cc_data)(cell_idx);
+                    }
+                    else if (sqrt(x * x + y * y) > (R1 - fac * patch_dx[0]) &&
+                             sqrt(x * x + y * y) < (R1 + fac * patch_dx[0]))
+                    {
+                        p_ex_qp = p1;
+                    }
+                    else
+                    {
+                        p_ex_qp = 0.5 * AA * AA * (x * x + y * y) - 0.5 * BB * BB / (x * x + y * y) +
+                                  2*AA * BB * log(sqrt(x * x + y * y)); //+ 0.5 * OMEGA1 * OMEGA1 * R1 * R1 -
+                                                                          //(0.5 * AA * AA * (R1 * R1) - 0.5 * BB * BB / (R1 * R1) + 2*AA * BB * log(R1)) ;
+                        p_outer_constant += p1 * (*wgt_cc_data)(cell_idx);
+                        p_outer_exact_constant += p_ex_qp * (*wgt_cc_data)(cell_idx);
+                        circle_area += (*wgt_cc_data)(cell_idx);
+                    }
+
+
+                }
+            }
+        }
+    }
+    SAMRAI_MPI::sumReduction(&p_inner_constant, 1);
+    double shift_ext = -(p_outer_exact_constant - p_outer_constant) / circle_area;
+    shift = -(p_inner_exact_constant - p_inner_constant) / inner_area;
     // vector<double> pos_values;
     double p_Eulerian_L2_norm = 0.0;
     double p_Eulerian_max_norm = 0.0;
@@ -735,13 +848,14 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                     else
                     {
                         p_ex_qp = 0.5 * AA * AA * (x * x + y * y) - 0.5 * BB * BB / (x * x + y * y) +
-                                  AA * BB * log(x * x + y * y) + 0.5 * OMEGA1 * OMEGA1 * R1 * R1 -
-                                  (0.5 * AA * AA * (R1 * R1) - 0.5 * BB * BB / (R1 * R1) + AA * BB * log(R1 * R1)) +
-                                  shift;
+                                  2*AA * BB * log(sqrt(x * x + y * y)) +shift_ext ; //+ 0.5 * OMEGA1 * OMEGA1 * R1 * R1 -
+                        //(0.5 * AA * AA * (R1 * R1) - 0.5 * BB * BB / (R1 * R1) + 2*AA * BB * log(R1)) +
+                        //shift_ext
                     }
 
                     p_Eulerian_L2_norm += std::abs(p1 - p_ex_qp) * std::abs(p1 - p_ex_qp) * (*wgt_cc_data)(cell_idx);
                     p_Eulerian_max_norm = std::max(p_Eulerian_max_norm, std::abs(p1 - p_ex_qp));
+                    //  pressure_stream << x <<" "<< y << " " << p1 - p_ex_qp << endl;
                 }
             }
         }
@@ -751,10 +865,11 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
     SAMRAI_MPI::maxReduction(&p_Eulerian_max_norm, 1);
 
     p_Eulerian_L2_norm = sqrt(p_Eulerian_L2_norm);
+    pressure_stream<< data_time << " " <<p_Eulerian_L2_norm << endl;
 
     pout << " p_Eulerian_L2_norm = " << p_Eulerian_L2_norm << "\n";
     pout << " p_Eulerian_max_norm = " << p_Eulerian_max_norm << "\n\n";
-
+    // pressure_stream.close();
     return;
 } // pressure_convergence
 

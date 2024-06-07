@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2017 - 2023 by the IBAMR developers
+// Copyright (c) 2017 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -415,7 +415,7 @@ main(int argc, char* argv[])
         }
 
         MeshRefinement mesh_refinement_beam1(beam_mesh);
-        mesh_refinement_beam1.uniformly_refine(1);
+        mesh_refinement_beam1.uniformly_refine(input_db->getInteger("Beam_refine_size"));
 
         beam_boundary_info = &beam_mesh.get_boundary_info();
         beam_mesh.prepare_for_use();
@@ -511,24 +511,11 @@ main(int argc, char* argv[])
         for (unsigned int d = 0; d < NDIM; ++d) vars[d] = d;
         vector<SystemData> velocity_data(1);
         velocity_data[0] = SystemData(fem_solver->getVelocitySystemName(), vars);
-        const bool USE_NORMALIZED_PRESSURE_JUMP = input_db->getBool("USE_NORMALIZED_PRESSURE_JUMP");
-        const string visc_j_fe_family = input_db->getString("viscous_jump_fe_family");
-        const string visc_j_fe_order = input_db->getString("viscous_jump_fe_order");
-        const string p_j_fe_family = input_db->getString("pressure_jump_fe_family");
-        const string p_j_fe_order = input_db->getString("pressure_jump_fe_order");
-        const string traction_fe_family = input_db->getString("traction_fe_family");
-        const string traction_fe_order = input_db->getString("traction_fe_order");
-        // Whether to use discontinuous basis functions with element-local support for the jumps + traction
-        // We set this up before initializing the FE equation system
-        ibfe_bndry_ops->registerDisconElemFamilyForViscousJump(
-            0, Utility::string_to_enum<FEFamily>(visc_j_fe_family), Utility::string_to_enum<Order>(visc_j_fe_order));
-        ibfe_bndry_ops->registerDisconElemFamilyForPressureJump(
-            0, Utility::string_to_enum<FEFamily>(p_j_fe_family), Utility::string_to_enum<Order>(p_j_fe_order));
-        if (input_db->getBoolWithDefault("COMPUTE_FLUID_TRACTION", false))
-            ibfe_bndry_ops->registerDisconElemFamilyForTraction(0,
-                                                                Utility::string_to_enum<FEFamily>(traction_fe_family),
-                                                                Utility::string_to_enum<Order>(traction_fe_order));
 
+        const bool USE_DISCON_ELEMS = input_db->getBool("USE_DISCON_ELEMS");
+        const bool USE_NORMALIZED_PRESSURE_JUMP = input_db->getBool("USE_NORMALIZED_PRESSURE_JUMP");
+
+        if (USE_DISCON_ELEMS) ibfe_bndry_ops->registerDisconElemFamilyForJumps();
         if (USE_NORMALIZED_PRESSURE_JUMP) ibfe_bndry_ops->registerPressureJumpNormalization();
 
         ibfe_bndry_ops->initializeFEEquationSystems();

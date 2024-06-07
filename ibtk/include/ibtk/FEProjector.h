@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2020 - 2023 by the IBAMR developers
+// Copyright (c) 2020 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -116,6 +116,15 @@ public:
     buildStabilizedL2ProjectionSolver(const std::string& system_name, double epsilon);
 
     /*!
+     * \return Pointers to a linear solver and sparse matrix corresponding to a
+     * L2 projection operator with an H1 smoothing.
+     *
+     * This augments the standard projection with a smoothing of the form (p, q) + epsilon (grad p, grad q) = (f, q).
+     */
+    std::pair<libMesh::PetscLinearSolver<double>*, libMesh::PetscMatrix<double>*>
+    buildSmoothedL2ProjectionSolver(const std::string& system_name, double epsilon);
+
+    /*!
      * \return Pointer to vector representation of diagonal L2 mass matrix.
      * Unlike buildLumpedL2ProjectionSolver this matrix is always diagonal and
      * is always assembled without applying constraints.
@@ -157,6 +166,20 @@ public:
                                        unsigned int max_its = 100);
 
     /*!
+     * \brief Set U to be the L2 projection of F with H1 smoothing
+     *
+     * This augments the standard projection with a smoothing of the form (p, q) + epsilon (grad p, grad q) = (f, q).
+     */
+    bool computeSmoothedL2Projection(libMesh::PetscVector<double>& U,
+                                     libMesh::PetscVector<double>& F,
+                                     const std::string& system_name,
+                                     double epsilon,
+                                     bool close_U = true,
+                                     bool close_F = true,
+                                     double tol = 1.0e-6,
+                                     unsigned int max_its = 100);
+
+    /*!
      * \brief Enable or disable logging.
      */
     void setLoggingEnabled(bool enable_logging = true);
@@ -196,6 +219,11 @@ protected:
     std::map<std::string, std::map<double, std::unique_ptr<libMesh::PetscLinearSolver<double> > > >
         d_stab_L2_proj_solver;
 
+    /// Data structures for consistent mass matrices and related solvers with H1 smoothing.
+    std::map<std::string, std::map<double, std::unique_ptr<libMesh::PetscMatrix<double> > > > d_smoothed_L2_proj_matrix;
+    std::map<std::string, std::map<double, std::unique_ptr<libMesh::PetscLinearSolver<double> > > >
+        d_smoothed_L2_proj_solver;
+
     std::map<std::string, FischerGuess> d_initial_guesses;
 
 private:
@@ -223,5 +251,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // #ifdef IBTK_HAVE_LIBMESH
-#endif // #ifndef included_IBTK_FEProjector
+#endif //#ifdef IBTK_HAVE_LIBMESH
+#endif //#ifndef included_IBTK_FEProjector

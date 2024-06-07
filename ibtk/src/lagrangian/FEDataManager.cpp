@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2014 - 2023 by the IBAMR developers
+// Copyright (c) 2014 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -202,12 +202,7 @@ collect_subdomain_ids(const libMesh::MeshBase& mesh)
  * need the JxW values. Hence this little helper function lets one get the
  * correct JxW values from the correct mapping object based on the runtime
  * dimensionality of the mesh.
- *
- * We need to return a reference to a temporary from this function - this is OK
- * (the temporary lives in a map) but the compiler doesn't know that, so silence
- * the warning about temporaries.
  */
-IBTK_DISABLE_EXTRA_WARNINGS
 const std::vector<double>&
 get_JxW(quadrature_key_type key,
         const Elem* elem,
@@ -228,7 +223,6 @@ get_JxW(quadrature_key_type key,
         return mapping.getJxW();
     }
 }
-IBTK_ENABLE_EXTRA_WARNINGS
 
 #if LIBMESH_VERSION_LESS_THAN(1, 6, 0)
 // libMesh's box intersection code is slow and not in a header (i.e., cannot be
@@ -2425,6 +2419,46 @@ FEDataManager::computeL2Projection(NumericVector<double>& U_vec,
 } // computeL2Projection
 
 bool
+FEDataManager::computeStabilizedL2Projection(NumericVector<double>& U_vec,
+                                             NumericVector<double>& F_vec,
+                                             const std::string& system_name,
+                                             const double epsilon,
+                                             const bool close_U,
+                                             const bool close_F,
+                                             const double tol,
+                                             const unsigned int max_its)
+{
+    return d_fe_projector->computeStabilizedL2Projection(*static_cast<PetscVector<double>*>(&U_vec),
+                                                         *static_cast<PetscVector<double>*>(&F_vec),
+                                                         system_name,
+                                                         epsilon,
+                                                         close_U,
+                                                         close_F,
+                                                         tol,
+                                                         max_its);
+} // computeStabilizedL2Projection
+
+bool
+FEDataManager::computeSmoothedL2Projection(NumericVector<double>& U_vec,
+                                           NumericVector<double>& F_vec,
+                                           const std::string& system_name,
+                                           const double epsilon,
+                                           const bool close_U,
+                                           const bool close_F,
+                                           const double tol,
+                                           const unsigned int max_its)
+{
+    return d_fe_projector->computeSmoothedL2Projection(*static_cast<PetscVector<double>*>(&U_vec),
+                                                       *static_cast<PetscVector<double>*>(&F_vec),
+                                                       system_name,
+                                                       epsilon,
+                                                       close_U,
+                                                       close_F,
+                                                       tol,
+                                                       max_its);
+} // computeSmoothedL2Projection
+
+bool
 FEDataManager::updateQuadratureRule(std::unique_ptr<QBase>& qrule,
                                     QuadratureType type,
                                     Order order,
@@ -2591,6 +2625,7 @@ FEDataManager::applyGradientDetector(const Pointer<BasePatchHierarchy<NDIM> > hi
         // Determine the active elements associated with the prescribed patch
         // level.
         std::vector<std::vector<Elem*> > active_level_elem_map;
+        const IntVector<NDIM> ghost_width = 1;
         collectActivePatchElements(active_level_elem_map, level_number, level_number + 1, d_max_level_number);
         std::vector<unsigned int> X_ghost_dofs;
         std::vector<Elem*> active_level_elems;

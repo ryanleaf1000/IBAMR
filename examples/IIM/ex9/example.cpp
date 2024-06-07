@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2017 - 2023 by the IBAMR developers
+// Copyright (c) 2017 - 2022 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -533,26 +533,10 @@ main(int argc, char* argv[])
         vector<SystemData> velocity_data(1);
         velocity_data[0] = SystemData(fem_solver->getVelocitySystemName(), vars);
 
+        const bool USE_DISCON_ELEMS = input_db->getBool("USE_DISCON_ELEMS");
         const bool USE_NORMALIZED_PRESSURE_JUMP = input_db->getBool("USE_NORMALIZED_PRESSURE_JUMP");
 
-        // Whether to use discontinuous basis functions with element-local support for the jumps + traction
-        // We register the part before initializing the FE equation system
-        const string visc_j_fe_family = input_db->getString("viscous_jump_fe_family");
-        const string visc_j_fe_order = input_db->getString("viscous_jump_fe_order");
-        const string p_j_fe_family = input_db->getString("pressure_jump_fe_family");
-        const string p_j_fe_order = input_db->getString("pressure_jump_fe_order");
-        const string traction_fe_family = input_db->getString("traction_fe_family");
-        const string traction_fe_order = input_db->getString("traction_fe_order");
-        ib_method_ops->registerDisconElemFamilyForViscousJump(BEAM_PART,
-                                                              Utility::string_to_enum<FEFamily>(visc_j_fe_family),
-                                                              Utility::string_to_enum<Order>(visc_j_fe_order));
-        ib_method_ops->registerDisconElemFamilyForPressureJump(
-            BEAM_PART, Utility::string_to_enum<FEFamily>(p_j_fe_family), Utility::string_to_enum<Order>(p_j_fe_order));
-        if (input_db->getBoolWithDefault("COMPUTE_FLUID_TRACTION", false))
-            ib_method_ops->registerDisconElemFamilyForTraction(BEAM_PART,
-                                                               Utility::string_to_enum<FEFamily>(traction_fe_family),
-                                                               Utility::string_to_enum<Order>(traction_fe_order));
-
+        if (USE_DISCON_ELEMS) ib_method_ops->registerDisconElemFamilyForJumps(BEAM_PART);
         if (USE_NORMALIZED_PRESSURE_JUMP) ib_method_ops->registerPressureJumpNormalization(BEAM_PART);
 
         ib_method_ops->initializeFEEquationSystems();
