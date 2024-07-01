@@ -42,7 +42,7 @@ CONVECTIVE_OP_TYPE           = "STABILIZED_PPM"             // convective differ
 CONVECTIVE_FORM              = "ADVECTIVE"       // how to compute the convective terms
 NORMALIZE_PRESSURE           = FALSE             // whether to explicitly force the pressure to have mean zero
 CFL_MAX                      = 0.2               // maximum CFL number
-DT                           = 0.25*CFL_MAX*DX   // maximum timestep size
+DT                           = 0.25*CFL_MAX*DX*4 //2   // maximum timestep size
 ERROR_ON_DT_CHANGE           = TRUE              // whether to emit an error message if the time step size changes
 VORTICITY_TAGGING            = TRUE              // whether to tag cells for refinement based on vorticity thresholds
 TAG_BUFFER                   = 4                 // size of tag buffer used by grid generation algorithm
@@ -110,7 +110,7 @@ IBHierarchyIntegrator {
    error_on_dt_change  = ERROR_ON_DT_CHANGE
    enable_logging      = ENABLE_LOGGING
 }
-
+USE_DISCON_ELEMS = FALSE
 IIMethod {
    IB_delta_fcn                 = IB_DELTA_FUNCTION
    use_pressure_jump_conditions = USE_PRESSURE_JUMP_CONDITIONS
@@ -122,6 +122,10 @@ IIMethod {
    p_calc_width                 = P_CALC_WIDTH
    wss_calc_width               = WSS_CALC_WIDTH
    min_ghost_cell_width         = 6
+      use_normal_velocity_update_structure = TRUE
+      use_velocity_correction = TRUE
+      velocity_tangent_stabilization_eps = 0.800000//1 //0.0004
+      //adaptive_smooth = TRUE
 }
 
 INSStaggeredHierarchyIntegrator {

@@ -488,7 +488,6 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
 {
     TetherData tether_data(input_db);
     void* const tether_data_ptr = reinterpret_cast<void*>(&tether_data);
-    std::cout<<"Am I called"<<std::endl;
     const unsigned int dim = mesh.mesh_dimension();
     double F_integral[NDIM];
     double T_integral[NDIM];
@@ -563,7 +562,6 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
         if (compute_fluid_traction) get_values_for_interpolation(TAU_node, *TAU_ghost_vec, dof_indices);
 
         const unsigned int n_qp = qrule->n_points();
-        std::cout<<"quadrature point number"<<n_qp<<std::endl;
         for (unsigned int qp = 0; qp < n_qp; ++qp)
         {
             interpolate(X, qp, X_node, phi);

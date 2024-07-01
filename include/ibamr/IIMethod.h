@@ -639,7 +639,7 @@ protected:
     std::vector<libMesh::PetscVector<double>*> d_F_half_vecs, d_F_IB_ghost_vecs;
     std::vector<libMesh::PetscVector<double>*> d_X_current_vecs, d_X_new_vecs, d_X_half_vecs, d_X0_vecs,
         d_X_IB_ghost_vecs,d_half_X_vecs ;
-    std::vector<libMesh::PetscVector<double>*> d_U_current_vecs, d_U_new_vecs,d_U_old_vecs, d_U_half_vecs ,d_smoothed_normal,d_smoothed_normal_ghost;
+    std::vector<libMesh::PetscVector<double>*> d_U_current_vecs, d_U_new_vecs,d_U_old_vecs,d_U_old_updated_vecs, d_U_half_vecs ,d_smoothed_normal,d_smoothed_normal_ghost;
     std::vector<libMesh::PetscVector<double>*> d_U_n_current_vecs, d_U_n_new_vecs, d_U_n_half_vecs;
     std::vector<libMesh::PetscVector<double>*> d_U_t_current_vecs, d_U_t_new_vecs, d_U_t_half_vecs;
     std::vector<std::array<libMesh::PetscVector<double>*, NDIM> > d_DU_jump_half_vecs, d_DU_jump_IB_ghost_vecs;
@@ -682,8 +682,9 @@ protected:
     double d_exterior_calc_coef = 1.0;
     double d_wss_calc_width = 1.05;
     double d_p_calc_width = 1.3;
-    double d_force_stabilization_eps = 0.0, d_velocity_stabilization_eps = 0.0, d_coordinate_stabilization_eps =0.0, d_wss_stabilization_eps = 0.0, d_tau_stabilization_eps = 0.0, d_normal_stabilization_eps = 0.0;
+    double d_force_stabilization_eps = 0.0, d_velocity_stabilization_eps = 0.0,d_velocity_tangent_stabilization_eps=0.0, d_coordinate_stabilization_eps =0.0, d_wss_stabilization_eps = 0.0, d_tau_stabilization_eps = 0.0, d_normal_stabilization_eps = 0.0;
     bool d_use_velocity_correction = true;
+    bool d_adaptive_smooth = false;
     bool d_use_smoothed_normal = false;
     bool d_use_analytic_normal =false;
     bool d_Q2_mesh_correction=false;
@@ -695,6 +696,7 @@ protected:
     bool d_use_direct_coupling_smoothed_normal_for_velocity = false;
     bool d_F_trial = false;
     bool d_use_Qi_scheme = false;
+    bool d_use_normal_velocity_update_structure = false;
     bool d_use_incorrected_velocity_interpoaltion_for_force_predictor = false;
     bool d_use_smoothed_normal_for_traction = false;
     bool d_use_post_processed_pressure_jump = false;

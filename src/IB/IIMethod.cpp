@@ -354,6 +354,7 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
 
     d_U_old_systems.resize(d_num_parts);
     d_U_old_vecs.resize(d_num_parts);
+    d_U_old_updated_vecs.resize(d_num_parts);
 
     d_U_n_systems.resize(d_num_parts);
     d_U_n_current_vecs.resize(d_num_parts);
@@ -426,8 +427,11 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
             d_U_current_vecs[part]->clone().release()); // WARNING: must be manually deleted
         d_U_half_vecs[part] = dynamic_cast<PetscVector<double>*>(
             d_U_current_vecs[part]->clone().release()); // WARNING: must be manually deleted
+
         d_U_old_systems[part] = &d_equation_systems[part]->get_system(VELOCITY_OLD_SYSTEM_NAME);
         d_U_old_vecs[part] = dynamic_cast<PetscVector<double>*>(d_U_old_systems[part]->current_local_solution.get());
+        d_U_old_updated_vecs[part] = dynamic_cast<PetscVector<double>*>(
+            d_U_old_vecs[part]->clone().release()); // WARNING: must be manually deleted
 
         d_U_n_systems[part] = &d_equation_systems[part]->get_system(NORMAL_VELOCITY_SYSTEM_NAME);
         d_U_n_current_vecs[part] =
@@ -530,6 +534,7 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
         *d_U_half_vecs[part] = *d_U_current_vecs[part];
 
         *d_U_old_vecs[part] = *d_U_old_systems[part]->solution;
+        *d_U_old_updated_vecs[part] = *d_U_old_vecs[part];
 
         *d_U_n_current_vecs[part] = *d_U_n_systems[part]->solution;
         *d_U_n_new_vecs[part] = *d_U_n_current_vecs[part];
@@ -576,7 +581,7 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
 {
     IBAMR_TIMER_START(t_postprocess_integrate_data);
     std::vector<std::vector<libMesh::PetscVector<double>*> > vec_collection_update = {
-        d_U_new_vecs, d_X_new_vecs, d_U_n_new_vecs, d_U_t_new_vecs,d_U_old_vecs, d_F_half_vecs,d_smoothed_normal, d_half_X_vecs
+        d_U_new_vecs, d_X_new_vecs, d_U_n_new_vecs, d_U_t_new_vecs,d_U_old_updated_vecs, d_F_half_vecs,d_smoothed_normal, d_half_X_vecs
     };
 
     if (d_use_pressure_jump_conditions)
@@ -602,10 +607,18 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
         TBOX_ASSERT(d_multistep_n_steps == 1);
         //d_U_new_vecs->copy("current", { "old" });
         //d_U_old_vecs
+        if(d_use_normal_velocity_update_structure){
+            for (unsigned part = 0; part < d_num_parts; ++part)
+            {
+               // int ierr = VecCopy( d_U_n_current_vecs[part]->vec(),d_U_old_vecs[part]->vec());
+                int ierr = VecAXPBYPCZ(d_U_old_updated_vecs[part]->vec(), 1.0, 1.0, 0.0, d_U_n_current_vecs[part]->vec(), d_U_t_current_vecs[part]->vec());
+                IBTK_CHKERRQ(ierr);}
+        }
+        else{
         for (unsigned part = 0; part < d_num_parts; ++part)
         {
-        int ierr = VecCopy( d_U_current_vecs[part]->vec(),d_U_old_vecs[part]->vec());
-        IBTK_CHKERRQ(ierr);}
+        int ierr = VecCopy( d_U_current_vecs[part]->vec(),d_U_old_updated_vecs[part]->vec());
+        IBTK_CHKERRQ(ierr);}}
 
         d_dt_old.push_front(new_time - current_time);
         if (d_dt_old.size() > static_cast<size_t>(d_multistep_n_steps)) d_dt_old.pop_back();
@@ -630,8 +643,9 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
         delete d_X_new_vecs[part];
         delete d_X_half_vecs[part];
 
-        *d_U_old_systems[part]->solution = *d_U_old_vecs[part];
-        *d_U_old_systems[part]->current_local_solution = *d_U_old_vecs[part];
+        *d_U_old_systems[part]->solution = *d_U_old_updated_vecs[part];
+        *d_U_old_systems[part]->current_local_solution = *d_U_old_updated_vecs[part];
+        delete d_U_old_updated_vecs[part];
 
         *d_U_systems[part]->solution = *d_U_new_vecs[part];
         *d_U_systems[part]->current_local_solution = *d_U_new_vecs[part];
@@ -706,6 +720,7 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
 
     d_U_old_systems.clear();
     d_U_old_vecs.clear();
+    d_U_old_updated_vecs.clear();
 
     d_U_n_systems.clear();
     d_U_n_current_vecs.clear();
@@ -778,6 +793,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
     const double mu = getINSHierarchyIntegrator()->getStokesSpecifications()->getMu();
     const int finest_ln = d_hierarchy->getFinestLevelNumber();
     const int coarsest_ln = 0;
+    std::vector<double> U_max_component_part(d_num_parts,0);
     bool use_correction_for_force_predict = true;
     for (int ln = finest_ln; ln > coarsest_ln; --ln)
     {
@@ -801,7 +817,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
         NumericVector<double>* X_ghost_vec = d_X_IB_ghost_vecs[part];
         NumericVector<double>* smoothed_normal_vec = d_smoothed_normal[part];
         NumericVector<double>* smoothed_normal_ghost_vec = d_smoothed_normal_ghost[part];
-
+        double* U_max_component = &U_max_component_part[part];
         NumericVector<double>* F_vec = d_F_half_vecs[part];
         NumericVector<double>* F_ghost_vec = d_F_IB_ghost_vecs[part];
 
@@ -983,6 +999,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
         boost::multi_array<double, 2> x_node,Normal_node,smoothed_normal_node,F_node;
         std::array<boost::multi_array<double, 2>, NDIM> DU_jump_node;
         std::vector<double> U_qp, U_in_qp, U_out_qp, WSS_in_qp, WSS_out_qp, n_qp, x_qp, x_in_qp, x_out_qp,F_trial_qp,U_correction_qp;
+
         std::array<std::vector<double>, NDIM> DU_jump_qp;
         VectorValue<double> U, WSS_in, WSS_out, U_n, U_t, n,X_corrected, Normal_qp, normal, x_dub;
         std::array<VectorValue<double>, 2> dx_dxi;
@@ -1079,6 +1096,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             for (PatchLevel<NDIM>::Iterator p(level); p; p++, ++local_patch_num) {
                 //std::cout<<"I am iterative at level:"<<count<<std::endl;
                 ++count;
+
                 // The relevant collection of elements.
                 const std::vector<Elem *> &patch_elems =
                     d_fe_data_managers[part]->getActivePatchElementMap()[local_patch_num];
@@ -1790,12 +1808,16 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     for (unsigned int k = 0; k < n_basis; ++k)
                     {
                         const double p_JxW = phi_X[k][qp] * JxW[qp];
+                        double u_mag=0;
                         for (unsigned int d = 0; d < NDIM; ++d)
                         {
                             U_rhs_e[d](k) += U(d) * p_JxW;
                             U_n_rhs_e[d](k) += U_n(d) * p_JxW;
                             U_t_rhs_e[d](k) += U_t(d) * p_JxW;
+                            //*(d_new_time-d_current_time)
+                            u_mag +=  U_t(d)* U_t(d);
                         }
+                        *U_max_component=std::max(std::sqrt(u_mag) , *U_max_component);
                     }
                     if(data_time<d_Q2_correction_end_time&&d_Q2_mesh_correction)
                     {
@@ -1852,7 +1874,6 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 *X_vec, *X_corrected_rhs_vec, COORDS_SYSTEM_NAME, d_default_interp_spec.use_consistent_mass_matrix);
             X_vec->close();
         }
-
         if (d_use_velocity_jump_conditions)
         {
             WSS_in_rhs_vec->close();
@@ -1871,10 +1892,21 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             *U_vec, *U_rhs_vec, VELOCITY_SYSTEM_NAME, d_velocity_stabilization_eps);
         U_vec->close();
         d_fe_data_managers[part]->computeSmoothedL2Projection(
-            *U_n_vec, *U_n_rhs_vec, VELOCITY_SYSTEM_NAME, d_velocity_stabilization_eps);
+            *U_n_vec, *U_n_rhs_vec, NORMAL_VELOCITY_SYSTEM_NAME, d_velocity_stabilization_eps);
         U_n_vec->close();
+        *U_max_component=std::max( *U_max_component,0.00001);
+        *U_max_component=std::min( *U_max_component,0.50/d_velocity_tangent_stabilization_eps);
+
         d_fe_data_managers[part]->computeSmoothedL2Projection(
-            *U_t_vec, *U_t_rhs_vec, VELOCITY_SYSTEM_NAME, d_velocity_stabilization_eps);
+            *U_t_vec, *U_t_rhs_vec, TANGENTIAL_VELOCITY_SYSTEM_NAME, 0);
+        U_t_vec->close();
+        double stab=U_t_vec->linfty_norm();
+        std::cout<<"stablization:"<<d_velocity_tangent_stabilization_eps* (stab)<<std::endl;
+        if(d_adaptive_smooth){
+        d_fe_data_managers[part]->computeSmoothedL2Projection(
+            *U_t_vec, *U_t_rhs_vec, TANGENTIAL_VELOCITY_SYSTEM_NAME, d_velocity_tangent_stabilization_eps* (stab));}//(*U_max_component));}
+        else{d_fe_data_managers[part]->computeSmoothedL2Projection(
+                *U_t_vec, *U_t_rhs_vec, TANGENTIAL_VELOCITY_SYSTEM_NAME, d_velocity_tangent_stabilization_eps);}
         U_t_vec->close();
         if (d_use_velocity_jump_conditions)
         {
@@ -3128,13 +3160,29 @@ IIMethod::AB2Step(const double current_time, const double new_time)
 
     for (unsigned int part = 0; part < d_meshes.size(); ++part)
     {
-        int ierr = VecWAXPY(d_X_new_vecs[part]->vec(),
+        int ierr;
+        if(d_use_normal_velocity_update_structure){
+            ierr = VecWAXPY(d_X_new_vecs[part]->vec(),
+                            b1 * dt,
+                            d_U_n_current_vecs[part]->vec(),
+                            d_X_current_vecs[part]->vec());
+            IBTK_CHKERRQ(ierr);
+
+
+            ierr = VecAXPY(d_X_new_vecs[part]->vec(), b1 * dt, d_U_t_current_vecs[part]->vec());
+            IBTK_CHKERRQ(ierr);
+            ierr = VecAXPY(d_X_new_vecs[part]->vec(), b2 * dt, d_U_old_vecs[part]->vec());
+            IBTK_CHKERRQ(ierr);
+        }
+        else{
+         ierr = VecWAXPY(d_X_new_vecs[part]->vec(),
                             b1 * dt,
                             d_U_current_vecs[part]->vec(),
                             d_X_current_vecs[part]->vec());
+
         IBTK_CHKERRQ(ierr);
         ierr = VecAXPY(d_X_new_vecs[part]->vec(), b2 * dt, d_U_old_vecs[part]->vec());
-        IBTK_CHKERRQ(ierr);
+        IBTK_CHKERRQ(ierr);}
         ierr = VecAXPBYPCZ(d_X_half_vecs[part]->vec(),
                            0.5,
                            0.5,
@@ -5593,6 +5641,9 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isDouble("normal_stabilization_eps")){d_normal_stabilization_eps = db->getDouble("normal_stabilization_eps");}
     if (db->isDouble("velocity_stabilization_eps"))
         d_velocity_stabilization_eps = db->getDouble("velocity_stabilization_eps");
+
+    if (db->isDouble("velocity_tangent_stabilization_eps"))
+        d_velocity_tangent_stabilization_eps = db->getDouble("velocity_tangent_stabilization_eps");
     if (db->isDouble("coordinate_stabilization_eps")){
         d_coordinate_stabilization_eps = db->getDouble("coordinate_stabilization_eps");}
     
@@ -5611,6 +5662,8 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     }
     if (db->isBool("use_velocity_correction")){
         d_use_velocity_correction = db->getBool("use_velocity_correction");}
+    if (db->isBool("adaptive_smooth")){
+        d_adaptive_smooth = db->getBool("adaptive_smooth");}
     if (db->isBool("use_smoothed_normal"))
     {
         if (db->isBool("smoothed_normal_fe_family")) d_smoothed_normal_fe_family = Utility::string_to_enum<FEFamily>(db->getString("smoothed_normal_fe_family"));
@@ -5646,6 +5699,11 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isBool("use_Qi_scheme"))
     {
         d_use_Qi_scheme= db->getBool("use_Qi_scheme");
+    }
+
+    if (db->isBool("use_normal_velocity_update_structure"))
+    {
+        d_use_normal_velocity_update_structure= db->getBool("use_normal_velocity_update_structure");
     }
     if (db->isBool("output_training_data"))
     {

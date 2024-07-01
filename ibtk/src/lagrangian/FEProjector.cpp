@@ -602,6 +602,10 @@ FEProjector::buildSmoothedL2ProjectionSolver(const std::string& system_name, con
         (!d_smoothed_L2_proj_solver[system_name].count(epsilon) ||
          !d_smoothed_L2_proj_matrix[system_name].count(epsilon)))
     {
+        if (d_smoothed_L2_proj_solver[system_name].size()>20){
+            d_smoothed_L2_proj_solver[system_name].clear();
+            d_smoothed_L2_proj_matrix[system_name].clear();
+        }
         if (d_enable_logging)
         {
             plog << "FEProjector::buildSmoothedL2ProjectionSolver(): building smoothed L2 projection solver for "
@@ -744,6 +748,7 @@ FEProjector::buildSmoothedL2ProjectionSolver(const std::string& system_name, con
         solver->init();
 
         // Store the solver, mass matrix, and configuration options.
+
         d_smoothed_L2_proj_solver[system_name][epsilon] = std::move(solver);
         d_smoothed_L2_proj_matrix[system_name][epsilon] = std::move(M_mat);
     }

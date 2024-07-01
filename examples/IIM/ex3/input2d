@@ -132,7 +132,7 @@ IBHierarchyIntegrator {
    enable_logging      = ENABLE_LOGGING
    num_cycles          = NUM_CYCLES
 }
-
+USE_DISCON_ELEMS = FALSE
 IIMethod {
    IB_delta_fcn                 = IB_DELTA_FUNCTION
    use_pressure_jump_conditions = USE_PRESSURE_JUMP_CONDITIONS
