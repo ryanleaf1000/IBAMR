@@ -1317,12 +1317,16 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             for (BoxIterator<NDIM> b(stencil_box); b; b++)
                             {
                                 const hier::Index<NDIM>& ic = b();
-                                for (int j = 0; j < NDIM; ++j) du_jump(j) = DU_jump_qp[d][s * NDIM + j];
+                                for (int j = 0; j < NDIM; ++j){
+                                    du_jump(j) = DU_jump_qp[d][s * NDIM + j];
+                                    wrc(j) = wr[j][ic_upper[j] - ic[j]];
+                                }
+                                //        std::cout<<"I am good before final assemble"<<std::endl;
 #if (NDIM == 2)
                                 coeff_vec =
                                     VectorValue<double>(interpCoeff[ic[0]][ic[1]][0], interpCoeff[ic[0]][ic[1]][1]);
                                 Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *
-                                                         (coeff_vec * du_jump);
+                                                         (wrc * du_jump);
 #endif
 
 #if (NDIM == 3)
@@ -1331,7 +1335,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                                                 interpCoeff[ic[0]][ic[1]][ic[2]][2]);
                                 Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
                                                                 w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
-                                                                (coeff_vec * du_jump);
+                                                                (wrc * du_jump);
 #endif
                             }
                         }
