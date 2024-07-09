@@ -1358,19 +1358,35 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                 }
                                 //        std::cout<<"I am good before final assemble"<<std::endl;
 #if (NDIM == 2)
+                                if(d_use_tan_correction){
                                 coeff_vec =
                                     VectorValue<double>(interpCoeff[ic[0]][ic[1]][0], interpCoeff[ic[0]][ic[1]][1]);
                                 Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *
-                                                         (wrc * du_jump);
+                                                         (wrc * du_jump);}
+                                else{
+                                    coeff_vec =
+                                        VectorValue<double>(interpCoeff[ic[0]][ic[1]][0], interpCoeff[ic[0]][ic[1]][1]);
+                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *
+                                                             (coeff_vec * du_jump);
+                                }
 #endif
 
 #if (NDIM == 3)
+                                if(d_use_tan_correction){
                                 coeff_vec = VectorValue<double>(interpCoeff[ic[0]][ic[1]][ic[2]][0],
                                                                 interpCoeff[ic[0]][ic[1]][ic[2]][1],
                                                                 interpCoeff[ic[0]][ic[1]][ic[2]][2]);
                                 Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
                                                                 w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
-                                                                (wrc * du_jump);
+                                                                (wrc * du_jump);}
+                                else{
+                                    coeff_vec = VectorValue<double>(interpCoeff[ic[0]][ic[1]][ic[2]][0],
+                                                                    interpCoeff[ic[0]][ic[1]][ic[2]][1],
+                                                                    interpCoeff[ic[0]][ic[1]][ic[2]][2]);
+                                    Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
+                                                                    w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
+                                                                    (coeff_vec * du_jump);
+                                }
 #endif
                             }
                         }
@@ -4512,6 +4528,9 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
         d_default_interp_spec.use_nodal_quadrature = db->getBool("interp_use_nodal_quadrature");
     else if (db->isBool("IB_use_nodal_quadrature"))
         d_default_interp_spec.use_nodal_quadrature = db->getBool("IB_use_nodal_quadrature");
+
+    if (db->isBool("use_tan_correction"))
+        d_use_tan_correction = db->getBool("use_tan_correction");
 
     // Spreading settings.
     if (db->isString("spread_delta_fcn"))
