@@ -685,6 +685,7 @@ protected:
     bool d_use_u_interp_correction = false;
     bool d_compute_fluid_traction = false;
     bool d_perturb_fe_mesh_nodes = true;
+    bool d_use_tan_correction = false;
     std::vector<libMesh::FEFamily> d_fe_family;
     std::vector<libMesh::FEFamily> d_viscous_jump_fe_family;
     std::vector<libMesh::FEFamily> d_pressure_jump_fe_family;
