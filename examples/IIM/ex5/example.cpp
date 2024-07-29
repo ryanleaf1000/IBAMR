@@ -586,6 +586,10 @@ main(int argc, char* argv[])
                        << "       but Triangle is required for TRI3 or TRI6 elements.\n");
 #endif
         }
+        else if (input_db->isString("SPHERE_MESH_FILENAME"))
+        {
+            solid_mesh.read(input_db->getString("SPHERE_MESH_FILENAME"), NULL);
+        }
         else
         {
             // NOTE: number of segments along boundary is 4*2^r.

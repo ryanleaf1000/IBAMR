@@ -11,11 +11,11 @@ N = 16                                    // actual    number of grid cells on c
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N  // effective number of grid cells on finest   grid level
 L = 96 * R                                   // length of computational domain
 H = 32 * R       							// width of the domain
-
+SPHERE_MESH_FILENAME = "sphere-solid-r-0.025.msh"
 DX0 = H/N                                      // mesh width on coarsest grid level
 DX  = H/NFINEST                                // mesh width on finest   grid level
 MFAC = 1.8                                     // ratio of Lagrangian mesh width to Cartesian mesh width
-ELEM_TYPE = "HEX8"                            // type of element to use for structure discretization
+ELEM_TYPE =  "TET4"                            // type of element to use for structure discretization
 USE_BOUNDARY_MESH = TRUE
 
 // solver parameters
@@ -220,7 +220,7 @@ Main {
 
 // visualization dump parameters
    viz_writer                  = "VisIt","ExodusII"
-   viz_dump_interval           = int(0.01/DT)
+   viz_dump_interval           = 1 //int(0.01/DT)
    viz_dump_dirname            = "viz_IB3d_glass"
    visit_number_procs_per_file = 1
 
