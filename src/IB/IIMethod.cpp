@@ -1323,42 +1323,21 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                     wrc(j) = wr[j][ic_upper[j] - ic[j]];
                                 }
 #if (NDIM == 2)
-                                if (d_use_Tan_velocity_correction)
-                                {
-                                    // Use velocity correction term from
-                                    // https://epubs.siam.org/doi/abs/10.1137/080712970?casa_token=LevsVOzF2m8AAAAA:UAgURw3W4dny0SrV2Vv30tt8-tOtlhsuzCCLfair1jLPyIqlL0ob-qnFaaL7oaweopiA2lDOXKo
-                                    Ujump[ic[0]][ic[1]][d] =
-                                        dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] * (wrc * du_jump);
-                                }
-                                else
-                                {
-                                    // Use velocity correction term from https://arxiv.org/abs/1812.06840
-                                    coeff_vec =
-                                        VectorValue<double>(interpCoeff[ic[0]][ic[1]][0], interpCoeff[ic[0]][ic[1]][1]);
-                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
-                                                             w[1][ic[1] - ic_lower[1]] * (coeff_vec * du_jump);
-                                }
+                                // Use velocity correction term from
+                                // https://epubs.siam.org/doi/abs/10.1137/080712970
+                                Ujump[ic[0]][ic[1]][d] =
+                                    dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] * (wrc * du_jump);
+
 #endif
 
 #if (NDIM == 3)
-                                if (d_use_Tan_velocity_correction)
-                                {
-                                    // Use velocity correction term from
-                                    // https://epubs.siam.org/doi/abs/10.1137/080712970?casa_token=LevsVOzF2m8AAAAA:UAgURw3W4dny0SrV2Vv30tt8-tOtlhsuzCCLfair1jLPyIqlL0ob-qnFaaL7oaweopiA2lDOXKo
-                                    Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
-                                                                    w[1][ic[1] - ic_lower[1]] *
-                                                                    w[2][ic[2] - ic_lower[2]] * (wrc * du_jump);
-                                }
-                                else
-                                {
-                                    // Use velocity correction term from https://arxiv.org/abs/1812.06840
-                                    coeff_vec = VectorValue<double>(interpCoeff[ic[0]][ic[1]][ic[2]][0],
-                                                                    interpCoeff[ic[0]][ic[1]][ic[2]][1],
-                                                                    interpCoeff[ic[0]][ic[1]][ic[2]][2]);
-                                    Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
-                                                                    w[1][ic[1] - ic_lower[1]] *
-                                                                    w[2][ic[2] - ic_lower[2]] * (coeff_vec * du_jump);
-                                }
+
+                                // Use velocity correction term from
+                                // https://epubs.siam.org/doi/abs/10.1137/080712970
+                                Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
+                                                                w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
+                                                                (wrc * du_jump);
+
 #endif
                             }
                         }
@@ -4440,9 +4419,6 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     // Force computation settings.
     if (db->isBool("use_pressure_jump_conditions"))
         d_use_pressure_jump_conditions = db->getBool("use_pressure_jump_conditions");
-
-    if (db->isBool("use_Tan_velocity_correction"))
-        d_use_Tan_velocity_correction = db->getBool("use_Tan_velocity_correction");
 
     if (db->isBool("use_velocity_jump_conditions"))
     {
