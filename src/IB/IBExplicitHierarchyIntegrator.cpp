@@ -178,6 +178,7 @@ IBExplicitHierarchyIntegrator::integrateHierarchySpecialized(const double curren
                                                              const double new_time,
                                                              const int cycle_num)
 {
+
     IBHierarchyIntegrator::integrateHierarchySpecialized(current_time, new_time, cycle_num);
     const double half_time = current_time + 0.5 * (new_time - current_time);
     VariableDatabase<NDIM>* var_db = VariableDatabase<NDIM>::getDatabase();
@@ -303,10 +304,12 @@ IBExplicitHierarchyIntegrator::integrateHierarchySpecialized(const double curren
                     "the Lagrangian mesh\n";
         d_u_phys_bdry_op->setPatchDataIndex(d_u_idx);
         d_u_phys_bdry_op->setHomogeneousBc(false);
+
         d_ib_method_ops->interpolateVelocity(d_u_idx,
                                              getCoarsenSchedules(d_object_name + "::u::CONSERVATIVE_COARSEN"),
                                              getGhostfillRefineSchedules(d_object_name + "::u"),
                                              new_time);
+
         break;
     case MIDPOINT_RULE:
         d_hier_velocity_data_ops->linearSum(d_u_idx, 0.5, u_current_idx, 0.5, u_new_idx);
@@ -395,6 +398,7 @@ IBExplicitHierarchyIntegrator::postprocessIntegrateHierarchy(const double curren
                                                              const bool skip_synchronize_new_state_data,
                                                              const int num_cycles)
 {
+
     auto ops = HierarchyDataOpsManager<NDIM>::getManager()->getOperationsDouble(d_u_var, d_hierarchy, true);
 
     auto velocity_ghost_update = [&](const std::vector<int>& indices)

@@ -199,6 +199,10 @@ public:
     void registerPressureJumpNormalization(unsigned int part = 0);
 
     /*!
+    * Register relevant part for which we would like to calculate traction forces
+    */
+    void registerTractionCalc(unsigned int part = 0);
+    /*!
      * Register the (optional) function used to initialize the physical
      * coordinates from the Lagrangian coordinates.
      *
@@ -350,7 +354,7 @@ public:
     /*!
      * A wrapper to compute the interfacial pressure and fluid traction from the jumps.
      */
-    void calculateInterfacialFluidForces(int p_data_idx, double data_time);
+    void calculateInterfacialFluidForces(int p_data_idx, double data_time, unsigned int part);
 
     /*!
      * Indicate that multistep time stepping will be used.
@@ -630,6 +634,7 @@ protected:
     std::vector<bool> d_use_discon_elem_for_jumps = { false };
     std::vector<bool> d_use_tangential_velocity = { false };
     std::vector<bool> d_normalize_pressure_jump = { false };
+    std::vector<bool> d_compute_fluid_traction = { false };
     const unsigned int d_num_parts = 1;
     std::vector<IBTK::FEDataManager*> d_fe_data_managers;
     SAMRAI::hier::IntVector<NDIM> d_ghosts = 0;
@@ -664,9 +669,10 @@ protected:
     bool d_use_pressure_jump_conditions = false;
     libMesh::FEFamily d_pressure_jump_fe_family = libMesh::LAGRANGE;
     bool d_use_velocity_jump_conditions = false;
+    bool d_trial_inconsistent_force = false;
     libMesh::FEFamily d_velocity_jump_fe_family = libMesh::LAGRANGE;
     libMesh::FEFamily d_force_fe_family = libMesh::LAGRANGE;
-    bool d_compute_fluid_traction = false;
+//    bool d_compute_fluid_traction = false;
     libMesh::FEFamily d_wss_fe_family = libMesh::LAGRANGE;
     libMesh::FEFamily d_tau_fe_family = libMesh::LAGRANGE;
     libMesh::FEFamily d_smoothed_normal_fe_family = libMesh::LAGRANGE;
@@ -682,6 +688,10 @@ protected:
     double d_exterior_calc_coef = 1.0;
     double d_wss_calc_width = 1.05;
     double d_p_calc_width = 1.3;
+    double d_isotropic_force_alpha1 = 0;
+    double d_isotropic_force_alpha2 = 0;
+    double d_isotropic_force_alpha3= 0;
+
     double d_force_stabilization_eps = 0.0, d_velocity_stabilization_eps = 0.0,d_velocity_tangent_stabilization_eps=0.0, d_coordinate_stabilization_eps =0.0, d_wss_stabilization_eps = 0.0, d_tau_stabilization_eps = 0.0, d_normal_stabilization_eps = 0.0;
     bool d_use_velocity_correction = true;
     bool d_adaptive_smooth = false;
@@ -696,7 +706,7 @@ protected:
     bool d_use_direct_coupling_smoothed_normal_for_velocity = false;
     bool d_F_trial = false;
     bool d_use_Qi_scheme = false;
-    bool d_use_normal_velocity_update_structure = false;
+    bool d_use_stablized_tangent_velocity_update_structure = false;
     bool d_use_incorrected_velocity_interpoaltion_for_force_predictor = false;
     bool d_use_smoothed_normal_for_traction = false;
     bool d_use_post_processed_pressure_jump = false;

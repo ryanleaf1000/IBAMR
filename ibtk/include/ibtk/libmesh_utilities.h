@@ -1162,62 +1162,60 @@ intersect_line_with_edge(std::vector<std::pair<double, libMesh::Point> >& t_vals
     return is_interior_intersection;
 } // intersect_line_with_edge
 
-//inline bool
-//intersect_line_with_edge_non_coordinate(std::vector<std::pair<double, libMesh::Point> >& t_vals,
-//                         libMesh::Edge* elem,
-//                         libMesh::Point r,
-//                         libMesh::VectorValue<double> q,
-//                         const double tol = 0.0)
-//{
-//    bool is_interior_intersection = false;
-//    t_vals.resize(0);
-//    switch (elem->type())
-//    {
-//    case libMesh::EDGE2:
-//    {
-//        // Linear interpolation:
-//        //
-//        //    0.5*(1-u)*p0 + 0.5*(1+u)*p1 = r + t*q
-//        //
-//        // Factor the interpolation formula:
-//        //
-//        //    0.5*(p1-p0)*u+0.5*(p1+p0) = r + t*q
-//        //
-//        // Solve for u:
-//        //
-//        //    a*u + b = 0
-//        //
-//        // with:
-//        //
-//        //    a = 0.5*(-p0+p1)
-//        //    b = 0.5*(p0+p1) - r
-//        const libMesh::Point& p0 = *elem->node_ptr(0);
-//        const libMesh::Point& p1 = *elem->node_ptr(1);
-//        double a11,a12,a21,a22,b1,b2;
-//
-//            a21 = 0.5 * (p1(1) - p0(1));
-//            a22 = -q(1);
-//
-//            b1 = -(0.5 * (p1(1) + p0(1)) - r(1));
-//
-//            a11 = 0.5 * (p1(0) - p0(0));
-//            a12 = -q(0);
-//
-//            b2 =-( 0.5 * (p1(0) + p0(0)) - r(0));
-//        double det=a11*a22-a21*a12;
-//        double det1=b1*a22-b2*a12;
-//        const double u = det1 / det;
-//
-//        // Look for intersections within the element interior.
-//        if (u >= -1.0 - tol && u <= 1.0 + tol)
-//        {
-//            double det2=a11*b2-a21*b1;
-//            const double t = det2 / det;
-//            is_interior_intersection = (u >= -1.0 && u <= 1.0);
-//            t_vals.push_back(std::make_pair(t, libMesh::Point(u, 0.0, 0.0)));
-//        }
-//        break;
-//    }
+inline bool
+intersect_line_with_edge_non_coordinate(std::vector<std::pair<double, libMesh::Point> >& t_vals,
+                         libMesh::Edge* elem,
+                         libMesh::Point r,
+                         libMesh::VectorValue<double> q,
+                         const double tol = 0.0)
+{
+    bool is_interior_intersection = false;
+    t_vals.resize(0);
+    switch (elem->type())
+    {
+    case libMesh::EDGE2:
+    {
+        // Linear interpolation:
+        //
+        //    0.5*(1-u)*p0 + 0.5*(1+u)*p1 = r + t*q
+        //
+        // Factor the interpolation formula:
+        //
+        //    0.5*(p1-p0)*u-(t*q) = r-0.5*(p1+p0)
+        //
+        // Solve for u:
+        //
+        //    a*u + b = 0
+        //
+        // with:
+        //
+        //    a = 0.5*(-p0+p1)
+        //    b = 0.5*(p0+p1) - r
+        const libMesh::Point& p0 = *elem->node_ptr(0);
+        const libMesh::Point& p1 = *elem->node_ptr(1);
+
+        double a11,a12,a21,a22,b1,b2;
+
+        a21 = 0.5 * (p1(1) - p0(1));
+        a22 = -q(1);
+        b2 = r(1)-(0.5 * (p1(1) + p0(1)) );
+        a11 = 0.5 * (p1(0) - p0(0));
+        a12 = -q(0);
+        b1 = r(0)-( 0.5 * (p1(0) + p0(0)) );
+        double det=a11*a22-a21*a12;
+        double det1=b1*a22-b2*a12;
+        const double u = det1 / det;
+
+        // Look for intersections within the element interior.
+        if (u >= -1.0 - tol && u <= 1.0 + tol)
+        {
+            double det2=a11*b2-a21*b1;
+            const double t = det2 / det;
+            is_interior_intersection = (u >= -1.0 && u <= 1.0);
+            t_vals.push_back(std::make_pair(t, libMesh::Point(u, 0.0, 0.0)));
+        }
+        break;
+    }
 //    case libMesh::EDGE3:
 //    {
 //        // Quadratic interpolation:
@@ -1286,15 +1284,15 @@ intersect_line_with_edge(std::vector<std::pair<double, libMesh::Point> >& t_vals
 //        }
 //        break;
 //    }
-//    default:
-//    {
-//        TBOX_ERROR("intersect_line_with_edge():"
-//                   << "  element type " << libMesh::Utility::enum_to_string<libMesh::ElemType>(elem->type())
-//                   << " is not supported at this time.\n");
-//    }
-//    }
-//    return is_interior_intersection;
-//} // intersect_line_with_edge
+    default:
+    {
+        TBOX_ERROR("intersect_line_with_edge():"
+                   << "  element type " << libMesh::Utility::enum_to_string<libMesh::ElemType>(elem->type())
+                   << " is not supported at this time.\n");
+    }
+    }
+    return is_interior_intersection;
+} // intersect_line_with_edge
 
 inline void
 intersect_line_with_flat_triangle(std::vector<std::pair<double, libMesh::Point> >& t_vals,

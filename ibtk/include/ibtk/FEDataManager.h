@@ -1010,7 +1010,7 @@ public:
                              bool consistent_mass_matrix = true,
                              bool close_U = true,
                              bool close_F = true,
-                             double tol = 1.0e-14,
+                             double tol = 1.0e-6,
                              unsigned int max_its = 1000);
 
     /*!
@@ -1034,7 +1034,7 @@ public:
                                      double epsilon,
                                      bool close_U = true,
                                      bool close_F = true,
-                                     double tol = 1.0e-14,
+                                     double tol = 1.0e-6,
                                      unsigned int max_its = 1000);
 
     /*!

@@ -28,7 +28,7 @@ USE_CONSISTENT_MASS_MATRIX   = TRUE              // whether to use a consistent 
 IB_POINT_DENSITY             = 4.0               // approximate density of IB quadrature points for Lagrangian-Eulerian interaction
 SOLVER_TYPE                  = "STAGGERED"       // the fluid solver to use (STAGGERED or COLLOCATED)
 CFL_MAX                      = 0.4               // maximum CFL number
-DT                           = 0.7*CFL_MAX*DX   // maximum timestep size
+DT                           = 0.2*CFL_MAX*DX   // maximum timestep size
 START_TIME                   = 0.0e0             // initial simulation time
 END_TIME                     = 100               // final simulation time
 GROW_DT                      = 2.0e0             // growth factor for timesteps
@@ -120,12 +120,15 @@ IIMethod {
    IB_point_density             = IB_POINT_DENSITY
    p_calc_width                 = P_CALC_WIDTH
    wss_calc_width               = WSS_CALC_WIDTH
-   compute_fluid_traction       = COMPUTE_FLUID_TRACTION
    min_ghost_cell_width         = 6
    use_normal_velocity_update_structure = TRUE
-   use_velocity_correction = TRUE
-   velocity_tangent_stabilization_eps = 0.10000//1 //0.0004
+   use_velocity_correction = FALSE
+   velocity_tangent_stabilization_eps = 0.10000 //1 //0.0004
    adaptive_smooth = TRUE
+   trial_inconsistent_force = TRUE
+   isotropic_force_alpha1 = 0.333333//0.333333333 //1
+    isotropic_force_alpha2 = 0.0
+     isotropic_force_alpha3 = 0.0
 }
 
 INSCollocatedHierarchyIntegrator {

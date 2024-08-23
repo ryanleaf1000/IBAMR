@@ -255,6 +255,15 @@ IIMethod::registerTangentialVelocityMotion(const unsigned int part)
 } // registerTangentialVelocityMotion
 
 void
+IIMethod::registerTractionCalc(const unsigned int part)
+{
+    TBOX_ASSERT(part < d_num_parts);
+    d_compute_fluid_traction[part] = true;
+    return;
+} // registerTangentialVelocityMotion
+
+
+void
 IIMethod::registerPressureJumpNormalization(const unsigned int part)
 {
     TBOX_ASSERT(part < d_num_parts);
@@ -471,19 +480,7 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
                 dynamic_cast<PetscVector<double>*>(d_fe_data_managers[part]->buildGhostedSolutionVector(
                     PRESSURE_JUMP_SYSTEM_NAME, /*localize_data*/ false));
 
-            d_P_in_systems[part] = &d_equation_systems[part]->get_system(PRESSURE_IN_SYSTEM_NAME);
-            d_P_in_half_vecs[part] =
-                dynamic_cast<PetscVector<double>*>(d_P_in_systems[part]->current_local_solution.get());
-            d_P_in_IB_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(
-                d_fe_data_managers[part]->buildGhostedSolutionVector(PRESSURE_IN_SYSTEM_NAME, /*localize_data*/ false));
-
-            d_P_out_systems[part] = &d_equation_systems[part]->get_system(PRESSURE_OUT_SYSTEM_NAME);
-            d_P_out_half_vecs[part] =
-                dynamic_cast<PetscVector<double>*>(d_P_out_systems[part]->current_local_solution.get());
-            d_P_out_IB_ghost_vecs[part] =
-                dynamic_cast<PetscVector<double>*>(d_fe_data_managers[part]->buildGhostedSolutionVector(
-                    PRESSURE_OUT_SYSTEM_NAME, /*localize_data*/ false));
-        }
+                   }
 
         if (d_use_velocity_jump_conditions)
         {
@@ -496,7 +493,21 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
                     dynamic_cast<PetscVector<double>*>(d_fe_data_managers[part]->buildGhostedSolutionVector(
                         VELOCITY_JUMP_SYSTEM_NAME[d], /*localize_data*/ false));
             }
-            d_WSS_in_systems[part] = &d_equation_systems[part]->get_system(WSS_IN_SYSTEM_NAME);
+            if(d_compute_fluid_traction[part]){
+                d_P_in_systems[part] = &d_equation_systems[part]->get_system(PRESSURE_IN_SYSTEM_NAME);
+                d_P_in_half_vecs[part] =
+                    dynamic_cast<PetscVector<double>*>(d_P_in_systems[part]->current_local_solution.get());
+                d_P_in_IB_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(
+                    d_fe_data_managers[part]->buildGhostedSolutionVector(PRESSURE_IN_SYSTEM_NAME, /*localize_data*/ false));
+
+                d_P_out_systems[part] = &d_equation_systems[part]->get_system(PRESSURE_OUT_SYSTEM_NAME);
+                d_P_out_half_vecs[part] =
+                    dynamic_cast<PetscVector<double>*>(d_P_out_systems[part]->current_local_solution.get());
+                d_P_out_IB_ghost_vecs[part] =
+                    dynamic_cast<PetscVector<double>*>(d_fe_data_managers[part]->buildGhostedSolutionVector(
+                        PRESSURE_OUT_SYSTEM_NAME, /*localize_data*/ false));
+
+                d_WSS_in_systems[part] = &d_equation_systems[part]->get_system(WSS_IN_SYSTEM_NAME);
             d_WSS_in_half_vecs[part] =
                 dynamic_cast<PetscVector<double>*>(d_WSS_in_systems[part]->current_local_solution.get());
             d_WSS_in_IB_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(
@@ -506,9 +517,9 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
             d_WSS_out_half_vecs[part] =
                 dynamic_cast<PetscVector<double>*>(d_WSS_out_systems[part]->current_local_solution.get());
             d_WSS_out_IB_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(
-                d_fe_data_managers[part]->buildGhostedSolutionVector(WSS_OUT_SYSTEM_NAME, /*localize_data*/ false));
+                d_fe_data_managers[part]->buildGhostedSolutionVector(WSS_OUT_SYSTEM_NAME, /*localize_data*/ false));}
         }
-        if (d_use_velocity_jump_conditions && d_use_pressure_jump_conditions)
+        if (d_compute_fluid_traction[part])
         {
             d_TAU_in_systems[part] = &d_equation_systems[part]->get_system(TAU_IN_SYSTEM_NAME);
             d_TAU_in_half_vecs[part] =
@@ -552,8 +563,8 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
         if (d_use_pressure_jump_conditions)
         {
             *d_P_jump_half_vecs[part] = *d_P_jump_systems[part]->solution;
-            *d_P_in_half_vecs[part] = *d_P_in_systems[part]->solution;
-            *d_P_out_half_vecs[part] = *d_P_out_systems[part]->solution;
+        //    *d_P_in_half_vecs[part] = *d_P_in_systems[part]->solution;
+        //    *d_P_out_half_vecs[part] = *d_P_out_systems[part]->solution;
         }
 
         if (d_use_velocity_jump_conditions)
@@ -562,12 +573,13 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
             {
                 *d_DU_jump_half_vecs[part][d] = *d_DU_jump_systems[part][d]->solution;
             }
-
+        }
+        if (d_compute_fluid_traction[part])
+        {
+            *d_P_in_half_vecs[part] = *d_P_in_systems[part]->solution;
+            *d_P_out_half_vecs[part] = *d_P_out_systems[part]->solution;
             *d_WSS_in_half_vecs[part] = *d_WSS_in_systems[part]->solution;
             *d_WSS_out_half_vecs[part] = *d_WSS_out_systems[part]->solution;
-        }
-        if (d_use_velocity_jump_conditions && d_use_pressure_jump_conditions)
-        {
             *d_TAU_in_half_vecs[part] = *d_TAU_in_systems[part]->solution;
             *d_TAU_out_half_vecs[part] = *d_TAU_out_systems[part]->solution;
         }
@@ -590,15 +602,17 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
         vec_collection_update.push_back(d_P_in_half_vecs);
         vec_collection_update.push_back(d_P_out_half_vecs);
     }
-    if (d_use_velocity_jump_conditions)
+//    if (d_use_velocity_jump_conditions)
+//    {
+//        vec_collection_update.push_back(d_WSS_in_half_vecs);
+//        vec_collection_update.push_back(d_WSS_out_half_vecs);
+//    }
+    for (unsigned part = 0; part < d_num_parts; ++part)
     {
-        vec_collection_update.push_back(d_WSS_in_half_vecs);
-        vec_collection_update.push_back(d_WSS_out_half_vecs);
-    }
-    if (d_compute_fluid_traction)
-    {
-        vec_collection_update.push_back(d_TAU_in_half_vecs);
-        vec_collection_update.push_back(d_TAU_out_half_vecs);
+        if (d_compute_fluid_traction[part])
+        {
+            vec_collection_update.push_back({d_WSS_in_half_vecs[part], d_WSS_out_half_vecs[part], d_TAU_in_half_vecs[part], d_TAU_out_half_vecs[part]});
+        }
     }
     batch_vec_ghost_update(vec_collection_update, INSERT_VALUES, SCATTER_FORWARD);
 
@@ -607,7 +621,7 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
         TBOX_ASSERT(d_multistep_n_steps == 1);
         //d_U_new_vecs->copy("current", { "old" });
         //d_U_old_vecs
-        if(d_use_normal_velocity_update_structure){
+        if(d_use_stablized_tangent_velocity_update_structure){
             for (unsigned part = 0; part < d_num_parts; ++part)
             {
                // int ierr = VecCopy( d_U_n_current_vecs[part]->vec(),d_U_old_vecs[part]->vec());
@@ -623,13 +637,16 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
         d_dt_old.push_front(new_time - current_time);
         if (d_dt_old.size() > static_cast<size_t>(d_multistep_n_steps)) d_dt_old.pop_back();
     }
-    if (d_compute_fluid_traction)
+    for (unsigned part = 0; part < d_num_parts; ++part)
     {
-        // Evaluate the fluid forces on the interface.
-        VariableDatabase<NDIM>* var_db = VariableDatabase<NDIM>::getDatabase();
-        const int p_data_idx = var_db->mapVariableAndContextToIndex(getINSHierarchyIntegrator()->getPressureVariable(),
-                                                                    getINSHierarchyIntegrator()->getScratchContext());
-        calculateInterfacialFluidForces(p_data_idx, d_new_time); // TODO: Should this be half_time?
+        if (d_compute_fluid_traction[part])
+        {
+            // Evaluate the fluid forces on the interface.
+            VariableDatabase<NDIM>* var_db = VariableDatabase<NDIM>::getDatabase();
+            const int p_data_idx = var_db->mapVariableAndContextToIndex(getINSHierarchyIntegrator()->getPressureVariable(),
+                                                                        getINSHierarchyIntegrator()->getScratchContext());
+            calculateInterfacialFluidForces(p_data_idx, d_new_time, part); // TODO: Should this be half_time?
+        }
     }
 
     // Update the coordinate mapping dX = X - s.
@@ -677,10 +694,7 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
         {
             *d_P_jump_systems[part]->solution = *d_P_jump_half_vecs[part];
             *d_P_jump_systems[part]->current_local_solution = *d_P_jump_half_vecs[part];
-            *d_P_in_systems[part]->solution = *d_P_in_half_vecs[part];
-            *d_P_in_systems[part]->current_local_solution = *d_P_in_half_vecs[part];
-            *d_P_out_systems[part]->solution = *d_P_out_half_vecs[part];
-            *d_P_out_systems[part]->current_local_solution = *d_P_out_half_vecs[part];
+
         }
 
         if (d_use_velocity_jump_conditions)
@@ -690,13 +704,17 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
                 *d_DU_jump_systems[part][d]->solution = *d_DU_jump_half_vecs[part][d];
                 *d_DU_jump_systems[part][d]->current_local_solution = *d_DU_jump_half_vecs[part][d];
             }
+        }
+        if (d_compute_fluid_traction[part])
+        {
+            *d_P_in_systems[part]->solution = *d_P_in_half_vecs[part];
+            *d_P_in_systems[part]->current_local_solution = *d_P_in_half_vecs[part];
+            *d_P_out_systems[part]->solution = *d_P_out_half_vecs[part];
+            *d_P_out_systems[part]->current_local_solution = *d_P_out_half_vecs[part];
             *d_WSS_in_systems[part]->solution = *d_WSS_in_half_vecs[part];
             *d_WSS_in_systems[part]->current_local_solution = *d_WSS_in_half_vecs[part];
             *d_WSS_out_systems[part]->solution = *d_WSS_out_half_vecs[part];
             *d_WSS_out_systems[part]->current_local_solution = *d_WSS_out_half_vecs[part];
-        }
-        if (d_use_pressure_jump_conditions && d_use_velocity_jump_conditions)
-        {
             *d_TAU_in_systems[part]->solution = *d_TAU_in_half_vecs[part];
             *d_TAU_in_systems[part]->current_local_solution = *d_TAU_in_half_vecs[part];
             *d_TAU_out_systems[part]->solution = *d_TAU_out_half_vecs[part];
@@ -862,8 +880,8 @@ IIMethod::interpolateVelocity(const int u_data_idx,
         }
         copy_and_synch(*X_vec, *X_ghost_vec);
         copy_and_synch(*F_vec, *F_ghost_vec);
-        NumericVector<double>* WSS_in_vec = d_use_velocity_jump_conditions ? d_WSS_in_half_vecs[part] : nullptr;
-        NumericVector<double>* WSS_out_vec = d_use_velocity_jump_conditions ? d_WSS_out_half_vecs[part] : nullptr;
+        NumericVector<double>* WSS_in_vec = d_compute_fluid_traction[part] ? d_WSS_in_half_vecs[part] : nullptr;
+        NumericVector<double>* WSS_out_vec = d_compute_fluid_traction[part] ? d_WSS_out_half_vecs[part] : nullptr;
 
         // Extract the mesh.
         EquationSystems* equation_systems = d_fe_data_managers[part]->getEquationSystems();
@@ -925,6 +943,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
         const std::vector<double>& JxW_F = fe_F->get_JxW();
         const std::vector<std::vector<double> >& phi_F = fe_F->get_phi();
 
+
         if (d_use_velocity_jump_conditions)
         {
             for (unsigned int i = 0; i < NDIM; ++i)
@@ -939,7 +958,10 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 }
                 DU_jump_dof_indices[i].resize(NDIM);
             }
+        }
 
+        if (d_compute_fluid_traction[part])
+        {
             WSS_out_system = &equation_systems->get_system(WSS_OUT_SYSTEM_NAME);
             WSS_out_dof_map = &WSS_out_system->get_dof_map();
             WSS_out_dof_map_cache = d_fe_data_managers[part]->getDofMapCache(WSS_OUT_SYSTEM_NAME);
@@ -958,6 +980,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 TBOX_ASSERT(WSS_in_dof_map->variable_type(d) == WSS_in_fe_type);
             }
         }
+
         FEType fe_type = U_fe_type;
         std::unique_ptr<FEBase> fe_X = FEBase::build(dim, fe_type);
         const std::vector<double>& JxW = fe_X->get_JxW();
@@ -989,11 +1012,10 @@ IIMethod::interpolateVelocity(const int u_data_idx,
         std::vector<DenseVector<double> > U_t_rhs_e(NDIM);
         std::vector<DenseVector<double>> smoothed_normal_rhs_e(NDIM);
         std::unique_ptr<NumericVector<double> > WSS_out_rhs_vec =
-            (d_use_velocity_jump_conditions ? WSS_out_vec->zero_clone() : std::unique_ptr<NumericVector<double> >());
-        DenseVector<double> WSS_out_rhs_e[NDIM];
+            (d_compute_fluid_traction[part] ? WSS_out_vec->zero_clone() : std::unique_ptr<NumericVector<double> >());        DenseVector<double> WSS_out_rhs_e[NDIM];
 
         std::unique_ptr<NumericVector<double> > WSS_in_rhs_vec =
-            (d_use_velocity_jump_conditions ? WSS_in_vec->zero_clone() : std::unique_ptr<NumericVector<double> >());
+            (d_compute_fluid_traction[part] ? WSS_in_vec->zero_clone() : std::unique_ptr<NumericVector<double> >());
         DenseVector<double> WSS_in_rhs_e[NDIM];
 
         boost::multi_array<double, 2> x_node,Normal_node,smoothed_normal_node,F_node;
@@ -1177,6 +1199,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
 
 
         local_patch_num = 0;
+
         for (PatchLevel<NDIM>::Iterator p(level); p; p++, ++local_patch_num)
         {
             // The relevant collection of elements.
@@ -1211,6 +1234,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             // Setup vectors to store the values of U, DU_j, x, and n at the
             // quadrature points.
             unsigned int n_qpoints_patch = 0;
+
             for (unsigned int e_idx = 0; e_idx < num_active_patch_elems; ++e_idx)
             {
                 Elem* const elem = patch_elems[e_idx];
@@ -1261,6 +1285,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             // Loop over the elements and compute the positions of the quadrature points.
             qrule.reset();
             unsigned int qp_offset = 0;
+
             for (unsigned int e_idx = 0; e_idx < num_active_patch_elems; ++e_idx)
             {
                 Elem* const elem = patch_elems[e_idx];
@@ -1405,6 +1430,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 }
                 qp_offset += n_qpoints;
             }
+
             // Interpolate values from the Cartesian grid patch to the
             // quadrature points.
             //
@@ -1678,14 +1704,12 @@ IIMethod::interpolateVelocity(const int u_data_idx,
 #endif
                         }
                     }
-                    if (d_use_velocity_jump_conditions)
-                    {
                         for (unsigned int k = 0; k < local_indices.size(); ++k)
                         {
                             U_qp[NDIM * local_indices[k] + axis] = U_axis[local_indices[k]];
                             U_correction_qp[NDIM * local_indices[k] + axis] =U_correction[local_indices[k]];
 
-                            if (dh != 0.0)
+                            if (dh != 0.0 && d_compute_fluid_traction[part])
                             {
                                 WSS_in_qp[NDIM * local_indices[k] + axis] =
                                     mu * (1.0 / dh) *
@@ -1704,13 +1728,13 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                         (U_out_qp[NDIM * local_indices[k] + axis] -
                                          U_qp[NDIM * local_indices[k] + axis]);
                             }
-                            else
-                            {
-                                TBOX_ERROR(d_object_name << ": The width for the wall shear stress hasn't been set up!"
-                                                         << std::endl);
-                            }
+//                            else
+//                            {
+//                                TBOX_ERROR(d_object_name << ": The width for the wall shear stress hasn't been set up!"
+//                                                         << std::endl);
+//                            }
                         }
-                    }
+
                 }
             }
 
@@ -1718,6 +1742,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             // Loop over the elements and accumulate the right-hand-side values.
             qrule.reset();
             qp_offset = 0;
+
             for (unsigned int e_idx = 0; e_idx < num_active_patch_elems; ++e_idx)
             {
                 Elem* const elem = patch_elems[e_idx];
@@ -1731,7 +1756,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                         X_corrected_rhs_e[d].resize(static_cast<int>(X_dof_indices[d].size()));
                     }
                     X_dof_map_cache.dof_indices(elem, X_dof_indices[d], d);
-                    if (d_use_velocity_jump_conditions)
+                    if (d_compute_fluid_traction[part])
                     {
                         WSS_out_dof_map_cache->dof_indices(elem, WSS_out_dof_indices[d], d);
                         WSS_out_rhs_e[d].resize(static_cast<int>(WSS_out_dof_indices[d].size()));
@@ -1797,7 +1822,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                                 X_corrected(d) = x_qp[NDIM * (qp_offset + qp) + d];
                             }
                         }
-                        if (d_use_velocity_jump_conditions)
+                        if (d_compute_fluid_traction[part])
                         {
                             WSS_in(d) = WSS_in_qp[NDIM * (qp_offset + qp) + d];
                             WSS_out(d) = WSS_out_qp[NDIM * (qp_offset + qp) + d];
@@ -1830,7 +1855,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             }
                         }
                     }
-                    if (d_use_velocity_jump_conditions)
+                    if (d_compute_fluid_traction[part])
                     {
                         for (unsigned int k = 0; k < n_basis_jump; ++k)
                         {
@@ -1854,7 +1879,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                     U_rhs_vec->add_vector(U_rhs_e[d], U_dof_indices[d]);
                     U_n_rhs_vec->add_vector(U_n_rhs_e[d], U_dof_indices[d]);
                     U_t_rhs_vec->add_vector(U_t_rhs_e[d], U_dof_indices[d]);
-                    if (d_use_velocity_jump_conditions)
+                    if (d_compute_fluid_traction[part])
                     {
                         WSS_out_dof_map->constrain_element_vector(WSS_out_rhs_e[d], WSS_out_dof_indices[d]);
                         WSS_out_rhs_vec->add_vector(WSS_out_rhs_e[d], WSS_out_dof_indices[d]);
@@ -1865,6 +1890,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 qp_offset += n_qpoints;
             }
         }
+
         U_rhs_vec->close();
         U_n_rhs_vec->close();
         U_t_rhs_vec->close();
@@ -1874,7 +1900,8 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                 *X_vec, *X_corrected_rhs_vec, COORDS_SYSTEM_NAME, d_default_interp_spec.use_consistent_mass_matrix);
             X_vec->close();
         }
-        if (d_use_velocity_jump_conditions)
+
+        if (d_compute_fluid_traction[part])
         {
             WSS_in_rhs_vec->close();
             d_fe_data_managers[part]->computeSmoothedL2Projection(
@@ -1901,7 +1928,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
             *U_t_vec, *U_t_rhs_vec, TANGENTIAL_VELOCITY_SYSTEM_NAME, 0);
         U_t_vec->close();
         double stab=U_t_vec->linfty_norm();
-        std::cout<<"stablization:"<<d_velocity_tangent_stabilization_eps* (stab)<<std::endl;
+        //std::cout<<"stablization:"<<d_velocity_tangent_stabilization_eps* (stab)<<std::endl;
         if(d_adaptive_smooth){
         d_fe_data_managers[part]->computeSmoothedL2Projection(
             *U_t_vec, *U_t_rhs_vec, TANGENTIAL_VELOCITY_SYSTEM_NAME, d_velocity_tangent_stabilization_eps* (stab));}//(*U_max_component));}
@@ -1917,6 +1944,7 @@ IIMethod::interpolateVelocity(const int u_data_idx,
         error_output.close();
 
     }
+
     IBAMR_TIMER_STOP(t_interpolate_velocity);
     return;
 } // interpolateVelocity
@@ -2963,9 +2991,9 @@ IIMethod::extrapolatePressureForTraction(const int p_data_idx, const double data
 } // extrapolatePressureForTraction
 
 void
-IIMethod::calculateInterfacialFluidForces(const int p_data_idx, double data_time)
+IIMethod::calculateInterfacialFluidForces(const int p_data_idx, double data_time, const unsigned int part)
 {
-    if (d_compute_fluid_traction && (!d_use_pressure_jump_conditions || !d_use_velocity_jump_conditions))
+    if (d_compute_fluid_traction[part] && (!d_use_pressure_jump_conditions || !d_use_velocity_jump_conditions))
     {
         TBOX_ERROR(d_object_name << ": To compute the traction both velocity and pressure jumps need to be turned on!"
                                  << std::endl);
@@ -2979,13 +3007,9 @@ IIMethod::calculateInterfacialFluidForces(const int p_data_idx, double data_time
     Pointer<RefineSchedule<NDIM> > ghost_fill_schd_p =
         ghost_fill_alg_p.createSchedule(d_hierarchy->getPatchLevel(finest_ln));
 
-    for (unsigned part = 0; part < d_num_parts; ++part)
-    {
-        // TODO: Does this need to be re-filled for each part?
-        ghost_fill_schd_p->fillData(data_time);
-        extrapolatePressureForTraction(p_scratch_data_idx, data_time, part);
-        computeFluidTraction(data_time, part);
-    }
+    ghost_fill_schd_p->fillData(data_time);
+    extrapolatePressureForTraction(p_scratch_data_idx, data_time, part);
+    computeFluidTraction(data_time, part);
 
 } // calculateInterfacialFluidForces
 void
@@ -3161,7 +3185,7 @@ IIMethod::AB2Step(const double current_time, const double new_time)
     for (unsigned int part = 0; part < d_meshes.size(); ++part)
     {
         int ierr;
-        if(d_use_normal_velocity_update_structure){
+        if(d_use_stablized_tangent_velocity_update_structure){
             ierr = VecWAXPY(d_X_new_vecs[part]->vec(),
                             b1 * dt,
                             d_U_n_current_vecs[part]->vec(),
@@ -4177,7 +4201,8 @@ IIMethod::initializeFEEquationSystems()
                     vector_variable_prefixes.push_back("DU_jump_" + std::to_string(d));
                     vector_fe_family.push_back(jump_family);
                 }
-
+                if (d_compute_fluid_traction[part])
+                {
                 vector_system_names.push_back(WSS_IN_SYSTEM_NAME);
                 vector_variable_prefixes.push_back("WSS_in");
                 vector_fe_family.push_back(jump_family);
@@ -4186,8 +4211,7 @@ IIMethod::initializeFEEquationSystems()
                 vector_variable_prefixes.push_back("WSS_out");
                 vector_fe_family.push_back(jump_family);
 
-                if (d_use_pressure_jump_conditions)
-                {
+
                     vector_system_names.push_back(TAU_IN_SYSTEM_NAME);
                     vector_variable_prefixes.push_back("TAU_IN");
                     vector_fe_family.push_back(jump_family);
@@ -4336,6 +4360,11 @@ IIMethod::initializeFEData()
                 DU_jump_system[d]->assemble_before_solve = false;
                 DU_jump_system[d]->assemble();
             }
+
+        }
+
+        if (d_compute_fluid_traction[part])
+        {
             System& WSS_in_system = equation_systems->get_system<System>(WSS_IN_SYSTEM_NAME);
             WSS_in_system.assemble_before_solve = false;
             WSS_in_system.assemble();
@@ -4343,10 +4372,6 @@ IIMethod::initializeFEData()
             System& WSS_out_system = equation_systems->get_system<System>(WSS_OUT_SYSTEM_NAME);
             WSS_out_system.assemble_before_solve = false;
             WSS_out_system.assemble();
-        }
-
-        if (d_use_pressure_jump_conditions && d_use_velocity_jump_conditions)
-        {
             System& TAU_in_system = equation_systems->get_system<System>(TAU_IN_SYSTEM_NAME);
             TAU_in_system.assemble_before_solve = false;
             TAU_in_system.assemble();
@@ -4677,6 +4702,9 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
 
         // Loop over the elements.
         std::vector<libMesh::dof_id_type> dof_id_scratch;
+        int axis_intersection_count = 0;
+        int diagonal_intersection_count = 0;
+
         for (size_t e_idx = 0; e_idx < num_active_patch_elems; ++e_idx)
         {
             Elem* const elem = patch_elems[e_idx];
@@ -4770,13 +4798,14 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
 
                 // Setup a unit vector pointing in the coordinate direction of
                 // interest.
-                VectorValue<double> q;
+                VectorValue<double> q, q_diagonal_pos,q_diagonal_neg;
                 q(axis) = 1.0;
 
                 // Loop over the relevant range of indices.
                 Box<NDIM> axis_box = box;
+                if(!d_trial_inconsistent_force){
                 axis_box.lower(axis) = 0;
-                axis_box.upper(axis) = 0;
+                axis_box.upper(axis) = 0;}
 
                 unsigned int SideDim[NDIM][NDIM - 1];
                 for (unsigned int d = 0; d < NDIM; ++d)
@@ -4785,26 +4814,28 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                 for (BoxIterator<NDIM> b(axis_box); b; b++)
                 {
                     const hier::Index<NDIM>& i_c = b();
-                    libMesh::Point r;
+                    libMesh::Point r,r_velocity;
                     std::array<libMesh::Point, NDIM - 1> rs;
 
                     for (unsigned int d = 0; d < NDIM; ++d)
                     {
-                        r(d) = (d == axis ? 0.0 :
-                                            x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+                        //r(d) = (d == axis ? 0.0 : x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+                       r(d) = x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5);// (d == axis ?  0 : x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+                       r_velocity(d) = (d == axis ?  x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d])) : x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+
 
                         for (unsigned int l = 0; l < NDIM - 1; ++l)
                         {
-                            rs[l](d) =
-                                (d == axis ? 0.0 :
-                                 d == SideDim[axis][l] ?
-                                             x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d])) :
-                                             x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+                           // rs[l](d) =
+                           //     (d == axis ? 0.0 :
+                           //      d == SideDim[axis][l] ?
+                           //                  x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d])) :
+                           //                  x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+                            rs[l](d) =  (d == axis ? x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]))  :  d == SideDim[axis][l] ? x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d])) : x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
                         }
                     }
-
-                    std::vector<std::pair<double, libMesh::Point> > intersections;
-                    std::array<std::vector<std::pair<double, libMesh::Point> >, NDIM - 1> intersectionsSide;
+                    std::vector<std::pair<double, libMesh::Point> > intersections, intersectionsDiagonal_pos,intersectionsDiagonal_neg, intersectionsDiagonalVelocity_pos,intersectionsDiagonalVelocity_neg;
+                    std::array<std::vector<std::pair<double, libMesh::Point> >, NDIM - 1> intersectionsSide,intersectionsSideDiagonal;
 
                     static const double tolerance = sqrt(std::numeric_limits<double>::epsilon());
 
@@ -4823,15 +4854,59 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                         intersect_line_with_face(intersectionsSide[l], static_cast<Face*>(elem), rs[l], q, tolerance);
 #endif
                     }
+                    if(d_trial_inconsistent_force){
+                        const int axis_diagonal= (axis+1)%NDIM;
+                        q_diagonal_pos(axis) = dx[axis];
+                        q_diagonal_neg(axis) = dx[axis];
+                        q_diagonal_pos(axis_diagonal)=dx[axis_diagonal];
+                        q_diagonal_neg(axis_diagonal)=-dx[axis_diagonal];
+                        q_diagonal_neg = q_diagonal_neg.unit();
+                        q_diagonal_pos = q_diagonal_pos.unit();
+#if (NDIM == 2)
 
-                    if (d_use_pressure_jump_conditions)
-                    {
-                        for (unsigned int k = 0; k < intersections.size(); ++k)
+                        intersect_line_with_edge_non_coordinate(
+                            intersectionsDiagonal_pos, static_cast<Edge*>(elem), r, q_diagonal_pos, tolerance);
+                        intersect_line_with_edge_non_coordinate(
+                            intersectionsDiagonal_neg, static_cast<Edge*>(elem), r, q_diagonal_neg, tolerance);
+
+                        intersect_line_with_edge_non_coordinate(intersectionsDiagonalVelocity_pos, static_cast<Edge*>(elem), r_velocity,
+                                                                q_diagonal_pos, tolerance);
+                        intersect_line_with_edge_non_coordinate(intersectionsDiagonalVelocity_neg, static_cast<Edge*>(elem), r_velocity,
+                                                                q_diagonal_neg, tolerance);
+
+#endif
+#if (NDIM == 3)
+                        intersect_line_with_face(intersectionsDiagonal_pos, static_cast<Face*>(elem), r, q_diagonal_pos, tolerance);
+#endif
+                        for (unsigned int l = 0; l < NDIM - 1; ++l)
                         {
-                            const libMesh::Point x = r + intersections[k].first * q;
-                            const libMesh::Point& xi = intersections[k].second;
+#if (NDIM == 2)
+                            intersect_line_with_edge_non_coordinate(intersectionsSideDiagonal[l], static_cast<Edge*>(elem), rs[l],
+                                                                    q_diagonal_pos, tolerance);
+#endif
+#if (NDIM == 3)
+                            intersect_line_with_face(intersectionsSideDiagonal[l], static_cast<Face*>(elem), rs[l], q_diagonal_pos, tolerance);
+#endif
+                        }
+                        int intersection_count=0;
+
+                        for (unsigned int k = 0; k < intersectionsDiagonal_pos.size(); ++k)
+                        {
+                            const libMesh::Point x = r + intersectionsDiagonal_pos[k].first * q_diagonal_pos;
+                            const libMesh::Point& xi = intersectionsDiagonal_pos[k].second;
                             SideIndex<NDIM> i_s(i_c, axis, 0);
+                            //r(d) = (d == axis ?  x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d])) : x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+
                             i_s(axis) = boost::math::iround((x(axis) - x_lower[axis]) / dx[axis]) + patch_lower[axis];
+                            //i_s(axis_diagonal) = boost::math::iround((x(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal]) + patch_lower[axis_diagonal];
+
+//                            std::cout<<" absolutely correct assemble location=("<< x_lower[0] + dx[0] * (static_cast<double>(i_s(0) - patch_lower[0])) <<","<<x_lower[1] + dx[1] * (static_cast<double>(i_s(1) - patch_lower[1]))<<")"<< std::endl;
+//                            std::cout<<"center ray location=("<<r<<")"<< std::endl;
+//                            std::cout<<"h:"<<dx[0]<<" "<< std::endl;
+//                            std::cout<<"axis:"<<axis<<" "<< std::endl;
+
+
+                          //  i_s(axis_diagonal) = boost::math::iround((x(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal]) + patch_lower[axis_diagonal];
                             if (extended_box.contains(i_s))
                             {
                                 std::vector<libMesh::Point> ref_coords(1, xi);
@@ -4899,13 +4974,674 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                                             else{
                                                 interpolate(&jn(0), 0, DU_jump_node[0], phi_P_jump);
                                             }
-                                            //                                            std::cout<<"print out force at pressure"<<jn(0)<<std::endl;
+                                            // std::cout<<"print out force at pressure"<<jn(0)<<std::endl;
                                             // std::cout<<k<<"intersection :normal vector:"<<n<<std::endl;
                                             // std::cout<<k<<"intersection :direct forces:"<<jn<<std::endl;
                                             double C_p=-jn*n;
                                         }
+                                        //const double sgn = (r-x)*n > 0.0 ? 1.0 : (r-x)*n < 0.0 ? -1.0 : 0.0;
+                                        const double sgn = (n* q_diagonal_pos) > 0.0 ? 1.0 : (n* q_diagonal_pos) < 0.0 ? -1.0 : 0.0;
+//                                        std::cout<<"normal axis"<<n(axis)<<"directional "<<(n*q_diagonal_pos)<<std::endl;
+//                                        std::cout<<"coordinate"<<x<<std::endl;
+//                                        std::cout<<"jump value"<<C_p<<std::endl;
+//                                        std::cout<<"i_s"<<i_s<<std::endl;
+
+
+                                        ++intersection_count;
+                                        ++diagonal_intersection_count;
+                                        (*f_data)(i_s) += d_isotropic_force_alpha1*q_diagonal_pos(axis)  * sgn * (C_p / sqrt(dx[axis]*dx[axis]+dx[axis_diagonal]*dx[axis_diagonal]));
+                                    }
+
+                                    // Keep track of the positions where we have
+                                    // imposed jump conditions.
+                                    intersection_points[axis][i_s].push_back(x);
+                                    intersection_ref_coords[axis][i_s].push_back(xi);
+                                    intersection_normals[axis][i_s].push_back(n);
+                                }
+                            }
+                        }
+
+                        for (unsigned int k = 0; k < intersectionsDiagonal_neg.size(); ++k)
+                        {
+                            const libMesh::Point x = r + intersectionsDiagonal_neg[k].first * q_diagonal_neg;
+                            const libMesh::Point& xi = intersectionsDiagonal_neg[k].second;
+                            SideIndex<NDIM> i_s(i_c, axis, 0);
+                            //r(d) = (d == axis ?  x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d])) : x_lower[d] + dx[d] * (static_cast<double>(i_c(d) - patch_lower[d]) + 0.5));
+
+                            i_s(axis) = boost::math::iround((x(axis) - x_lower[axis]) / dx[axis]) + patch_lower[axis];
+                            //i_s(axis_diagonal) = boost::math::iround((x(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal]) + patch_lower[axis_diagonal];
+
+                            //                            std::cout<<" absolutely correct assemble location=("<< x_lower[0] + dx[0] * (static_cast<double>(i_s(0) - patch_lower[0])) <<","<<x_lower[1] + dx[1] * (static_cast<double>(i_s(1) - patch_lower[1]))<<")"<< std::endl;
+                            //                            std::cout<<"center ray location=("<<r<<")"<< std::endl;
+                            //                            std::cout<<"h:"<<dx[0]<<" "<< std::endl;
+                            //                            std::cout<<"axis:"<<axis<<" "<< std::endl;
+
+
+                            //  i_s(axis_diagonal) = boost::math::iround((x(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal]) + patch_lower[axis_diagonal];
+                            if (extended_box.contains(i_s))
+                            {
+                                std::vector<libMesh::Point> ref_coords(1, xi);
+                                fe_X->reinit(elem, &ref_coords);
+                                fe_P_jump->reinit(elem, &ref_coords);
+                                for (unsigned int l = 0; l < NDIM - 1; ++l)
+                                {
+                                    interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+                                }
+                                if (NDIM == 2)
+                                {
+                                    dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                }
+                                n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                                if(d_use_direct_coupling_smoothed_normal){
+                                    interpolate(n, 0, smoothed_normal_node, phi_X);
+                                    n=n.unit();
+                                }
+
+                                // Make sure we haven't already found this
+                                // intersection.
+                                //
+                                // (Because we are doing this in floating point
+                                // arithmetic, we can't even count on the
+                                // intersection being assigned to the same index!)
+                                bool found_same_intersection_point = false;
+                                for (int shift = -1; shift <= 1; ++shift)
+                                {
+                                    SideIndex<NDIM> i_s_prime = i_s;
+                                    i_s_prime(axis) += shift;
+                                    const std::vector<libMesh::Point>& candidate_coords =
+                                        intersection_points[axis][i_s_prime];
+                                    const std::vector<libMesh::Point>& candidate_ref_coords =
+                                        intersection_ref_coords[axis][i_s_prime];
+                                    const std::vector<VectorValue<double> >& candidate_normals =
+                                        intersection_normals[axis][i_s_prime];
+
+                                    found_same_intersection_point =
+                                        checkDoubleCountingIntersection(axis,
+                                                                        dx,
+                                                                        n,
+                                                                        x,
+                                                                        xi,
+                                                                        i_s,
+                                                                        i_s_prime,
+                                                                        candidate_coords,
+                                                                        candidate_ref_coords,
+                                                                        candidate_normals);
+                                    if (found_same_intersection_point) break;
+                                }
+
+                                if (!found_same_intersection_point)
+                                {
+                                    // Evaluate the jump conditions and apply them
+                                    // to the Eulerian grid.
+                                    if (side_ghost_boxes[axis].contains(i_s))
+                                    {
+                                        const double C_p = interpolate(0, P_jump_node, phi_P_jump);
+                                        if (d_use_direct_coupling)
+                                        {
+                                            if(d_F_trial){
+                                                interpolate(&jn(0), 0, F_node, phi_X);
+                                                jn=-jn;
+                                            }
+                                            else{
+                                                interpolate(&jn(0), 0, DU_jump_node[0], phi_P_jump);
+                                            }
+                                            // std::cout<<"print out force at pressure"<<jn(0)<<std::endl;
+                                            // std::cout<<k<<"intersection :normal vector:"<<n<<std::endl;
+                                            // std::cout<<k<<"intersection :direct forces:"<<jn<<std::endl;
+                                            double C_p=-jn*n;
+                                        }
+                                        //const double sgn = (r-x)*n > 0.0 ? 1.0 : (r-x)*n < 0.0 ? -1.0 : 0.0;
+                                        const double sgn = (n* q_diagonal_neg) > 0.0 ? 1.0 : (n* q_diagonal_neg) < 0.0 ? -1.0 : 0.0;
+                                        //                                        std::cout<<"normal axis"<<n(axis)<<"directional "<<(n*q_diagonal_pos)<<std::endl;
+                                        //                                        std::cout<<"coordinate"<<x<<std::endl;
+                                        //                                        std::cout<<"jump value"<<C_p<<std::endl;
+                                        //                                        std::cout<<"i_s"<<i_s<<std::endl;
+
+
+                                        ++intersection_count;
+                                        ++diagonal_intersection_count;
+                                        (*f_data)(i_s) += d_isotropic_force_alpha1*q_diagonal_neg(axis) * sgn * (C_p / sqrt(dx[axis]*dx[axis]+dx[axis_diagonal]*dx[axis_diagonal]));
+                                    }
+
+                                    // Keep track of the positions where we have
+                                    // imposed jump conditions.
+                                    intersection_points[axis][i_s].push_back(x);
+                                    intersection_ref_coords[axis][i_s].push_back(xi);
+                                    intersection_normals[axis][i_s].push_back(n);
+                                }
+                            }
+                        }
+
+                        if (d_use_velocity_jump_conditions)
+                        {
+
+                            for (unsigned int k = 0; k < intersectionsDiagonalVelocity_pos.size(); ++k)
+                            {
+                                libMesh::Point xu = r + intersectionsDiagonalVelocity_pos[k].first * q_diagonal_pos;
+                                const libMesh::Point& xui = intersectionsDiagonalVelocity_pos[k].second;
+                                SideIndex<NDIM> i_s_um(i_c, axis, 0);
+                                hier::Index<NDIM> i_c_neighbor = i_c;
+                                i_c_neighbor(axis) += 1;
+
+                                SideIndex<NDIM> i_s_up(i_c_neighbor, axis, 0);
+                                i_s_up(axis) =
+                                    boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] + 0.5) + patch_lower[axis];
+//                                i_s_up(axis_diagonal) =
+//                                    boost::math::iround((xu(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal] + 0.5) + patch_lower[axis_diagonal];
+                                i_s_um(axis) =
+                                    boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 0.5) + patch_lower[axis];
+//                                i_s_um(axis_diagonal) =
+//                                    boost::math::iround((xu(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal] - 0.5) + patch_lower[axis_diagonal];
+                                if (extended_box.contains(i_s_up) && extended_box.contains(i_s_um))
+                                {
+                                    std::vector<libMesh::Point> ref_coords(1, xui);
+                                    fe_X->reinit(elem, &ref_coords);
+                                    fe_P_jump->reinit(elem, &ref_coords);
+                                    for (unsigned int l = 0; l < NDIM - 1; ++l)
+                                    {
+                                        interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+                                    }
+                                    if (NDIM == 2)
+                                    {
+                                        dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                    }
+                                    n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                                    if(d_use_direct_coupling_smoothed_normal){
+                                        interpolate(n, 0, smoothed_normal_node, phi_X);
+                                        n=n.unit();
+                                    }
+                                    bool found_same_intersection_point = false;
+
+                                    for (int shift = -1; shift <= 1; ++shift)
+                                    {
+                                        SideIndex<NDIM> i_s_prime = i_s_um;
+                                        i_s_prime(axis) += shift;
+                                        const std::vector<libMesh::Point>& candidate_coords =
+                                            intersection_u_points[axis][i_s_prime];
+                                        const std::vector<libMesh::Point>& candidate_ref_coords =
+                                            intersection_u_ref_coords[axis][i_s_prime];
+                                        const std::vector<VectorValue<double> >& candidate_normals =
+                                            intersection_u_normals[axis][i_s_prime];
+
+                                        found_same_intersection_point =
+                                            checkDoubleCountingIntersection(axis,
+                                                                            dx,
+                                                                            n,
+                                                                            xu,
+                                                                            xui,
+                                                                            i_s_um,
+                                                                            i_s_prime,
+                                                                            candidate_coords,
+                                                                            candidate_ref_coords,
+                                                                            candidate_normals);
+                                        if (found_same_intersection_point) break;
+                                    }
+
+                                    if (!found_same_intersection_point)
+                                    {
+                                        // imposed jump conditions.
+
+                                        TBOX_ASSERT(i_s_um.getAxis() == i_s_up.getAxis());
+                                        TBOX_ASSERT(i_s_up(axis) - i_s_um(axis) == 1);
+                                        const double x_cell_bdry_um_axis =
+                                            x_lower[axis] +
+                                            static_cast<double>(i_s_um(axis) - patch_lower[axis]) * dx[axis];
+                                        const double x_cell_bdry_um_diag =
+                                            x_lower[axis_diagonal] +
+                                            static_cast<double>(i_s_um(axis_diagonal) - patch_lower[axis_diagonal]+0.5) * dx[axis_diagonal];
+                                        const double x_cell_bdry_up_axis =
+                                            x_lower[axis] +
+                                            static_cast<double>(i_s_up(axis) - patch_lower[axis]) * dx[axis];
+                                        const double x_cell_bdry_up_diag =
+                                            x_lower[axis_diagonal] +
+                                            static_cast<double>(i_s_up(axis_diagonal) - patch_lower[axis_diagonal]+0.5) * dx[axis_diagonal];
+                                        const double sdh_um = sqrt((xu(axis) - x_cell_bdry_um_axis)*(xu(axis) - x_cell_bdry_um_axis)+(xu(axis_diagonal) - x_cell_bdry_um_diag)*(xu(axis_diagonal) - x_cell_bdry_um_diag)); // Signed Distance h
+                                        const double sdh_up = -sqrt((xu(axis) - x_cell_bdry_up_axis)*(xu(axis) - x_cell_bdry_up_axis)+(xu(axis_diagonal) - x_cell_bdry_up_diag)*(xu(axis_diagonal) - x_cell_bdry_up_diag)); // Signed Distance h
+                                        double h_diagonal = sqrt((dx[axis] * dx[axis])*(dx[axis] * dx[axis])+(dx[axis_diagonal] * dx[axis_diagonal])*(dx[axis_diagonal] * dx[axis_diagonal]));
+                                        std::cout<<"Print sdh_um"<<sdh_um<<" "<<dx[axis]+dx[axis_diagonal]<<std::endl;
+                                        TBOX_ASSERT((sdh_um) < dx[axis]+dx[axis_diagonal] && sdh_um > 0);
+                                        TBOX_ASSERT(fabs(sdh_up) < dx[axis]+dx[axis_diagonal] && sdh_up < 0);
+                                        if (side_ghost_boxes[axis].contains(i_s_up) &&
+                                            side_ghost_boxes[axis].contains(i_s_um))
+                                        {
+                                            double C_u_um = 0;
+                                            double C_u_up = 0;
+
+                                            interpolate(&jn(0), 0, DU_jump_node[axis], phi_P_jump);
+                                            if (d_use_direct_coupling)
+                                            {
+                                                if(d_F_trial){
+                                                    interpolate(&jn(0), 0, F_node, phi_X);
+                                                    jn=-jn;
+                                                }
+                                                jn(axis)=(jn(axis)-jn*n*n(axis))*n(axis);
+                                            }
+                                            C_u_up = sdh_up * jn(axis);
+                                            C_u_um = sdh_um * jn(axis);
+
+                                            //const double sgn = (r-xu)*n > 0.0 ? 1.0 : (r-xu)*n < 0.0 ? -1.0 : 0.0;
+                                            const double sgn = (n*q_diagonal_pos) > 0.0 ? 1.0 : (n*q_diagonal_pos) < 0.0 ? -1.0 : 0.0;
+
+                                            // Note that the corrections are applied to opposite sides
+                                            (*f_data)(i_s_up) -= d_isotropic_force_alpha2*q_diagonal_pos(axis) *sgn* (C_u_um / (h_diagonal*h_diagonal));
+                                            (*f_data)(i_s_um) += d_isotropic_force_alpha2*q_diagonal_pos(axis)*sgn * (C_u_up / (h_diagonal*h_diagonal));
+                                        }
+
+                                        // Keep track of the positions where we have
+                                        // imposed jump conditions.
+                                        intersection_u_points[axis][i_s_um].push_back(xu);
+                                        intersection_u_ref_coords[axis][i_s_um].push_back(xui);
+                                        intersection_u_normals[axis][i_s_um].push_back(n);
+                                    }
+                                }
+                            }
+                            for (unsigned int k = 0; k < intersectionsDiagonalVelocity_neg.size(); ++k)
+                            {
+                                libMesh::Point xu = r + intersectionsDiagonalVelocity_neg[k].first * q_diagonal_neg;
+                                const libMesh::Point& xui = intersectionsDiagonalVelocity_neg[k].second;
+                                SideIndex<NDIM> i_s_um(i_c, axis, 0);
+                                hier::Index<NDIM> i_c_neighbor = i_c;
+                                i_c_neighbor(axis) += 1;
+
+                                SideIndex<NDIM> i_s_up(i_c_neighbor, axis, 0);
+                                i_s_up(axis) =
+                                    boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] + 0.5) + patch_lower[axis];
+                                //                                i_s_up(axis_diagonal) =
+                                //                                    boost::math::iround((xu(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal] + 0.5) + patch_lower[axis_diagonal];
+                                i_s_um(axis) =
+                                    boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 0.5) + patch_lower[axis];
+                                //                                i_s_um(axis_diagonal) =
+                                //                                    boost::math::iround((xu(axis_diagonal) - x_lower[axis_diagonal]) / dx[axis_diagonal] - 0.5) + patch_lower[axis_diagonal];
+                                if (extended_box.contains(i_s_up) && extended_box.contains(i_s_um))
+                                {
+                                    std::vector<libMesh::Point> ref_coords(1, xui);
+                                    fe_X->reinit(elem, &ref_coords);
+                                    fe_P_jump->reinit(elem, &ref_coords);
+                                    for (unsigned int l = 0; l < NDIM - 1; ++l)
+                                    {
+                                        interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+                                    }
+                                    if (NDIM == 2)
+                                    {
+                                        dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                    }
+                                    n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                                    if(d_use_direct_coupling_smoothed_normal){
+                                        interpolate(n, 0, smoothed_normal_node, phi_X);
+                                        n=n.unit();
+                                    }
+                                    bool found_same_intersection_point = false;
+
+                                    for (int shift = -1; shift <= 1; ++shift)
+                                    {
+                                        SideIndex<NDIM> i_s_prime = i_s_um;
+                                        i_s_prime(axis) += shift;
+                                        const std::vector<libMesh::Point>& candidate_coords =
+                                            intersection_u_points[axis][i_s_prime];
+                                        const std::vector<libMesh::Point>& candidate_ref_coords =
+                                            intersection_u_ref_coords[axis][i_s_prime];
+                                        const std::vector<VectorValue<double> >& candidate_normals =
+                                            intersection_u_normals[axis][i_s_prime];
+
+                                        found_same_intersection_point =
+                                            checkDoubleCountingIntersection(axis,
+                                                                            dx,
+                                                                            n,
+                                                                            xu,
+                                                                            xui,
+                                                                            i_s_um,
+                                                                            i_s_prime,
+                                                                            candidate_coords,
+                                                                            candidate_ref_coords,
+                                                                            candidate_normals);
+                                        if (found_same_intersection_point) break;
+                                    }
+
+                                    if (!found_same_intersection_point)
+                                    {
+                                        // imposed jump conditions.
+
+                                        TBOX_ASSERT(i_s_um.getAxis() == i_s_up.getAxis());
+                                        TBOX_ASSERT(i_s_up(axis) - i_s_um(axis) == 1);
+                                        const double x_cell_bdry_um_axis =
+                                            x_lower[axis] +
+                                            static_cast<double>(i_s_um(axis) - patch_lower[axis]) * dx[axis];
+                                        const double x_cell_bdry_um_diag =
+                                            x_lower[axis_diagonal] +
+                                            static_cast<double>(i_s_um(axis_diagonal) - patch_lower[axis_diagonal]+0.5) * dx[axis_diagonal];
+                                        const double x_cell_bdry_up_axis =
+                                            x_lower[axis] +
+                                            static_cast<double>(i_s_up(axis) - patch_lower[axis]) * dx[axis];
+                                        const double x_cell_bdry_up_diag =
+                                            x_lower[axis_diagonal] +
+                                            static_cast<double>(i_s_up(axis_diagonal) - patch_lower[axis_diagonal]+0.5) * dx[axis_diagonal];
+                                        const double sdh_um = sqrt((xu(axis) - x_cell_bdry_um_axis)*(xu(axis) - x_cell_bdry_um_axis)+(xu(axis_diagonal) - x_cell_bdry_um_diag)*(xu(axis_diagonal) - x_cell_bdry_um_diag)); // Signed Distance h
+                                        const double sdh_up = -sqrt((xu(axis) - x_cell_bdry_up_axis)*(xu(axis) - x_cell_bdry_up_axis)+(xu(axis_diagonal) - x_cell_bdry_up_diag)*(xu(axis_diagonal) - x_cell_bdry_up_diag)); // Signed Distance h
+                                        double h_diagonal = sqrt((dx[axis] * dx[axis])*(dx[axis] * dx[axis])+(dx[axis_diagonal] * dx[axis_diagonal])*(dx[axis_diagonal] * dx[axis_diagonal]));
+                                        TBOX_ASSERT((sdh_um) < dx[axis]+dx[axis_diagonal] && sdh_um > 0);
+                                        TBOX_ASSERT(fabs(sdh_up) < dx[axis]+dx[axis_diagonal] && sdh_up < 0);
+                                        if (side_ghost_boxes[axis].contains(i_s_up) &&
+                                            side_ghost_boxes[axis].contains(i_s_um))
+                                        {
+                                            double C_u_um = 0;
+                                            double C_u_up = 0;
+
+                                            interpolate(&jn(0), 0, DU_jump_node[axis], phi_P_jump);
+                                            if (d_use_direct_coupling)
+                                            {
+                                                if(d_F_trial){
+                                                    interpolate(&jn(0), 0, F_node, phi_X);
+                                                    jn=-jn;
+                                                }
+                                                jn(axis)=(jn(axis)-jn*n*n(axis))*n(axis);
+                                            }
+                                            C_u_up = sdh_up * jn(axis);
+                                            C_u_um = sdh_um * jn(axis);
+
+                                            //const double sgn = (r-xu)*n > 0.0 ? 1.0 : (r-xu)*n < 0.0 ? -1.0 : 0.0;
+                                            const double sgn = (n*q_diagonal_pos) > 0.0 ? 1.0 : (n*q_diagonal_pos) < 0.0 ? -1.0 : 0.0;
+
+                                            // Note that the corrections are applied to opposite sides
+                                            (*f_data)(i_s_up) -= d_isotropic_force_alpha2*q_diagonal_pos(axis) *sgn* (C_u_um / (h_diagonal*h_diagonal));
+                                            (*f_data)(i_s_um) += d_isotropic_force_alpha2*q_diagonal_pos(axis)*sgn * (C_u_up / (h_diagonal*h_diagonal));
+                                        }
+
+                                        // Keep track of the positions where we have
+                                        // imposed jump conditions.
+                                        intersection_u_points[axis][i_s_um].push_back(xu);
+                                        intersection_u_ref_coords[axis][i_s_um].push_back(xui);
+                                        intersection_u_normals[axis][i_s_um].push_back(n);
+                                    }
+                                }
+                            }
+//
+//                            for (unsigned int j = 0; j < NDIM - 1; ++j)
+//                            {
+//                                for (unsigned int k = 0; k < intersectionsSideDiagonal[j].size(); ++k)
+//                                {
+//                                    libMesh::Point xu = rs[j] + intersectionsSideDiagonal[j][k].first * q_diagonal_pos;
+//                                    const libMesh::Point& xui = intersectionsSideDiagonal[j][k].second;
+//                                    SideIndex<NDIM> i_s_up;
+//                                    SideIndex<NDIM> i_s_um;
+//
+//                                    if (xu(axis) - x_lower[axis] > 0.0)
+//                                    {
+//                                        if (fmod(xu(axis) - x_lower[axis], dx[axis]) >= 0.5 * dx[axis])
+//                                        {
+//                                            SideIndex<NDIM> i_side_um(i_c, SideDim[axis][j], 0);
+//                                            hier::Index<NDIM> i_c_neighbor = i_c;
+//                                            i_c_neighbor(axis) += 1;
+//
+//                                            SideIndex<NDIM> i_side_up(i_c_neighbor, SideDim[axis][j], 0);
+//
+//                                            i_side_up(axis) = boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis]) +
+//                                                              patch_lower[axis];
+//                                            i_side_um(axis) =
+//                                                boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 0.5) +
+//                                                patch_lower[axis];
+//                                            i_s_up = i_side_up;
+//                                            i_s_um = i_side_um;
+//                                        }
+//                                        else if (fmod((xu(axis) - x_lower[axis]), dx[axis]) < 0.5 * dx[axis])
+//                                        {
+//                                            SideIndex<NDIM> i_side_up(i_c, SideDim[axis][j], 0);
+//                                            hier::Index<NDIM> i_c_neighbor = i_c;
+//                                            i_c_neighbor(axis) -= 1;
+//                                            SideIndex<NDIM> i_side_um(i_c_neighbor, SideDim[axis][j], 0);
+//                                            i_side_up(axis) =
+//                                                boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 0.5) +
+//                                                patch_lower[axis];
+//                                            i_side_um(axis) =
+//                                                boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 1.0) +
+//                                                patch_lower[axis];
+//                                            i_s_up = i_side_up;
+//                                            i_s_um = i_side_um;
+//                                        }
+//                                        else
+//                                        {
+//                                            continue;
+//                                        }
+//                                    }
+//                                    else if (xu(axis) - x_lower[axis] < 0.0)
+//                                    {
+//                                        if (fmod(fabs(xu(axis) - x_lower[axis]), dx[axis]) < 0.5 * dx[axis])
+//                                        {
+//                                            SideIndex<NDIM> i_side_um(i_c, SideDim[axis][j], 0);
+//                                            hier::Index<NDIM> i_c_neighbor = i_c;
+//                                            i_c_neighbor(axis) += 1;
+//
+//                                            SideIndex<NDIM> i_side_up(i_c_neighbor, SideDim[axis][j], 0);
+//
+//                                            i_side_up(axis) = boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis]) +
+//                                                              patch_lower[axis];
+//                                            i_side_um(axis) =
+//                                                boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 0.5) +
+//                                                patch_lower[axis];
+//                                            i_s_up = i_side_up;
+//                                            i_s_um = i_side_um;
+//                                        }
+//                                        else
+//                                        {
+//                                            SideIndex<NDIM> i_side_up(i_c, SideDim[axis][j], 0);
+//                                            hier::Index<NDIM> i_c_neighbor = i_c;
+//                                            i_c_neighbor(axis) -= 1;
+//                                            SideIndex<NDIM> i_side_um(i_c_neighbor, SideDim[axis][j], 0);
+//                                            i_side_up(axis) =
+//                                                boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 0.5) +
+//                                                patch_lower[axis];
+//                                            i_side_um(axis) =
+//                                                boost::math::iround((xu(axis) - x_lower[axis]) / dx[axis] - 1.0) +
+//                                                patch_lower[axis];
+//                                            i_s_up = i_side_up;
+//                                            i_s_um = i_side_um;
+//                                        }
+//                                    }
+//                                    else
+//                                    {
+//                                        TBOX_ERROR(d_object_name << ":  Restart file version different than class version."
+//                                                                 << std::endl);
+//                                    }
+//
+//                                    if (extended_side_box.contains(i_s_up) && extended_side_box.contains(i_s_um))
+//                                    {
+//                                        TBOX_ASSERT(i_s_up(axis) - i_s_um(axis) == 1);
+//                                        std::vector<libMesh::Point> ref_coords(1, xui);
+//                                        fe_X->reinit(elem, &ref_coords);
+//                                        fe_P_jump->reinit(elem, &ref_coords);
+//                                        for (unsigned int l = 0; l < NDIM - 1; ++l)
+//                                        {
+//                                            interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+//                                        }
+//                                        if (NDIM == 2)
+//                                        {
+//                                            dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+//                                        }
+//                                        n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+//                                        if(d_use_direct_coupling_smoothed_normal){
+//                                            interpolate(n, 0, smoothed_normal_node, phi_X);
+//                                            n=n.unit();
+//                                        }
+//
+//
+//                                        bool found_same_intersection_point = false;
+//
+//                                        for (int shift = -1; shift <= 1; ++shift)
+//                                        {
+//                                            SideIndex<NDIM> i_s_prime = i_s_um;
+//                                            i_s_prime(SideDim[axis][j]) += shift;
+//                                            const std::vector<libMesh::Point>& candidate_coords =
+//                                                intersectionSide_u_points[j][axis][i_s_prime];
+//                                            const std::vector<libMesh::Point>& candidate_ref_coords =
+//                                                intersectionSide_u_ref_coords[j][axis][i_s_prime];
+//                                            const std::vector<VectorValue<double> >& candidate_normals =
+//                                                intersectionSide_u_normals[j][axis][i_s_prime];
+//
+//                                            found_same_intersection_point =
+//                                                checkDoubleCountingIntersection(axis,
+//                                                                                dx,
+//                                                                                n,
+//                                                                                xu,
+//                                                                                xui,
+//                                                                                i_s_um,
+//                                                                                i_s_prime,
+//                                                                                candidate_coords,
+//                                                                                candidate_ref_coords,
+//                                                                                candidate_normals);
+//                                            if (found_same_intersection_point) break;
+//                                        }
+//
+//                                        if (!found_same_intersection_point)
+//                                        {
+//                                            // Evaluate the jump conditions and apply them
+//                                            // to the Eulerian grid.
+//
+//                                            const double x_mid_side_up_axis =
+//                                                x_lower[axis] +
+//                                                static_cast<double>(i_s_up(axis) - patch_lower[axis] + 0.5) * dx[axis];
+//                                            const double x_mid_side_up_diagonal =
+//                                                x_lower[axis_diagonal] +
+//                                                static_cast<double>(i_s_up(axis_diagonal) - patch_lower[axis_diagonal] + 0.5) * dx[axis_diagonal];
+//                                            const double x_mid_side_um_axis =
+//                                                x_lower[axis] +
+//                                                static_cast<double>(i_s_um(axis) - patch_lower[axis] + 0.5) * dx[axis];
+//                                            const double x_mid_side_um_diagonal =
+//                                                x_lower[axis_diagonal] +
+//                                                static_cast<double>(i_s_um(axis_diagonal) - patch_lower[axis_diagonal] + 0.5) * dx[axis_diagonal];
+//
+//                                            TBOX_ASSERT(xu(axis) <= x_mid_side_up_axis);
+//                                            TBOX_ASSERT(xu(axis) > x_mid_side_um_axis);
+//
+//                                            //const double sdh_up = xu(axis) - x_mid_side_up; // Signed Distance h
+//                                            //const double sdh_um = xu(axis) - x_mid_side_um;
+//                                            const double sdh_up = -sqrt((xu(axis) - x_mid_side_up_axis)*(xu(axis) - x_mid_side_up_axis)+(xu(axis_diagonal) - x_mid_side_up_diagonal)*(xu(axis_diagonal) - x_mid_side_up_diagonal)); // Signed Distance h
+//                                            const double sdh_um = sqrt((xu(axis) - x_mid_side_um_axis)*(xu(axis) - x_mid_side_um_axis)+(xu(axis_diagonal) - x_mid_side_um_diagonal)*(xu(axis_diagonal) - x_mid_side_um_diagonal)); // Signed Distance h
+//                                            double h_diagonal = sqrt((dx[axis] * dx[axis])*(dx[axis] * dx[axis])+(dx[axis_diagonal] * dx[axis_diagonal])*(dx[axis_diagonal] * dx[axis_diagonal]));
+//
+//                                            if (side_ghost_boxes[SideDim[axis][j]].contains(i_s_up) &&
+//                                                side_ghost_boxes[SideDim[axis][j]].contains(i_s_um))
+//                                            {
+//                                                double C_u_um = 0;
+//                                                double C_u_up = 0;
+//
+//                                                interpolate(&jn(0), 0, DU_jump_node[SideDim[axis][j]], phi_P_jump);
+//                                                if (d_use_direct_coupling)
+//                                                {
+//                                                    if(d_F_trial){
+//                                                        interpolate(&jn(0), 0, F_node, phi_X);
+//                                                        jn=-jn;
+//                                                    }
+//                                                    jn(axis)=(jn(SideDim[axis][j])-jn*n*n(SideDim[axis][j]))*n(axis);
+//                                                }
+//                                                C_u_um = sdh_um * jn(axis);
+//                                                C_u_up = sdh_up * jn(axis);
+//
+//                                                //const double sgn = (r-xu)*n > 0.0 ? 1.0 : (r-xu)*n < 0.0 ? -1.0 : 0.0;
+//                                                const double sgn = (n*q_diagonal_pos) > 0.0 ? 1.0 : (n*q_diagonal_pos) < 0.0 ? -1.0 : 0.0;
+//
+//                                                (*f_data)(i_s_um) += d_isotropic_force_alpha3*sgn * (C_u_up / (h_diagonal*h_diagonal));
+//                                                (*f_data)(i_s_up) -= d_isotropic_force_alpha3*sgn * (C_u_um / (h_diagonal*h_diagonal));
+//                                            }
+//                                            intersectionSide_u_points[j][axis][i_s_um].push_back(xu);
+//                                            intersectionSide_u_ref_coords[j][axis][i_s_um].push_back(xui);
+//                                            intersectionSide_u_normals[j][axis][i_s_um].push_back(n);
+//                                        }
+//                                    }
+//                                }
+//                            }
+                        }
+                    }
+
+                    if (d_use_pressure_jump_conditions)
+                    {
+                        int intersection_count=0;
+                        for (unsigned int k = 0; k < intersections.size(); ++k)
+                        {
+                            const libMesh::Point x = r + intersections[k].first * q;
+                            const libMesh::Point& xi = intersections[k].second;
+                            SideIndex<NDIM> i_s(i_c, axis, 0);
+                            i_s(axis) = boost::math::iround((x(axis) - x_lower[axis]) / dx[axis]) + patch_lower[axis];
+
+
+                            if (extended_box.contains(i_s))
+                            {
+                                std::vector<libMesh::Point> ref_coords(1, xi);
+                                fe_X->reinit(elem, &ref_coords);
+                                fe_P_jump->reinit(elem, &ref_coords);
+                                for (unsigned int l = 0; l < NDIM - 1; ++l)
+                                {
+                                    interpolate(dx_dxi[l], 0, x_node, *dphi_dxi[l]);
+                                }
+                                if (NDIM == 2)
+                                {
+                                    dx_dxi[1] = VectorValue<double>(0.0, 0.0, 1.0);
+                                }
+                                n = (dx_dxi[0].cross(dx_dxi[1])).unit();
+                                if(d_use_direct_coupling_smoothed_normal){
+                                    interpolate(n, 0, smoothed_normal_node, phi_X);
+                                    n=n.unit();
+                                }
+
+                                // Make sure we haven't already found this
+                                // intersection.
+                                //
+                                // (Because we are doing this in floating point
+                                // arithmetic, we can't even count on the
+                                // intersection being assigned to the same index!)
+                                bool found_same_intersection_point = false;
+                                for (int shift = -1; shift <= 1; ++shift)
+                                {
+                                    SideIndex<NDIM> i_s_prime = i_s;
+                                    i_s_prime(axis) += shift;
+                                    const std::vector<libMesh::Point>& candidate_coords =
+                                        intersection_points[axis][i_s_prime];
+                                    const std::vector<libMesh::Point>& candidate_ref_coords =
+                                        intersection_ref_coords[axis][i_s_prime];
+                                    const std::vector<VectorValue<double> >& candidate_normals =
+                                        intersection_normals[axis][i_s_prime];
+
+                                    found_same_intersection_point =
+                                        checkDoubleCountingIntersection(axis,
+                                                                        dx,
+                                                                        n,
+                                                                        x,
+                                                                        xi,
+                                                                        i_s,
+                                                                        i_s_prime,
+                                                                        candidate_coords,
+                                                                        candidate_ref_coords,
+                                                                        candidate_normals);
+                                    if (found_same_intersection_point) break;
+                                }
+
+                                if (!found_same_intersection_point)
+                                {
+                                    // Evaluate the jump conditions and apply them
+                                    // to the Eulerian grid.
+                                    if (side_ghost_boxes[axis].contains(i_s))
+                                    {
+                                        const double C_p = interpolate(0, P_jump_node, phi_P_jump);
+                                        if (d_use_direct_coupling)
+                                        {
+                                            if(d_F_trial){
+                                                interpolate(&jn(0), 0, F_node, phi_X);
+                                                jn=-jn;
+                                            }
+                                            else{
+                                                interpolate(&jn(0), 0, DU_jump_node[0], phi_P_jump);
+                                            }
+                                            // std::cout<<"print out force at pressure"<<jn(0)<<std::endl;
+                                            // std::cout<<k<<"intersection :normal vector:"<<n<<std::endl;
+                                            // std::cout<<k<<"intersection :direct forces:"<<jn<<std::endl;
+                                            double C_p=-jn*n;
+                                        }
+                                        ++intersection_count;
+                                        ++axis_intersection_count;
+//                                        std::cout<<" correct normal axis "<<n(axis)<<"directional "<<(n*q_diagonal_pos)<<std::endl;
+//                                        std::cout<<"correct coordinate "<<x<<std::endl;
+//                                        std::cout<<"correct jump value "<<C_p<<std::endl;
+//                                        std::cout<<" corrected i_s "<<i_s<<std::endl;
                                         const double sgn = n(axis) > 0.0 ? 1.0 : n(axis) < 0.0 ? -1.0 : 0.0;
-                                        (*f_data)(i_s) += sgn * (C_p / dx[axis]);
+                                        (*f_data)(i_s) += (1-d_isotropic_force_alpha1)*sgn * (C_p / dx[axis]);
                                     }
 
                                     // Keep track of the positions where we have
@@ -5017,8 +5753,8 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
 
                                         const double sgn = n(axis) > 0.0 ? 1.0 : n(axis) < 0.0 ? -1.0 : 0.0;
                                         // Note that the corrections are applied to opposite sides
-                                        (*f_data)(i_s_up) -= sgn * (C_u_um / (dx[axis] * dx[axis]));
-                                        (*f_data)(i_s_um) += sgn * (C_u_up / (dx[axis] * dx[axis]));
+                                        (*f_data)(i_s_up) -= (1-d_isotropic_force_alpha2)*sgn * (C_u_um / (dx[axis] * dx[axis]));
+                                        (*f_data)(i_s_um) += (1-d_isotropic_force_alpha2)*sgn * (C_u_up / (dx[axis] * dx[axis]));
                                     }
 
                                     // Keep track of the positions where we have
@@ -5203,8 +5939,8 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
 
                                             const double sgn = n(axis) > 0.0 ? 1.0 : n(axis) < 0.0 ? -1.0 : 0.0;
 
-                                            (*f_data)(i_s_um) += sgn * (C_u_up / (dx[axis] * dx[axis]));
-                                            (*f_data)(i_s_up) -= sgn * (C_u_um / (dx[axis] * dx[axis]));
+                                            (*f_data)(i_s_um) += (1-d_isotropic_force_alpha3)*sgn * (C_u_up / (dx[axis] * dx[axis]));
+                                            (*f_data)(i_s_up) -= (1-d_isotropic_force_alpha3)*sgn * (C_u_um / (dx[axis] * dx[axis]));
                                         }
                                         intersectionSide_u_points[j][axis][i_s_um].push_back(xu);
                                         intersectionSide_u_ref_coords[j][axis][i_s_um].push_back(xui);
@@ -5223,6 +5959,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                 elem->point(k) = X_node_cache[k];
             }
         }
+        std::cout<<"diagonal intersection no"<< diagonal_intersection_count<<"axis intersection no"<< axis_intersection_count<<std::endl;
     }
 
     return;
@@ -5443,6 +6180,7 @@ IIMethod::commonConstructor(const std::string& object_name,
     d_use_tangential_velocity.resize(d_num_parts);
     d_normalize_pressure_jump.resize(d_num_parts);
     d_use_discon_elem_for_jumps.resize(d_num_parts);
+    d_compute_fluid_traction.resize(d_num_parts);
 
     // Determine whether we should use first-order or second-order shape
     // functions for each part of the structure.
@@ -5605,7 +6343,7 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
 
     if (db->isBool("use_velocity_jump_conditions"))
         d_use_velocity_jump_conditions = db->getBool("use_velocity_jump_conditions");
-    if (d_use_velocity_jump_conditions)
+    if (d_use_pressure_jump_conditions && d_use_velocity_jump_conditions)
     {
         if (db->isDouble("wss_calc_width")) d_wss_calc_width = db->getDouble("wss_calc_width");
         if (db->isString("velocity_jump_fe_family"))
@@ -5623,12 +6361,11 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     {
         if (db->isBool("perturb_fe_mesh_nodes")) d_perturb_fe_mesh_nodes = db->getBool("perturb_fe_mesh_nodes");
     }
-    if (db->isBool("compute_fluid_traction")) d_compute_fluid_traction = db->getBool("compute_fluid_traction");
-    if (d_compute_fluid_traction)
-    {
+//if (db->isBool("compute_fluid_traction")) d_compute_fluid_traction = db->getBool("compute_fluid_traction");
+
         if (db->isDouble("p_calc_width")) d_p_calc_width = db->getDouble("p_calc_width");
         if (db->isDouble("exterior_calc_coef")) d_exterior_calc_coef = db->getDouble("exterior_calc_coef");
-    }
+
     if (db->isBool("use_consistent_mass_matrix"))
         d_use_consistent_mass_matrix = db->getBool("use_consistent_mass_matrix");
     if (db->isBool("use_direct_forcing")) d_use_direct_forcing = db->getBool("use_direct_forcing");
@@ -5701,9 +6438,9 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
         d_use_Qi_scheme= db->getBool("use_Qi_scheme");
     }
 
-    if (db->isBool("use_normal_velocity_update_structure"))
+    if (db->isBool("use_stablized_tangent_velocity_update_structure"))
     {
-        d_use_normal_velocity_update_structure= db->getBool("use_normal_velocity_update_structure");
+        d_use_stablized_tangent_velocity_update_structure = db->getBool("use_stablized_tangent_velocity_update_structure");
     }
     if (db->isBool("output_training_data"))
     {
@@ -5724,6 +6461,26 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
     if (db->isDouble("num_smooth_cycles"))
     {
         d_num_smooth_cycles = db->getDouble("num_smooth_cycles");
+    }
+    if (db->isDouble("isotropic_force_alpha1"))
+    {
+        d_isotropic_force_alpha1 = db->getDouble("isotropic_force_alpha1");
+    }
+    if (db->isDouble("isotropic_force_alpha2"))
+    {
+        d_isotropic_force_alpha2 = db->getDouble("isotropic_force_alpha2");
+    }
+    if (db->isDouble("isotropic_force_alpha3"))
+    {
+        d_isotropic_force_alpha3 = db->getDouble("isotropic_force_alpha3");
+    }
+    if (db->isBool("trial_inconsistent_force"))
+    {
+        d_trial_inconsistent_force= db->getBool("trial_inconsistent_force");
+    }
+    if (db->isBool("use_incorrected_velocity_interpoaltion_for_force_predictor"))
+    {
+        d_use_incorrected_velocity_interpoaltion_for_force_predictor= db->getBool("use_incorrected_velocity_interpoaltion_for_force_predictor");
     }
     if (db->keyExists("do_log"))
         d_do_log = db->getBool("do_log");

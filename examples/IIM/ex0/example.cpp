@@ -333,12 +333,15 @@ main(int argc, char* argv[])
 
         vector<SystemData> sys_data(1, SystemData(IIMethod::VELOCITY_SYSTEM_NAME, vars));
         Pointer<IIMethod> ibfe_ops = ib_ops;
+        if (compute_fluid_traction)   ibfe_ops->registerTractionCalc(0);
         ibfe_ops->initializeFEEquationSystems();
         equation_systems = ibfe_ops->getFEDataManager()->getEquationSystems();
         IIMethod::LagSurfaceForceFcnData surface_fcn_data(tether_force_function, sys_data, tether_data_ptr);
         ibfe_ops->registerLagSurfaceForceFunction(surface_fcn_data);
-
+        std::cout<<"a"<<std::endl;
         // Create Eulerian initial condition specification objects.
+        std::cout<<"b"<<std::endl;
+
         if (input_db->keyExists("VelocityInitialConditions"))
         {
             Pointer<CartGridFunction> u_init = new muParserCartGridFunction(
@@ -352,6 +355,7 @@ main(int argc, char* argv[])
                 "p_init", app_initializer->getComponentDatabase("PressureInitialConditions"), grid_geometry);
             navier_stokes_integrator->registerPressureInitialConditions(p_init);
         }
+        std::cout<<"c"<<std::endl;
 
         // Create Eulerian boundary condition specification objects (when necessary).
         const IntVector<NDIM>& periodic_shift = grid_geometry->getPeriodicShift();
@@ -394,6 +398,8 @@ main(int argc, char* argv[])
         std::unique_ptr<ExodusII_IO> exodus_io(uses_exodus ? new ExodusII_IO(mesh) : NULL);
 
         // Initialize hierarchy configuration and data on all patches.
+        std::cout<<"cd"<<std::endl;
+
         ibfe_ops->initializeFEData();
         time_integrator->initializePatchHierarchy(patch_hierarchy, gridding_algorithm);
 
@@ -403,6 +409,7 @@ main(int argc, char* argv[])
         // Print the input database contents to the log file.
         plog << "Input database:\n";
         input_db->printClassData(plog);
+        std::cout<<"d"<<std::endl;
 
         // Write out initial visualization data.
         int iteration_num = time_integrator->getIntegratorStep();
@@ -446,6 +453,8 @@ main(int argc, char* argv[])
         // Main time step loop.
         double loop_time_end = time_integrator->getEndTime();
         double dt = 0.0;
+        std::cout<<"e"<<std::endl;
+
         while (!MathUtilities<double>::equalEps(loop_time, loop_time_end) && time_integrator->stepsRemaining())
         {
             iteration_num = time_integrator->getIntegratorStep();
