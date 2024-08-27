@@ -626,7 +626,7 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
 } // preprocessIntegrateData
 
 void
-IIMethod::postprocessIntegrateData(double current_time, double new_time, int num_cycles)
+IIMethod::postprocessIntegrateData(double current_time, double new_time, int /*num_cycles*/)
 {
     IBAMR_TIMER_START(t_postprocess_integrate_data);
     std::vector<std::vector<libMesh::PetscVector<double>*> > vec_collection_update = {
