@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2014 - 2024 by the IBAMR developers
+// Copyright (c) 2014 - 2023 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -171,7 +171,7 @@ static Timer* t_begin_data_redistribution;
 static Timer* t_end_data_redistribution;
 static Timer* t_apply_gradient_detector;
 // Version of IBFEMethod restart file data.
-const int IBFE_METHOD_VERSION = 7;
+const int IBFE_METHOD_VERSION = 6;
 
 inline boundary_id_type
 get_dirichlet_bdry_ids(const std::vector<boundary_id_type>& bdry_ids)
@@ -631,12 +631,12 @@ IBFEMethod::postprocessIntegrateData(double current_time, double new_time, int n
     if (d_Q_vecs) vecs.push_back(d_Q_vecs->get("half"));
     batch_vec_ghost_update(vecs, INSERT_VALUES, SCATTER_FORWARD);
 
-    if (d_multistep_n_previous_steps > 0)
+    if (d_multistep_n_steps > 0)
     {
-        TBOX_ASSERT(d_multistep_n_previous_steps == 1);
+        TBOX_ASSERT(d_multistep_n_steps == 1);
         d_U_vecs->copy("current", { "old" });
         d_dt_old.push_front(new_time - current_time);
-        if (d_dt_old.size() > static_cast<size_t>(d_multistep_n_previous_steps)) d_dt_old.pop_back();
+        if (d_dt_old.size() > static_cast<size_t>(d_multistep_n_steps)) d_dt_old.pop_back();
     }
 
     d_X_vecs->copy("new", { "solution", "current" });
@@ -770,9 +770,9 @@ IBFEMethod::interpolateVelocity(const int u_data_idx,
 } // interpolateVelocity
 
 void
-IBFEMethod::setUseMultistepTimeStepping(const unsigned int n_previous_steps)
+IBFEMethod::setUseMultistepTimeStepping(const int n_steps)
 {
-    d_multistep_n_previous_steps = n_previous_steps;
+    d_multistep_n_steps = n_steps;
     return;
 } // setUseMultistepTimeStepping
 
@@ -1085,8 +1085,8 @@ IBFEMethod::spreadForce(const int f_data_idx,
                 level->getPatchDescriptor()->getPatchDataFactory(f_scratch_data_idx)->getGhostCellWidth();
 
             // TODO - SAMRAIGhostDataAccumulator has not been tested with multiple levels
-            d_ghost_data_accumulator = std::make_unique<SAMRAIGhostDataAccumulator>(
-                hierarchy, f_var, gcw, getCoarsestPatchLevelNumber(), getFinestPatchLevelNumber());
+            d_ghost_data_accumulator.reset(new SAMRAIGhostDataAccumulator(
+                hierarchy, f_var, gcw, getCoarsestPatchLevelNumber(), getFinestPatchLevelNumber()));
         }
         d_ghost_data_accumulator->accumulateGhostData(f_scratch_data_idx);
     }
@@ -1340,9 +1340,7 @@ IBFEMethod::registerEulerianVariables()
                      d_lagrangian_workload_var,
                      ghosts,
                      d_lagrangian_workload_coarsen_type,
-                     d_lagrangian_workload_refine_type,
-                     nullptr,
-                     false);
+                     d_lagrangian_workload_refine_type);
     return;
 } // registerEulerianVariables
 
@@ -1724,14 +1722,10 @@ IBFEMethod::putToDatabase(Pointer<Database> db)
     db->putBool("d_split_normal_force", d_split_normal_force);
     db->putBool("d_split_tangential_force", d_split_tangential_force);
     db->putBool("d_use_jump_conditions", d_use_jump_conditions);
-    std::unique_ptr<bool[]> part_is_active_arr = std::make_unique<bool[]>(d_part_is_active.size());
+    std::unique_ptr<bool[]> part_is_active_arr{ new bool[d_part_is_active.size()] };
     std::copy(d_part_is_active.begin(), d_part_is_active.end(), part_is_active_arr.get());
     db->putInteger("part_is_active_arr_size", d_part_is_active.size());
     db->putBoolArray("part_is_active_arr", part_is_active_arr.get(), d_part_is_active.size());
-    std::unique_ptr<double[]> dt_old_arr{ new double[d_dt_old.size()] };
-    std::copy(d_dt_old.begin(), d_dt_old.end(), dt_old_arr.get());
-    db->putInteger("dt_old_arr_size", d_dt_old.size());
-    if (!d_dt_old.empty()) db->putDoubleArray("dt_old_arr", dt_old_arr.get(), d_dt_old.size());
     return;
 } // putToDatabase
 
@@ -1827,29 +1821,28 @@ IBFEMethod::doInitializeFESystemVectors()
 
     // The choice of FEDataManager set is important here since it determines the
     // IB ghost regions.
-    d_X_vecs = std::make_unique<LibMeshSystemIBVectors>(d_active_fe_data_managers, getCurrentCoordinatesSystemName());
-    d_U_vecs = std::make_unique<LibMeshSystemIBVectors>(d_active_fe_data_managers, getVelocitySystemName());
-    d_F_vecs = std::make_unique<LibMeshSystemIBVectors>(d_active_fe_data_managers, getForceSystemName());
-    d_X_IB_vecs =
-        std::make_unique<LibMeshSystemIBVectors>(d_active_fe_data_managers, getCurrentCoordinatesSystemName());
-    d_U_IB_vecs = std::make_unique<LibMeshSystemIBVectors>(d_active_fe_data_managers, getVelocitySystemName());
-    d_F_IB_vecs = std::make_unique<LibMeshSystemIBVectors>(d_active_fe_data_managers, getForceSystemName());
+    d_X_vecs.reset(new LibMeshSystemIBVectors(d_active_fe_data_managers, getCurrentCoordinatesSystemName()));
+    d_U_vecs.reset(new LibMeshSystemIBVectors(d_active_fe_data_managers, getVelocitySystemName()));
+    d_F_vecs.reset(new LibMeshSystemIBVectors(d_active_fe_data_managers, getForceSystemName()));
+    d_X_IB_vecs.reset(new LibMeshSystemIBVectors(d_active_fe_data_managers, getCurrentCoordinatesSystemName()));
+    d_U_IB_vecs.reset(new LibMeshSystemIBVectors(d_active_fe_data_managers, getVelocitySystemName()));
+    d_F_IB_vecs.reset(new LibMeshSystemIBVectors(d_active_fe_data_managers, getForceSystemName()));
     if (d_has_stress_normalization_parts)
     {
-        d_P_vecs = std::make_unique<LibMeshSystemIBVectors>(
-            d_active_fe_data_managers, d_stress_normalization_part, getPressureSystemName());
+        d_P_vecs.reset(new LibMeshSystemIBVectors(
+            d_active_fe_data_managers, d_stress_normalization_part, getPressureSystemName()));
     }
     if (d_has_static_pressure_parts)
     {
-        d_P_vecs = std::make_unique<LibMeshSystemIBVectors>(
-            d_active_fe_data_managers, d_static_pressure_part, getPressureSystemName());
+        d_P_vecs.reset(
+            new LibMeshSystemIBVectors(d_active_fe_data_managers, d_static_pressure_part, getPressureSystemName()));
     }
     if (d_has_lag_body_source_parts)
     {
-        d_Q_vecs = std::make_unique<LibMeshSystemIBVectors>(
-            d_active_fe_data_managers, d_lag_body_source_part, getSourceSystemName());
-        d_Q_IB_vecs = std::make_unique<LibMeshSystemIBVectors>(
-            d_active_fe_data_managers, d_lag_body_source_part, getSourceSystemName());
+        d_Q_vecs.reset(
+            new LibMeshSystemIBVectors(d_active_fe_data_managers, d_lag_body_source_part, getSourceSystemName()));
+        d_Q_IB_vecs.reset(
+            new LibMeshSystemIBVectors(d_active_fe_data_managers, d_lag_body_source_part, getSourceSystemName()));
     }
     return;
 } // doInitializeFESystemVectors
@@ -2875,7 +2868,7 @@ IBFEMethod::commonConstructor(const Pointer<Database>& input_db, int max_levels)
                                                       use_nodal_quadrature,
                                                       allow_rules_with_negative_weights);
 
-    // Initialize function data to nullptr.
+    // Initialize function data to NULL.
     d_lag_body_source_part.resize(n_parts, false);
     d_lag_body_source_fcn_data.resize(n_parts);
     d_direct_forcing_kinematics_data.resize(n_parts, Pointer<IBFEDirectForcingKinematics>(nullptr));
@@ -3103,9 +3096,10 @@ IBFEMethod::getFromInput(const Pointer<Database>& db, bool /*is_from_restart*/)
                                      << std::endl);
         }
 
-        d_secondary_hierarchy = std::make_unique<SecondaryHierarchy>(d_object_name + "::scratch_hierarchy",
-                                                                     db->getDatabase("GriddingAlgorithm"),
-                                                                     db->getDatabase("LoadBalancer"));
+        d_secondary_hierarchy =
+            std::unique_ptr<SecondaryHierarchy>(new SecondaryHierarchy(d_object_name + "::scratch_hierarchy",
+                                                                       db->getDatabase("GriddingAlgorithm"),
+                                                                       db->getDatabase("LoadBalancer")));
     }
 
     d_patch_association_cfl = db->getDoubleWithDefault("patch_association_cfl", d_patch_association_cfl);
@@ -3139,14 +3133,9 @@ IBFEMethod::getFromRestart()
     d_use_jump_conditions = db->getBool("d_use_jump_conditions");
     const int part_is_active_arr_size = db->getInteger("part_is_active_arr_size");
     d_part_is_active.resize(part_is_active_arr_size);
-    std::unique_ptr<bool[]> part_is_active_arr = std::make_unique<bool[]>(d_part_is_active.size());
+    std::unique_ptr<bool[]> part_is_active_arr{ new bool[d_part_is_active.size()] };
     db->getBoolArray("part_is_active_arr", part_is_active_arr.get(), d_part_is_active.size());
     std::copy(part_is_active_arr.get(), part_is_active_arr.get() + part_is_active_arr_size, d_part_is_active.begin());
-    const int dt_old_arr_size = db->getInteger("dt_old_arr_size");
-    d_dt_old.resize(dt_old_arr_size);
-    std::unique_ptr<double[]> dt_old_arr{ new double[d_dt_old.size()] };
-    if (!d_dt_old.empty()) db->getDoubleArray("dt_old_arr", dt_old_arr.get(), d_dt_old.size());
-    std::copy(dt_old_arr.get(), dt_old_arr.get() + dt_old_arr_size, d_dt_old.begin());
     return;
 } // getFromRestart
 

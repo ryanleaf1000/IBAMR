@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2011 - 2024 by the IBAMR developers
+// Copyright (c) 2011 - 2023 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -299,6 +299,7 @@ string_to_enum<TimeSteppingType>(const std::string& val)
 {
     if (strcasecmp(val.c_str(), "ADAMS_BASHFORTH") == 0) return ADAMS_BASHFORTH;
     if (strcasecmp(val.c_str(), "BACKWARD_EULER") == 0) return BACKWARD_EULER;
+    if (strcasecmp(val.c_str(), "BDF1") == 0) return BACKWARD_EULER;
     if (strcasecmp(val.c_str(), "BDF2") == 0) return BDF2;
     if (strcasecmp(val.c_str(), "FORWARD_EULER") == 0) return FORWARD_EULER;
     if (strcasecmp(val.c_str(), "MIDPOINT_RULE") == 0) return MIDPOINT_RULE;
@@ -349,6 +350,7 @@ is_bdf_time_stepping_type(TimeSteppingType val)
 {
     switch (val)
     {
+    case BACKWARD_EULER:
     case BDF2:
         return true;
     default:

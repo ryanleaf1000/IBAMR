@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------
 //
-// Copyright (c) 2014 - 2024 by the IBAMR developers
+// Copyright (c) 2014 - 2023 by the IBAMR developers
 // All rights reserved.
 //
 // This file is part of IBAMR.
@@ -152,8 +152,8 @@ IBExplicitHierarchyIntegrator::preprocessIntegrateHierarchy(const double current
         TBOX_ERROR(d_object_name << "::preprocessIntegrateHierarchy():\n"
                                  << "  unsupported time stepping type: "
                                  << enum_to_string<TimeSteppingType>(d_time_stepping_type) << "\n"
-                                 << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, BDF2, "
-                                    "MIDPOINT_RULE, TRAPEZOIDAL_RULE\n");
+                                 << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, "
+                                    "MIDPOINT_RULE, TRAPEZOIDAL_RULE, ADAMS_BASHFORTH\n");
     }
 
     // Compute an initial prediction of the updated positions of the Lagrangian
@@ -245,8 +245,8 @@ IBExplicitHierarchyIntegrator::integrateHierarchySpecialized(const double curren
         TBOX_ERROR(d_object_name << "::integrateHierarchy():\n"
                                  << "  unsupported time stepping type: "
                                  << enum_to_string<TimeSteppingType>(d_time_stepping_type) << "\n"
-                                 << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, BDF2, "
-                                    "MIDPOINT_RULE, TRAPEZOIDAL_RULE\n");
+                                 << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, "
+                                    "MIDPOINT_RULE, TRAPEZOIDAL_RULE, BDF2\n");
     }
 
     // Compute the Lagrangian source/sink strengths and spread them to the
@@ -325,8 +325,8 @@ IBExplicitHierarchyIntegrator::integrateHierarchySpecialized(const double curren
         TBOX_ERROR(d_object_name << "::integrateHierarchy():\n"
                                  << "  unsupported time stepping type: "
                                  << enum_to_string<TimeSteppingType>(d_time_stepping_type) << "\n"
-                                 << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, BDF2, "
-                                    "MIDPOINT_RULE, TRAPEZOIDAL_RULE\n");
+                                 << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, "
+                                    "MIDPOINT_RULE, TRAPEZOIDAL_RULE, BDF2\n");
     }
 
     // Compute an updated prediction of the updated positions of the Lagrangian
@@ -363,8 +363,8 @@ IBExplicitHierarchyIntegrator::integrateHierarchySpecialized(const double curren
             TBOX_ERROR(d_object_name << "::integrateHierarchy():\n"
                                      << "  unsupported time stepping type: "
                                      << enum_to_string<TimeSteppingType>(d_time_stepping_type) << "\n"
-                                     << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, BDF2, "
-                                        "MIDPOINT_RULE, TRAPEZOIDAL_RULE\n");
+                                     << "  supported time stepping types are: FORWARD_EULER, BACKWARD_EULER, "
+                                        "MIDPOINT_RULE, TRAPEZOIDAL_RULE, BDF2\n");
         }
     }
 
