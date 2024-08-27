@@ -376,11 +376,9 @@ public:
     /*!
      * Indicate that multistep time stepping will be used.
      *
-     * A default implementation is provided that emits an unrecoverable
-     * exception.
+     * @param[in] n_previous_steps Number of previous solution values that can be used by the multistep scheme.
      */
-    void setUseMultistepTimeStepping(int n_steps = 1) override;
-
+    void setUseMultistepTimeStepping(unsigned int n_previous_steps = 1) override;
 
     /*!
      * Advance the positions of the Lagrangian structure using the forward Euler
@@ -399,7 +397,6 @@ public:
      * trapezoidal rule.
      */
     void trapezoidalStep(double current_time, double new_time) override;
-
 
     /*!
      * Advance the positions of the Lagrangian structure using the standard
@@ -652,13 +649,15 @@ protected:
     const unsigned int d_num_parts = 1;
     std::vector<IBTK::FEDataManager*> d_fe_data_managers;
     SAMRAI::hier::IntVector<NDIM> d_ghosts = 0;
-    std::vector<libMesh::System*> d_X_systems, d_U_systems,d_U_old_systems, d_U_n_systems, d_U_t_systems, d_F_systems, d_P_jump_systems,
-        d_WSS_in_systems, d_WSS_out_systems, d_P_in_systems, d_P_out_systems, d_TAU_in_systems, d_TAU_out_systems;
+    std::vector<libMesh::System*> d_X_systems, d_U_systems, d_U_old_systems, d_U_n_systems, d_U_t_systems, d_F_systems,
+        d_P_jump_systems, d_WSS_in_systems, d_WSS_out_systems, d_P_in_systems, d_P_out_systems, d_TAU_in_systems,
+        d_TAU_out_systems;
     std::vector<std::array<libMesh::System*, NDIM> > d_DU_jump_systems;
     std::vector<libMesh::PetscVector<double>*> d_F_half_vecs, d_F_IB_ghost_vecs;
     std::vector<libMesh::PetscVector<double>*> d_X_current_vecs, d_X_new_vecs, d_X_half_vecs, d_X0_vecs,
-        d_X_IB_ghost_vecs ;
-    std::vector<libMesh::PetscVector<double>*> d_U_current_vecs, d_U_new_vecs,d_U_old_vecs,d_U_old_updated_vecs, d_U_half_vecs;
+        d_X_IB_ghost_vecs;
+    std::vector<libMesh::PetscVector<double>*> d_U_current_vecs, d_U_new_vecs, d_U_old_vecs, d_U_old_updated_vecs,
+        d_U_half_vecs;
     std::vector<libMesh::PetscVector<double>*> d_U_n_current_vecs, d_U_n_new_vecs, d_U_n_half_vecs;
     std::vector<libMesh::PetscVector<double>*> d_U_t_current_vecs, d_U_t_new_vecs, d_U_t_half_vecs;
     std::vector<std::array<libMesh::PetscVector<double>*, NDIM> > d_DU_jump_half_vecs, d_DU_jump_IB_ghost_vecs;
@@ -685,7 +684,6 @@ protected:
     bool d_use_u_interp_correction = false;
     bool d_compute_fluid_traction = false;
     bool d_perturb_fe_mesh_nodes = true;
-    bool d_use_tan_correction = false;
     std::vector<libMesh::FEFamily> d_fe_family;
     std::vector<libMesh::FEFamily> d_viscous_jump_fe_family;
     std::vector<libMesh::FEFamily> d_pressure_jump_fe_family;
@@ -759,8 +757,9 @@ protected:
     /*!
      * Data related to multi-step time stepping.
      */
-    int d_multistep_n_steps = 0;
+    unsigned int d_multistep_n_previous_steps = 0;
     std::deque<double> d_dt_old;
+
 private:
     /*!
      * \brief Default constructor.

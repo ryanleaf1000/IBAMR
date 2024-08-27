@@ -651,19 +651,20 @@ IIMethod::postprocessIntegrateData(double current_time, double new_time, int num
     }
     batch_vec_ghost_update(vec_collection_update, INSERT_VALUES, SCATTER_FORWARD);
 
-    if (d_multistep_n_steps > 0)
+    if (d_multistep_n_previous_steps > 0)
     {
-        TBOX_ASSERT(d_multistep_n_steps == 1);
-        //d_U_new_vecs->copy("current", { "old" });
-        //d_U_old_vecs
+        TBOX_ASSERT(d_multistep_n_previous_steps == 1);
+        // d_U_new_vecs->copy("current", { "old" });
+        // d_U_old_vecs
 
         for (unsigned part = 0; part < d_num_parts; ++part)
         {
-        int ierr = VecCopy( d_U_current_vecs[part]->vec(),d_U_old_updated_vecs[part]->vec());
-        IBTK_CHKERRQ(ierr);}
+            int ierr = VecCopy(d_U_current_vecs[part]->vec(), d_U_old_updated_vecs[part]->vec());
+            IBTK_CHKERRQ(ierr);
+        }
 
         d_dt_old.push_front(new_time - current_time);
-        if (d_dt_old.size() > static_cast<size_t>(d_multistep_n_steps)) d_dt_old.pop_back();
+        if (d_dt_old.size() > static_cast<size_t>(d_multistep_n_previous_steps)) d_dt_old.pop_back();
     }
     if (d_compute_fluid_traction)
     {
@@ -1352,41 +1353,21 @@ IIMethod::interpolateVelocity(const int u_data_idx,
                             for (BoxIterator<NDIM> b(stencil_box); b; b++)
                             {
                                 const hier::Index<NDIM>& ic = b();
-                                for (int j = 0; j < NDIM; ++j){
-                                    du_jump(j) = DU_jump_qp[d][s * NDIM + j];
-                                    wrc(j) = wr[j][ic_upper[j] - ic[j]];
-                                }
-                                //        std::cout<<"I am good before final assemble"<<std::endl;
+                                for (int j = 0; j < NDIM; ++j) du_jump(j) = DU_jump_qp[d][s * NDIM + j];
 #if (NDIM == 2)
-                                if(d_use_tan_correction){
                                 coeff_vec =
                                     VectorValue<double>(interpCoeff[ic[0]][ic[1]][0], interpCoeff[ic[0]][ic[1]][1]);
                                 Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *
-                                                         (wrc * du_jump);}
-                                else{
-                                    coeff_vec =
-                                        VectorValue<double>(interpCoeff[ic[0]][ic[1]][0], interpCoeff[ic[0]][ic[1]][1]);
-                                    Ujump[ic[0]][ic[1]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] * w[1][ic[1] - ic_lower[1]] *
-                                                             (coeff_vec * du_jump);
-                                }
+                                                         (coeff_vec * du_jump);
 #endif
 
 #if (NDIM == 3)
-                                if(d_use_tan_correction){
                                 coeff_vec = VectorValue<double>(interpCoeff[ic[0]][ic[1]][ic[2]][0],
                                                                 interpCoeff[ic[0]][ic[1]][ic[2]][1],
                                                                 interpCoeff[ic[0]][ic[1]][ic[2]][2]);
                                 Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
                                                                 w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
-                                                                (wrc * du_jump);}
-                                else{
-                                    coeff_vec = VectorValue<double>(interpCoeff[ic[0]][ic[1]][ic[2]][0],
-                                                                    interpCoeff[ic[0]][ic[1]][ic[2]][1],
-                                                                    interpCoeff[ic[0]][ic[1]][ic[2]][2]);
-                                    Ujump[ic[0]][ic[1]][ic[2]][d] = dx[0] * w[0][ic[0] - ic_lower[0]] *
-                                                                    w[1][ic[1] - ic_lower[1]] * w[2][ic[2] - ic_lower[2]] *
-                                                                    (coeff_vec * du_jump);
-                                }
+                                                                (coeff_vec * du_jump);
 #endif
                             }
                         }
@@ -2469,12 +2450,11 @@ IIMethod::calculateInterfacialFluidForces(const int p_data_idx, double data_time
 
 } // calculateInterfacialFluidForces
 void
-IIMethod::setUseMultistepTimeStepping(const int n_steps)
+IIMethod::setUseMultistepTimeStepping(const unsigned int n_previous_steps)
 {
-    d_multistep_n_steps = n_steps;
+    d_multistep_n_previous_steps = n_previous_steps;
     return;
 } // setUseMultistepTimeStepping
-
 
 void
 IIMethod::forwardEulerStep(const double current_time, const double new_time)
@@ -2593,24 +2573,17 @@ IIMethod::AB2Step(const double current_time, const double new_time)
     for (unsigned int part = 0; part < d_meshes.size(); ++part)
     {
         int ierr;
-         ierr = VecWAXPY(d_X_new_vecs[part]->vec(),
-                            b1 * dt,
-                            d_U_current_vecs[part]->vec(),
-                            d_X_current_vecs[part]->vec());
+        ierr =
+            VecWAXPY(d_X_new_vecs[part]->vec(), b1 * dt, d_U_current_vecs[part]->vec(), d_X_current_vecs[part]->vec());
 
         IBTK_CHKERRQ(ierr);
         ierr = VecAXPY(d_X_new_vecs[part]->vec(), b2 * dt, d_U_old_vecs[part]->vec());
         IBTK_CHKERRQ(ierr);
-        ierr = VecAXPBYPCZ(d_X_half_vecs[part]->vec(),
-                           0.5,
-                           0.5,
-                           0.0,
-                           d_X_current_vecs[part]->vec(),
-                           d_X_new_vecs[part]->vec());
+        ierr = VecAXPBYPCZ(
+            d_X_half_vecs[part]->vec(), 0.5, 0.5, 0.0, d_X_current_vecs[part]->vec(), d_X_new_vecs[part]->vec());
     }
     return;
 } // AB2Step
-
 
 void
 IIMethod::computeLagrangianForce(const double data_time)
@@ -2647,18 +2620,18 @@ IIMethod::computeLagrangianForce(const double data_time)
 
         // Setup global and elemental right-hand-side vectors.
         NumericVector<double>* X_vec = nullptr;
-       if (MathUtilities<double>::equalEps(data_time, d_current_time))
-          {
-             X_vec = d_X_current_vecs[part];
-          }
-          else if (MathUtilities<double>::equalEps(data_time, d_half_time))
-          {
-             X_vec = d_X_half_vecs[part];
-          }
-          else if (MathUtilities<double>::equalEps(data_time, d_new_time))
-          {
-              X_vec = d_X_new_vecs[part];
-          }
+        if (MathUtilities<double>::equalEps(data_time, d_current_time))
+        {
+            X_vec = d_X_current_vecs[part];
+        }
+        else if (MathUtilities<double>::equalEps(data_time, d_half_time))
+        {
+            X_vec = d_X_half_vecs[part];
+        }
+        else if (MathUtilities<double>::equalEps(data_time, d_new_time))
+        {
+            X_vec = d_X_new_vecs[part];
+        }
 
         double surface_area = 0.0;
 
@@ -3031,15 +3004,17 @@ IIMethod::spreadForce(const int f_data_idx,
 {
     IBAMR_TIMER_START(t_spread_force);
 
-    std::vector<std::vector<libMesh::PetscVector<double>*> > vec_collection_update = {
-        d_X_IB_ghost_vecs, d_F_IB_ghost_vecs, d_F_half_vecs
-    };
+    std::vector<std::vector<libMesh::PetscVector<double>*> > vec_collection_update = { d_X_IB_ghost_vecs,
+                                                                                       d_F_IB_ghost_vecs,
+                                                                                       d_F_half_vecs };
     if (MathUtilities<double>::equalEps(data_time, d_current_time))
     {
-        vec_collection_update.push_back(d_X_current_vecs);    }
+        vec_collection_update.push_back(d_X_current_vecs);
+    }
     else if (MathUtilities<double>::equalEps(data_time, d_half_time))
     {
-        vec_collection_update.push_back(d_X_half_vecs);     }
+        vec_collection_update.push_back(d_X_half_vecs);
+    }
     else if (MathUtilities<double>::equalEps(data_time, d_new_time))
     {
         vec_collection_update.push_back(d_X_new_vecs);
@@ -3205,9 +3180,10 @@ IIMethod::initializeFEEquationSystems()
             // vector FE systems:
             std::vector<std::string> vector_system_names{
                 COORDS_SYSTEM_NAME,          COORD_MAPPING_SYSTEM_NAME,       VELOCITY_SYSTEM_NAME,
-                NORMAL_VELOCITY_SYSTEM_NAME, TANGENTIAL_VELOCITY_SYSTEM_NAME, FORCE_SYSTEM_NAME, VELOCITY_OLD_SYSTEM_NAME
+                NORMAL_VELOCITY_SYSTEM_NAME, TANGENTIAL_VELOCITY_SYSTEM_NAME, FORCE_SYSTEM_NAME,
+                VELOCITY_OLD_SYSTEM_NAME
             };
-            std::vector<std::string> vector_variable_prefixes{ "X", "dX", "U", "U_n", "U_t", "F" ,"U_old"};
+            std::vector<std::string> vector_variable_prefixes{ "X", "dX", "U", "U_n", "U_t", "F", "U_old" };
             std::vector<libMesh::FEFamily> vector_fe_family(vector_system_names.size(), d_fe_family[part]);
             std::vector<libMesh::Order> vector_fe_order(vector_system_names.size(), d_fe_order[part]);
 
@@ -4532,9 +4508,6 @@ IIMethod::getFromInput(Pointer<Database> db, bool /*is_from_restart*/)
         d_default_interp_spec.use_nodal_quadrature = db->getBool("interp_use_nodal_quadrature");
     else if (db->isBool("IB_use_nodal_quadrature"))
         d_default_interp_spec.use_nodal_quadrature = db->getBool("IB_use_nodal_quadrature");
-
-    if (db->isBool("use_tan_correction"))
-        d_use_tan_correction = db->getBool("use_tan_correction");
 
     // Spreading settings.
     if (db->isString("spread_delta_fcn"))
