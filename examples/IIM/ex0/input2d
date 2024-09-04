@@ -121,14 +121,14 @@ IIMethod {
    p_calc_width                 = P_CALC_WIDTH
    wss_calc_width               = WSS_CALC_WIDTH
    min_ghost_cell_width         = 6
-   use_normal_velocity_update_structure = TRUE
+  // use_normal_velocity_update_structure = TRUE
    use_velocity_correction = FALSE
-   velocity_tangent_stabilization_eps = 0.10000 //1 //0.0004
-   adaptive_smooth = TRUE
-   trial_inconsistent_force = TRUE
-   isotropic_force_alpha1 = 0.333333//0.333333333 //1
-    isotropic_force_alpha2 = 0.0
-     isotropic_force_alpha3 = 0.0
+   //velocity_tangent_stabilization_eps = 0.10000 //1 //0.0004
+   //adaptive_smooth = TRUE
+ //  trial_inconsistent_force = TRUE
+  // isotropic_force_alpha1 = 0.333333//0.333333333 //1
+  //  isotropic_force_alpha2 = 0.0
+  //   isotropic_force_alpha3 = 0.0
 }
 
 INSCollocatedHierarchyIntegrator {

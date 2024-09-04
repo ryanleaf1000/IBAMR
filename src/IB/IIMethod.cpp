@@ -507,7 +507,7 @@ IIMethod::preprocessIntegrateData(double current_time, double new_time, int /*nu
                     dynamic_cast<PetscVector<double>*>(d_fe_data_managers[part]->buildGhostedSolutionVector(
                         PRESSURE_OUT_SYSTEM_NAME, /*localize_data*/ false));
 
-                d_WSS_in_systems[part] = &d_equation_systems[part]->get_system(WSS_IN_SYSTEM_NAME);
+             d_WSS_in_systems[part] = &d_equation_systems[part]->get_system(WSS_IN_SYSTEM_NAME);
             d_WSS_in_half_vecs[part] =
                 dynamic_cast<PetscVector<double>*>(d_WSS_in_systems[part]->current_local_solution.get());
             d_WSS_in_IB_ghost_vecs[part] = dynamic_cast<PetscVector<double>*>(
@@ -4806,6 +4806,7 @@ IIMethod::imposeJumpConditions(const int f_data_idx,
                 if(!d_trial_inconsistent_force){
                 axis_box.lower(axis) = 0;
                 axis_box.upper(axis) = 0;}
+
 
                 unsigned int SideDim[NDIM][NDIM - 1];
                 for (unsigned int d = 0; d < NDIM; ++d)

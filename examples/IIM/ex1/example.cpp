@@ -543,7 +543,7 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
 
     VectorValue<double> F, N, U, n, x, X, TAU;
     std::ofstream smoothed_velocit_output;
-    if(true){
+    if(false){
         smoothed_velocit_output.open("test-smoothed-velocity "+std::to_string(loop_time)+" .csv");}
     const auto el_begin = mesh.active_local_elements_begin();
     const auto el_end = mesh.active_local_elements_end();
@@ -580,7 +580,7 @@ postprocess_data(tbox::Pointer<tbox::Database> input_db,
                 F_integral[d] += F(d) * JxW[qp];
                 if (compute_fluid_traction) T_integral[d] += TAU(d) * JxW[qp];
             }
-            if(true){
+            if(false){
                 if (NDIM == 2) {
                     // error_output << x_qp[NDIM * (qp_offset + qp)] << " "<< x_qp[NDIM * (qp_offset + qp)+1] << " "<< U_correction_qp[NDIM * (qp_offset + qp)] << "\n";
                     smoothed_velocit_output << x(0) << " "<< x(1) << " "<< U(0) << "\n";
