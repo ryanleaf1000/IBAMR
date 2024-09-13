@@ -5,14 +5,14 @@ RHO = 1.0
 
 // grid spacing parameters
 L = 16.0                                       // width of computational domain
-MAX_LEVELS = 6                                 // maximum number of levels in locally refined grid
+MAX_LEVELS = 1                                 // maximum number of levels in locally refined grid
 REF_RATIO  = 2                                 // refinement ratio between levels
-N = 16                                         // actual    number of grid cells on coarsest grid level
+N = 400                                         // actual    number of grid cells on coarsest grid level
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N       // effective number of grid cells on finest   grid level
 DX0 = L/N                                      // mesh width on coarsest grid level
 DX  = L/NFINEST                                // mesh width on finest   grid level
-MFAC = 2.0                                     // ratio of Lagrangian mesh width to Cartesian mesh width
-ELEM_TYPE = "TRI6"                             // type of element to use for structure discretization
+MFAC = 1.0                                     // ratio of Lagrangian mesh width to Cartesian mesh width
+ELEM_TYPE = "TRI3"                             // type of element to use for structure discretization
 PK1_DEV_QUAD_ORDER = "SEVENTH"
 PK1_DIL_QUAD_ORDER = "FIFTH"
 USE_BOUNDARY_MESH = TRUE
@@ -24,8 +24,8 @@ USE_JUMP_CONDITIONS        = FALSE             // whether to impose pressure jum
 USE_CONSISTENT_MASS_MATRIX = TRUE              // whether to use a consistent or lumped mass matrix
 IB_POINT_DENSITY           = 4.0               // approximate density of IB quadrature points for Lagrangian-Eulerian interaction
 SOLVER_TYPE                = "STAGGERED"       // the fluid solver to use (STAGGERED or COLLOCATED)
-CFL_MAX                    = 0.2               // maximum CFL number
-DT                         = 0.0125*CFL_MAX*DX   // maximum timestep size
+CFL_MAX                    = 0.4               // maximum CFL number
+DT                         = 0.2*CFL_MAX*DX   // maximum timestep size
 START_TIME                 = 0.0e0             // initial simulation time
 END_TIME                   = 100            // final simulation time
 GROW_DT                    = 2.0e0             // growth factor for timesteps
@@ -45,15 +45,15 @@ OUTPUT_DIV_U               = TRUE
 ENABLE_LOGGING             = TRUE
 
 // model parameters
-KAPPA_S = 0//2*DX/DT^2
-ETA_S = 0//1*DX/DT
+KAPPA_S = 0.2/(0.25*CFL_MAX*DX)^2 //2*DX/DT^2
+ETA_S = 10 //1*DX/DT
 
 // tether penalty data
 C1_S = 1.0e5
-KAPPA_S_BODY = 1.0e6
-ETA_S_BODY = 0.0
-KAPPA_S_SURFACE = 1.0e6
-ETA_S_SURFACE = 0.0
+KAPPA_S_BODY = 0.2/(0.25*CFL_MAX*DX)^2
+ETA_S_BODY = 10
+KAPPA_S_SURFACE = 0.2/(0.25*CFL_MAX*DX)^2
+ETA_S_SURFACE = 10
 
 // collocated solver parameters
 PROJECTION_METHOD_TYPE = "PRESSURE_UPDATE"
