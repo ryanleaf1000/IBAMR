@@ -9,11 +9,11 @@ U_MAX = 2.0
 L = 16.0                                         // width of computational domain
 MAX_LEVELS = 1                                   // maximum number of levels in locally refined grid
 REF_RATIO  = 2                                   // refinement ratio between levels
-N = 100                                           // actual    number of grid cells on coarsest grid level
+N = 400                                           // actual    number of grid cells on coarsest grid level
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N         // effective number of grid cells on finest   grid level
 DX0 = L/N                                        // mesh width on coarsest grid level
 DX  = L/NFINEST                                  // mesh width on finest   grid level
-MFAC = 2.00                                       // ratio of Lagrangian mesh width to Cartesian mesh width
+MFAC = 1.00                                       // ratio of Lagrangian mesh width to Cartesian mesh width
 ELEM_TYPE = "TRI3"                               // type of element to use for structure discretization
 
 // solver parameters
@@ -122,13 +122,16 @@ IIMethod {
    wss_calc_width               = WSS_CALC_WIDTH
    min_ghost_cell_width         = 6
   // use_normal_velocity_update_structure = TRUE
-   use_velocity_correction = FALSE
+   //use_velocity_correction = FALSE
    //velocity_tangent_stabilization_eps = 0.10000 //1 //0.0004
    //adaptive_smooth = TRUE
- //  trial_inconsistent_force = TRUE
-  // isotropic_force_alpha1 = 0.333333//0.333333333 //1
-  //  isotropic_force_alpha2 = 0.0
-  //   isotropic_force_alpha3 = 0.0
+   trial_inconsistent_force = TRUE
+   isotropic_force_alpha1 = 1/12 //0.333333333 //1
+   isotropic_force_alpha2 = 0.333333
+   isotropic_force_alpha3 = 0.333333
+  //trial = TRUE
+ // F_trial = TRUE
+ // use_direct_coupling = TRUE
 }
 
 INSCollocatedHierarchyIntegrator {

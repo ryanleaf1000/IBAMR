@@ -7,9 +7,9 @@ U_MAX = 1.0
 MU    = RHO*U_MAX*R_D/Re
 // grid spacing parameters
 L = 16.0                                         // width of computational domain
-MAX_LEVELS = 6                                   // maximum number of levels in locally refined grid
+MAX_LEVELS = 1                                   // maximum number of levels in locally refined grid
 REF_RATIO  = 2                                   // refinement ratio between levels
-N = 16                                           // actual    number of grid cells on coarsest grid level
+N = 400                                           // actual    number of grid cells on coarsest grid level
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N         // effective number of grid cells on finest   grid level
 DX0 = L/N                                        // mesh width on coarsest grid level
 DX  = L/NFINEST                                  // mesh width on finest   grid level
@@ -126,6 +126,10 @@ IIMethod {
       use_velocity_correction = TRUE
       //velocity_tangent_stabilization_eps = 0.800000//1 //0.0004
       //adaptive_smooth = TRUE
+         trial_inconsistent_force = TRUE
+        // isotropic_force_alpha1 = 0.333333//0.333333333 //1
+         isotropic_force_alpha2 = 0.333333
+         isotropic_force_alpha3 = 0.333333
 }
 
 INSStaggeredHierarchyIntegrator {

@@ -685,6 +685,7 @@ protected:
     bool d_use_consistent_mass_matrix = true;
     bool d_use_direct_forcing = false;
     bool d_use_direct_coupling = false;
+    bool d_trial = false;
     double d_exterior_calc_coef = 1.0;
     double d_wss_calc_width = 1.05;
     double d_p_calc_width = 1.3;
