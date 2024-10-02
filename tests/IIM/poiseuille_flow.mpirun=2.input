@@ -4,11 +4,11 @@ RHO   = 1.0                                         // mass density of fluid (gm
 MU    = 1/Re                                        // dynamic viscosity of fluid (gm/(cm s))
 U_MAX = 1.0                                      // approximate maximum velocity in the entire domain (cm/2)                                         // external pressure (dyne/cm^2)
 PI = 3.14159265359
-THETA = PI/12.0
+THETA =  0 //.0
 // discretization parameters
 MAX_LEVELS = 1                                      // maximum number of levels in locally refined grid
 REF_RATIO  = 1                                      // refinement ratio between levels
-N = 128                                   // actual    number of grid cells on coarsest grid level
+N = 64                                   // actual    number of grid cells on coarsest grid level
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N            // effective number of grid cells on finest   grid level
 L = 5.0                                           // channel length (cm)
 P_E = 4* MU * L
@@ -18,11 +18,11 @@ FAC = 0.0
 W = 0.0                                           // body    width  (cm)
 DX0 = H/N                                           // mesh width on coarsest grid level (cm)
 DX  = H/NFINEST                                     // mesh width on finest   grid level (cm)
-MFAC = 2.0                                    // ratio of Lagrangian mesh width to Cartesian mesh width for thin structure
+MFAC = 1.0                                    // ratio of Lagrangian mesh width to Cartesian mesh width for thin structure
 ELEM_TYPE = "EDGE2"                                 // type of element to use for thin structure discretization
 elem_order = "FIRST"                                // finite element order
 PK1_DEV_QUAD_ORDER = "SEVENTH"
-
+DP   = 80* MU * L*U_MAX/(D*D)                                         // external pressure (dyne/cm^2)
 //Computing velocity profile
 X_LOC = L/2.0
 Y_LOC_MIN = 0.1*H
@@ -41,12 +41,14 @@ USE_CONSISTENT_MASS_MATRIX = TRUE              // whether to use a consistent or
 IB_POINT_DENSITY           = 4                    // approximate density of IB quadrature points for Lagrangian-Eulerian interaction
 SOLVER_TYPE                = "STAGGERED"            // the fluid solver to use (STAGGERED or COLLOCATED)
 CFL_MAX                    = 0.10                   // maximum CFL number
-DT       				   = 0.5*CFL_MAX*DX
+DT       		   = 0.0205425*CFL_MAX*DX //0.01225*CFL_MAX*DX //0.01125
 START_TIME                 = 0.0e0                  // initial simulation time
-END_TIME                   = 20*DT               // final simulation time
+END_TIME                   = 10               // final simulation time
 GROW_DT                    = 2.0e0                  // growth factor for timesteps
 NUM_CYCLES                 = 1                      // number of cycles of fixed-point iteration
 //VISCOUS_TS_TYPE = "BACKWARD_EULER"
+COMPUTE_FLUID_TRACTION       = FALSE
+
 CONVECTIVE_TS_TYPE         = "ADAMS_BASHFORTH"      // convective time stepping type
 CONVECTIVE_OP_TYPE         = "STABILIZED_PPM"       // convective differencing discretization type
 CONVECTIVE_FORM            = "ADVECTIVE"            // how to compute the convective terms
@@ -63,7 +65,7 @@ OUTPUT_DIV_U               = TRUE
 ENABLE_LOGGING             = TRUE
 
 // Penalty parameter
-KAPPA_S_THIN = 0.0022/(cos(THETA) * DT^2)
+KAPPA_S_THIN = 0.22/(  0.5*CFL_MAX*DX)^2
 ETA_S_THIN = 0.0*DX/DT
      // maximum timestep size
 
@@ -77,90 +79,102 @@ P = "(X1 <= (X1_lower + X0*tan(theta)) ? 0.0 : ( X1 >= (X1_upper + X0*tan(theta)
 
 
 VelocityInitialConditions {
-
-	p_e = P_E
-    theta = THETA
-    D = D
-    w = W
-    L = L
-    X1_lower = X1_lower
-    X1_upper = X1_upper
-    mu = MU
-    function_0 = U
-    function_1 = V
+   // Parabolic profile
+   H = H
+   D = D
+   A = (H+D)/2
+   B = (H-D)/2
+   C = -4*U_MAX/(D*D)
+   U = "(abs(X1 - 0.5*H) >= D/2 ? 0.0 : 0.0)"
+   V = "0.0"   
+   function_0 = U
+   function_1 = V
 }
 
 
 PressureInitialConditions {
-    D = D
-    L = L
-    H = H
-
-    mu = MU
-    p_e = P_E
-    theta = THETA
-    X1_lower = X1_lower
-    X1_upper = X1_upper
-    function = P
+   H = H
+   D = D
+   L = L
+   dp = DP
+    function = "( abs(X1 - 0.5*H) > D/2  ? 0.0 : dp )"
 }
 
 
 VelocityBcCoefs_0 {
-    theta = THETA
-    p_e = P_E
-    D = D
-    w = W
-    L = L
-    X1_lower = X1_lower
-    X1_upper = X1_upper
-    mu = MU
-
-    H = H
-
-    acoef_function_0 = "0.0"
-    acoef_function_1 = "0.0"
+   H = H
+   D = D
+   dp = DP
+    acoef_function_0 = "( abs(X1 - 0.5*H) < D/2 ? 0.0 : 1.0 )"
+    acoef_function_1 = "( abs(X1 - 0.5*H) < D/2 ? 0.0 : 1.0 )"
     acoef_function_2 = "1.0"
     acoef_function_3 = "1.0"
+    acoef_function_4 = "1.0"
+    acoef_function_5 = "1.0"
 
-    bcoef_function_0 = "1.0"
-    bcoef_function_1 = "1.0"
+    bcoef_function_0 = "( abs(X1 - 0.5*H) < D/2 ? 1.0 : 0.0 )"
+    bcoef_function_1 = "( abs(X1 - 0.5*H) < D/2 ? 1.0 : 0.0 )"
     bcoef_function_2 = "0.0"
     bcoef_function_3 = "0.0"
+    bcoef_function_4 = "0.0"
+    bcoef_function_5 = "0.0"
 
-    gcoef_function_0 = "( X1 < (X1_lower + X0*tan(theta)) ? 0.0 : ( (X1 > (X1_upper + X0*tan(theta))) ? 0.0 : -(-2.*p_e*(X0/cos(theta) + (X1-X1_lower-X0*tan(theta))*sin(theta))/(L/cos(theta) + D*tan(theta)) + p_e)))"
-    gcoef_function_1 = "( X1 < (X1_lower + X0*tan(theta)) ? 0.0 : ( (X1 > (X1_upper + X0*tan(theta))) ? 0.0 : -(-2.*p_e*(X0/cos(theta) + (X1-X1_lower-X0*tan(theta))*sin(theta))/(L/cos(theta) + D*tan(theta)) + p_e)))"
+    gcoef_function_0 = "( abs(X1 - 0.5*H) < D/2 ? -(tanh(2*t))*dp : 0.0 )" 
+    gcoef_function_1 = "( abs(X1 - 0.5*H) < D/2 ? -(tanh(2*t))*dp : 0.0 )" 
     gcoef_function_2 = "0.0"
     gcoef_function_3 = "0.0"
+    gcoef_function_4 = "0.0"
+    gcoef_function_5 = "0.0"
 }
 
+
 VelocityBcCoefs_1 {
-
-    theta = THETA
-    p_e = P_E
-    D = D
-    w = W
-    L = L
-    X1_lower = X1_lower
-    X1_upper = X1_upper
-    mu = MU
-
-    H = H
-
    acoef_function_0 = "1.0"
    acoef_function_1 = "1.0"
    acoef_function_2 = "0.0"
    acoef_function_3 = "0.0"
-
+   acoef_function_4 = "1.0"
+   acoef_function_5 = "1.0"
+   
    bcoef_function_0 = "0.0"
    bcoef_function_1 = "0.0"
    bcoef_function_2 = "1.0"
    bcoef_function_3 = "1.0"
+   bcoef_function_4 = "0.0"
+   bcoef_function_5 = "0.0"
 
-   gcoef_function_0 = V
-   gcoef_function_1 = V
+   gcoef_function_0 = "0.0"
+   gcoef_function_1 = "0.0"
    gcoef_function_2 = "0.0"
    gcoef_function_3 = "0.0"
+   gcoef_function_4 = "0.0"
+   gcoef_function_5 = "0.0"
 }
+
+
+VelocityBcCoefs_2 {
+   acoef_function_0 = "1.0"
+   acoef_function_1 = "1.0"
+   acoef_function_2 = "1.0"
+   acoef_function_3 = "1.0"
+   acoef_function_4 = "0.0"
+   acoef_function_5 = "0.0"
+   
+   bcoef_function_0 = "0.0"
+   bcoef_function_1 = "0.0"
+   bcoef_function_2 = "0.0"
+   bcoef_function_3 = "0.0"
+   bcoef_function_4 = "1.0"
+   bcoef_function_5 = "1.0"
+
+   gcoef_function_0 = "0.0"
+   gcoef_function_1 = "0.0"
+   gcoef_function_2 = "0.0"
+   gcoef_function_3 = "0.0"
+   gcoef_function_4 = "0.0"
+   gcoef_function_5 = "0.0"
+}
+
 
 
 IBHierarchyIntegrator {
@@ -173,6 +187,7 @@ IBHierarchyIntegrator {
    error_on_dt_change  = ERROR_ON_DT_CHANGE
    enable_logging      = ENABLE_LOGGING
    enable_logging_solver_iterations = FALSE
+//      time_stepping_type = "BDF2"
 }
 
 IIMethod {
@@ -186,6 +201,10 @@ IIMethod {
    wss_calc_width			  = WSS_CALC_WIDTH
    min_ghost_cell_width = 6
    enable_logging_solver_iterations = FALSE
+//   trial_inconsistent_force = TRUE
+//   isotropic_force_alpha1 = 1/12 //0.333333333 //1
+//   isotropic_force_alpha2 = 0.333333
+//   isotropic_force_alpha3 = 0.333333
 }
 
 INSStaggeredHierarchyIntegrator {
@@ -210,6 +229,7 @@ INSStaggeredHierarchyIntegrator {
    output_Div_U                  = OUTPUT_DIV_U
    enable_logging                = ENABLE_LOGGING
    enable_logging_solver_iterations = FALSE
+  // viscous_time_stepping_type = "BDF2"
 
    //convective_op_db {
       //settings for STABILIZED_PPM convective operator
@@ -228,7 +248,7 @@ Main {
 
 // visualization dump parameters
    viz_writer                  = "VisIt","ExodusII"
-   viz_dump_interval           = -1
+   viz_dump_interval           = 10
    viz_dump_dirname            = "viz_IIM_2d"
    visit_number_procs_per_file = 1
 

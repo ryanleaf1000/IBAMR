@@ -109,6 +109,7 @@ IBHierarchyIntegrator {
    dt_max              = DT
    error_on_dt_change  = ERROR_ON_DT_CHANGE
    enable_logging      = ENABLE_LOGGING
+   time_stepping_type = "BDF2"
 }
 USE_DISCON_ELEMS = TRUE
 IIMethod {
@@ -127,7 +128,7 @@ IIMethod {
       //velocity_tangent_stabilization_eps = 0.800000//1 //0.0004
       //adaptive_smooth = TRUE
          trial_inconsistent_force = TRUE
-        // isotropic_force_alpha1 = 0.333333//0.333333333 //1
+        isotropic_force_alpha1 = 1/12 //0.333333333 //1/
          isotropic_force_alpha2 = 0.333333
          isotropic_force_alpha3 = 0.333333
 }
@@ -153,6 +154,7 @@ INSStaggeredHierarchyIntegrator {
    output_Omega                  = OUTPUT_OMEGA
    output_Div_U                  = OUTPUT_DIV_U
    enable_logging                = ENABLE_LOGGING
+   viscous_time_stepping_type = "BDF2"
 }
 
 Main {

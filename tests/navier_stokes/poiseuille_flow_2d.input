@@ -123,7 +123,7 @@ Main {
    restart_dump_dirname        = "restart_INS2d"
 
 // hierarchy data dump parameters
-   data_dump_interval          = 0
+   data_dump_interval          = 1
    data_dump_dirname           = "hier_data_INS2d"
 
 // timer dump parameters

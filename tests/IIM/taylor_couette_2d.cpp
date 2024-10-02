@@ -293,6 +293,7 @@ main(int argc, char* argv[])
         for (unsigned int d = 0; d < NDIM; ++d) vars[d] = d;
         vector<SystemData> sys_data(1, SystemData(IIMethod::VELOCITY_SYSTEM_NAME, vars));
         Pointer<IIMethod> ibfe_ops = ib_ops;
+        ibfe_ops->registerTractionCalc(0);
         ibfe_ops->initializeFEEquationSystems();
 
         EquationSystems* inner_equation_systems = ibfe_ops->getFEDataManager()->getEquationSystems();
