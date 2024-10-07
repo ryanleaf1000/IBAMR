@@ -46,8 +46,7 @@ c
 
       REAL alpha
 
-      REAL U(ilower0-U_gcw:iupper0+U_gcw,
-     &       ilower1-U_gcw:iupper1+U_gcw)
+      REAL U(CELL2d(ilower,iupper,U_gcw))
 
       REAL dx(0:NDIM-1)
 c
@@ -68,17 +67,17 @@ c
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0
             G(i0,i1,0) =
-     &         6.0/6*fac0*(U(i0+1,i1)-U(i0-1,i1)) +
-     &         0.0/6*fac0*(U(i0+1,i1+1)-U(i0-1,i1+1)) +
-     &         0.0/6*fac0*(U(i0+1,i1-1)-U(i0-1,i1-1))
+     &         11.0/12*fac0*(U(i0+1,i1)-U(i0-1,i1)) +
+     &         1.0/24*fac0*(U(i0+1,i1+1)-U(i0-1,i1+1)) +
+     &         1.0/24*fac0*(U(i0+1,i1-1)-U(i0-1,i1-1))
          enddo
       enddo
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0
             G(i0,i1,1) =
-     &            6.0/6*fac1*(U(i0,i1+1)-U(i0,i1-1)) +
-     &            0.0/6*fac1*(U(i0+1,i1+1)-U(i0+1,i1-1)) +
-     &            0.0/6*fac1*(U(i0-1,i1+1)-U(i0-1,i1-1))
+     &            11.0/12*fac1*(U(i0,i1+1)-U(i0,i1-1)) +
+     &            1.0/24*fac1*(U(i0+1,i1+1)-U(i0+1,i1-1)) +
+     &            1.0/24*fac1*(U(i0-1,i1+1)-U(i0-1,i1-1))
          enddo
       enddo
 c
@@ -117,8 +116,7 @@ c
 
       REAL alpha
 
-      REAL U(ilower0-U_gcw:iupper0+U_gcw,
-     &       ilower1-U_gcw:iupper1+U_gcw)
+      REAL U(CELL2d(ilower,iupper,U_gcw))
 
       REAL beta
 
@@ -143,18 +141,18 @@ c
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0
             G(i0,i1,0) =
-     &            6.0/6*fac0*(U(i0+1,i1)-U(i0-1,i1))  +
-     &            0.0/6*fac0*(U(i0+1,i1+1)-U(i0-1,i1+1)) +
-     &            0.0/6*fac0*(U(i0+1,i1-1)-U(i0-1,i1-1))  +
+     &            11.0/12*fac0*(U(i0+1,i1)-U(i0-1,i1))  +
+     &            1.0/24*fac0*(U(i0+1,i1+1)-U(i0-1,i1+1)) +
+     &            1.0/24*fac0*(U(i0+1,i1-1)-U(i0-1,i1-1))  +
      &           beta*V(i0,i1,0)
          enddo
       enddo
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0
             G(i0,i1,1) =
-     &            6.0/6*fac1*(U(i0,i1+1)-U(i0,i1-1)) +
-     &            0.0/6*fac1*(U(i0+1,i1+1)-U(i0+1,i1-1)) +
-     &            0.0/6*fac1*(U(i0-1,i1+1)-U(i0-1,i1-1)) +
+     &            11.0/12*fac1*(U(i0,i1+1)-U(i0,i1-1)) +
+     &            1.0/24*fac1*(U(i0+1,i1+1)-U(i0+1,i1-1)) +
+     &            1.0/24*fac1*(U(i0-1,i1+1)-U(i0-1,i1-1)) +
      &            beta*V(i0,i1,1)
          enddo
       enddo
@@ -192,8 +190,7 @@ c
 
       REAL alpha
 
-      REAL U(ilower0-U_gcw:iupper0+U_gcw,
-     &       ilower1-U_gcw:iupper1+U_gcw)
+      REAL U(CELL2d(ilower,iupper,U_gcw))
 
       REAL dx(0:NDIM-1)
 c
@@ -215,17 +212,17 @@ c
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0+1
             g0(i0,i1) =
-     &         6.0/6*fac0*(U(i0,i1)-U(i0-1,i1)) +
-     &         0.0/6*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
-     &         0.0/6*fac0*(U(i0,i1-1)-U(i0-1,i1-1))
+     &         11.0/12*fac0*(U(i0,i1)-U(i0-1,i1)) +
+     &         1.0/24*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
+     &         1.0/24*fac0*(U(i0,i1-1)-U(i0-1,i1-1))
          enddo
       enddo
       do i0 = ilower0,iupper0
          do i1 = ilower1,iupper1+1
             g1(i1,i0) =
-     &          6.0/6*fac1*(U(i0,i1)-U(i0,i1-1)) +
-     &          0.0/6*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
-     &          0.0/6*fac1*(U(i0-1,i1)-U(i0-1,i1-1))
+     &          11.0/12*fac1*(U(i0,i1)-U(i0,i1-1)) +
+     &          1.0/24*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
+     &          1.0/24*fac1*(U(i0-1,i1)-U(i0-1,i1-1))
          enddo
       enddo
 c
@@ -264,8 +261,7 @@ c
 
       REAL alpha
 
-      REAL U(ilower0-U_gcw:iupper0+U_gcw,
-     &       ilower1-U_gcw:iupper1+U_gcw)
+      REAL U(CELL2d(ilower,iupper,U_gcw))
 
       REAL beta
 
@@ -292,18 +288,18 @@ c
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0+1
             g0(i0,i1) =
-     &         6.0/6*fac0*(U(i0,i1)-U(i0-1,i1)) +
-     &         0.0/6*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
-     &         0.0/6*fac0*(U(i0,i1-1)-U(i0-1,i1-1)) +
+     &         11.0/12*fac0*(U(i0,i1)-U(i0-1,i1)) +
+     &         1.0/24*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
+     &         1.0/24*fac0*(U(i0,i1-1)-U(i0-1,i1-1)) +
      &         beta*v0(i0,i1)
          enddo
       enddo
       do i0 = ilower0,iupper0
          do i1 = ilower1,iupper1+1
             g1(i1,i0) =
-     &          6.0/6*fac1*(U(i0,i1)-U(i0,i1-1)) +
-     &          0.0/6*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
-     &          0.0/6*fac1*(U(i0-1,i1)-U(i0-1,i1-1)) +
+     &          11.0/12*fac1*(U(i0,i1)-U(i0,i1-1)) +
+     &          1.0/24*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
+     &          1.0/24*fac1*(U(i0-1,i1)-U(i0-1,i1-1)) +
      &          beta*v1(i1,i0)
          enddo
       enddo
@@ -341,8 +337,7 @@ c
 
       REAL alpha
 
-      REAL U(ilower0-U_gcw:iupper0+U_gcw,
-     &       ilower1-U_gcw:iupper1+U_gcw)
+      REAL U(CELL2d(ilower,iupper,U_gcw))
 
       REAL dx(0:NDIM-1)
 c
@@ -364,17 +359,17 @@ c
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0+1
             g0(i0,i1) =
-     &         6.0/6*fac0*(U(i0,i1)-U(i0-1,i1)) +
-     &         0.0/6*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
-     &         0.0/6*fac0*(U(i0,i1-1)-U(i0-1,i1-1))
+     &         11.0/12*fac0*(U(i0,i1)-U(i0-1,i1)) +
+     &         1.0/24*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
+     &         1.0/24*fac0*(U(i0,i1-1)-U(i0-1,i1-1))
          enddo
       enddo
       do i1 = ilower1,iupper1+1
          do i0 = ilower0,iupper0
             g1(i0,i1) =
-     &          6.0/6*fac1*(U(i0,i1)-U(i0,i1-1)) +
-     &          0.0/6*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
-     &          0.0/6*fac1*(U(i0-1,i1)-U(i0-1,i1-1))
+     &          11.0/12*fac1*(U(i0,i1)-U(i0,i1-1)) +
+     &          1.0/24*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
+     &          1.0/24*fac1*(U(i0-1,i1)-U(i0-1,i1-1))
          enddo
       enddo
 c
@@ -413,8 +408,7 @@ c
 
       REAL alpha
 
-      REAL U(ilower0-U_gcw:iupper0+U_gcw,
-     &       ilower1-U_gcw:iupper1+U_gcw)
+      REAL U(CELL2d(ilower,iupper,U_gcw))
 
       REAL beta
 
@@ -441,18 +435,18 @@ c
       do i1 = ilower1,iupper1
          do i0 = ilower0,iupper0+1
             g0(i0,i1) =
-     &       6.0/6*fac0*(U(i0,i1)-U(i0-1,i1)) +
-     &         0.0/6*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
-     &         0.0/6*fac0*(U(i0,i1-1)-U(i0-1,i1-1)) +
+     &       11.0/12*fac0*(U(i0,i1)-U(i0-1,i1)) +
+     &         1.0/24*fac0*(U(i0,i1+1)-U(i0-1,i1+1)) +
+     &         1.0/24*fac0*(U(i0,i1-1)-U(i0-1,i1-1)) +
      &         beta*v0(i0,i1)
          enddo
       enddo
       do i1 = ilower1,iupper1+1
          do i0 = ilower0,iupper0
             g1(i0,i1) =
-     &          6.0/6*fac1*(U(i0,i1)-U(i0,i1-1)) +
-     &          0.0/6*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
-     &          0.0/6*fac1*(U(i0-1,i1)-U(i0-1,i1-1)) +
+     &          11.0/12*fac1*(U(i0,i1)-U(i0,i1-1)) +
+     &          1.0/24*fac1*(U(i0+1,i1)-U(i0+1,i1-1)) +
+     &          1.0/24*fac1*(U(i0-1,i1)-U(i0-1,i1-1)) +
      &         beta*v1(i0,i1)
          enddo
       enddo
