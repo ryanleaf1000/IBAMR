@@ -1787,17 +1787,17 @@ INSStaggeredHierarchyIntegrator::regridHierarchyBeginSpecialized()
     }
 
     // Determine the divergence of the velocity field before regridding.
-    d_hier_math_ops->div(d_Div_U_idx,
-                         d_Div_U_var,
-                         1.0,
-                         d_U_current_idx,
-                         d_U_var,
-                         d_no_fill_op,
-                         d_integrator_time,
-                         /*synch_cf_bdry*/ false,
-                         -1.0,
-                         d_Q_current_idx,
-                         d_Q_var);
+//    d_hier_math_ops->div(d_Div_U_idx,
+//                         d_Div_U_var,
+//                         1.0,
+//                         d_U_current_idx,
+//                         d_U_var,
+//                         d_no_fill_op,
+//                         d_integrator_time,
+//                         /*synch_cf_bdry*/ false,
+//                         -1.0,
+//                         d_Q_current_idx,
+//                         d_Q_var);
     const int wgt_cc_idx = d_hier_math_ops->getCellWeightPatchDescriptorIndex();
     d_div_U_norm_1_pre = d_hier_cc_data_ops->L1Norm(d_Div_U_idx, wgt_cc_idx);
     d_div_U_norm_2_pre = d_hier_cc_data_ops->L2Norm(d_Div_U_idx, wgt_cc_idx);
@@ -1810,17 +1810,17 @@ INSStaggeredHierarchyIntegrator::regridHierarchyEndSpecialized()
 {
     const int wgt_cc_idx = d_hier_math_ops->getCellWeightPatchDescriptorIndex();
     // Determine the divergence of the velocity field after regridding.
-    d_hier_math_ops->div(d_Div_U_idx,
-                         d_Div_U_var,
-                         1.0,
-                         d_U_current_idx,
-                         d_U_var,
-                         d_no_fill_op,
-                         d_integrator_time,
-                         /*synch_cf_bdry*/ true,
-                         -1.0,
-                         d_Q_current_idx,
-                         d_Q_var);
+//    d_hier_math_ops->div(d_Div_U_idx,
+//                         d_Div_U_var,
+//                         1.0,
+//                         d_U_current_idx,
+//                         d_U_var,
+//                         d_no_fill_op,
+//                         d_integrator_time,
+//                         /*synch_cf_bdry*/ true,
+//                         -1.0,
+//                         d_Q_current_idx,
+//                         d_Q_var);
     d_div_U_norm_1_post = d_hier_cc_data_ops->L1Norm(d_Div_U_idx, wgt_cc_idx);
     d_div_U_norm_2_post = d_hier_cc_data_ops->L2Norm(d_Div_U_idx, wgt_cc_idx);
     d_div_U_norm_oo_post = d_hier_cc_data_ops->maxNorm(d_Div_U_idx, wgt_cc_idx);
@@ -2162,8 +2162,8 @@ INSStaggeredHierarchyIntegrator::setupPlotDataSpecialized()
     // Compute Div U.
     if (d_output_Div_U)
     {
-        d_hier_math_ops->div(
-            d_Div_U_idx, d_Div_U_var, 1.0, d_U_current_idx, d_U_var, d_no_fill_op, d_integrator_time, false);
+//        d_hier_math_ops->div(
+//            d_Div_U_idx, d_Div_U_var, 1.0, d_U_current_idx, d_U_var, d_no_fill_op, d_integrator_time, false);
     }
 
     // Compute EE = 0.5*(grad u + grad u^T).
@@ -2248,17 +2248,17 @@ INSStaggeredHierarchyIntegrator::regridProjection()
     }
 
     // Setup the right-hand-side vector for the projection-Poisson solve.
-    d_hier_math_ops->div(d_Div_U_idx,
-                         d_Div_U_var,
-                         -1.0,
-                         d_U_current_idx,
-                         d_U_var,
-                         d_no_fill_op,
-                         d_integrator_time,
-                         /*synch_cf_bdry*/ false,
-                         +1.0,
-                         d_Q_current_idx,
-                         d_Q_var);
+//    d_hier_math_ops->div(d_Div_U_idx,
+//                         d_Div_U_var,
+//                         -1.0,
+//                         d_U_current_idx,
+//                         d_U_var,
+//                         d_no_fill_op,
+//                         d_integrator_time,
+//                         /*synch_cf_bdry*/ false,
+//                         +1.0,
+//                         d_Q_current_idx,
+//                         d_Q_var);
     const double Div_U_mean = (1.0 / volume) * d_hier_cc_data_ops->integral(d_Div_U_idx, wgt_cc_idx);
     d_hier_cc_data_ops->addScalar(d_Div_U_idx, d_Div_U_idx, -Div_U_mean);
 

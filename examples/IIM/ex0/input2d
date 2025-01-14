@@ -8,8 +8,8 @@ U_MAX = 2.0
 // grid spacing parameters
 L = 16.0                                         // width of computational domain
 MAX_LEVELS = 1                                   // maximum number of levels in locally refined grid
-REF_RATIO  = 2                                   // refinement ratio between levels
-N = 400                                           // actual    number of grid cells on coarsest grid level
+REF_RATIO  = 1                                   // refinement ratio between levels
+N = 1025                                           // actual    number of grid cells on coarsest grid level
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N         // effective number of grid cells on finest   grid level
 DX0 = L/N                                        // mesh width on coarsest grid level
 DX  = L/NFINEST                                  // mesh width on finest   grid level
@@ -44,7 +44,7 @@ OUTPUT_U                     = TRUE
 OUTPUT_P                     = TRUE
 OUTPUT_F                     = TRUE
 OUTPUT_OMEGA                 = TRUE
-OUTPUT_DIV_U                 = TRUE
+OUTPUT_DIV_U                 = FALSE
 ENABLE_LOGGING               = TRUE
 
 
@@ -216,17 +216,8 @@ CartesianGeometry {
 
 GriddingAlgorithm {
    max_levels = MAX_LEVELS
-   ratio_to_coarser {
-      level_1 = REF_RATIO,REF_RATIO
-      level_2 = REF_RATIO,REF_RATIO
-      level_3 = REF_RATIO,REF_RATIO
-      level_4 = REF_RATIO,REF_RATIO
-      level_5 = REF_RATIO,REF_RATIO
-      level_6 = REF_RATIO,REF_RATIO
-      level_7 = REF_RATIO,REF_RATIO
-   }
    largest_patch_size {
-      level_0 = 512,512  // all finer levels will use same values as level_0
+      level_0 = 1512,1512  // all finer levels will use same values as level_0
    }
    smallest_patch_size {
       level_0 =   8,  8  // all finer levels will use same values as level_0

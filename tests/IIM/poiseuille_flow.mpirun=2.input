@@ -7,7 +7,7 @@ PI = 3.14159265359
 THETA =  0 //.0
 // discretization parameters
 MAX_LEVELS = 1                                      // maximum number of levels in locally refined grid
-REF_RATIO  = 1                                      // refinement ratio between levels
+REF_RATIO  = 2                                      // refinement ratio between levels
 N = 64                                   // actual    number of grid cells on coarsest grid level
 NFINEST = (REF_RATIO^(MAX_LEVELS - 1))*N            // effective number of grid cells on finest   grid level
 L = 5.0                                           // channel length (cm)

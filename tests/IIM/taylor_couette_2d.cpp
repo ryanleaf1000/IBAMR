@@ -551,6 +551,8 @@ velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
     const double X_max[2] = { 0.45 * L, 0.45 * L };
 
     double u_Eulerian_L2_norm = 0.0;
+    double u_Eulerian_L2_local_norm = 0.0;
+
     double u_Eulerian_max_norm = 0.0;
     int N_max = 0;
     vector<double> pos_values;
@@ -645,7 +647,11 @@ velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                     N_max += 1;
                     u_Eulerian_L2_norm += std::abs(u0 - u_ex) * std::abs(u0 - u_ex) * (*wgt_cc_data)(lower_idx);
                     u_Eulerian_L2_norm += std::abs(v0 - v_ex) * std::abs(v0 - v_ex) * (*wgt_cc_data)(lower_idx);
-
+                    if(sqrt(xu * xu + yu * yu) > (R1 -  patch_dx[0]) &&
+                        sqrt(xu * xu + yu * yu) < (R1 +  patch_dx[0])){
+                        u_Eulerian_L2_local_norm+= std::abs(u0 - u_ex) * std::abs(u0 - u_ex) * (*wgt_cc_data)(lower_idx);
+                        u_Eulerian_L2_local_norm += std::abs(v0 - v_ex) * std::abs(v0 - v_ex) * (*wgt_cc_data)(lower_idx);
+                    }
                     u_Eulerian_max_norm = std::max(u_Eulerian_max_norm, std::abs(u0 - u_ex));
                     u_Eulerian_max_norm = std::max(u_Eulerian_max_norm, std::abs(v0 - v_ex));
                 }
@@ -655,11 +661,14 @@ velocity_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
 
     SAMRAI_MPI::sumReduction(&N_max, 1);
     SAMRAI_MPI::sumReduction(&u_Eulerian_L2_norm, 1);
-    SAMRAI_MPI::maxReduction(&u_Eulerian_max_norm, 1);
+    SAMRAI_MPI::sumReduction(&u_Eulerian_L2_local_norm, 1);
 
+    SAMRAI_MPI::maxReduction(&u_Eulerian_max_norm, 1);
+    u_Eulerian_L2_local_norm= sqrt(u_Eulerian_L2_local_norm);
     u_Eulerian_L2_norm = sqrt(u_Eulerian_L2_norm);
     velocity_stream<< data_time << " " <<u_Eulerian_L2_norm << endl;
     pout << " u_Eulerian_L2_norm = " << u_Eulerian_L2_norm << "\n\n";
+    pout << " u_Eulerian_L2_local_norm = " << u_Eulerian_L2_local_norm << "\n\n";
     pout << " u_Eulerian_max_norm = " << u_Eulerian_max_norm << "\n\n";
 
     return;
@@ -777,6 +786,7 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
     shift = -(p_inner_exact_constant - p_inner_constant) / inner_area;
     // vector<double> pos_values;
     double p_Eulerian_L2_norm = 0.0;
+    double p_Eulerian_local_L2_norm = 0.0;
     double p_Eulerian_max_norm = 0.0;
     int N_max = 0;
     for (int ln = finest_ln; ln >= coarsest_ln; --ln)
@@ -855,6 +865,10 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
                     }
 
                     p_Eulerian_L2_norm += std::abs(p1 - p_ex_qp) * std::abs(p1 - p_ex_qp) * (*wgt_cc_data)(cell_idx);
+                    if(sqrt(x * x + y * y) > (R1 - patch_dx[0]) &&
+                        sqrt(x * x + y * y) < (R1 +  patch_dx[0])){
+                        p_Eulerian_local_L2_norm+= std::abs(p1 - p_ex_qp) * std::abs(p1 - p_ex_qp) * (*wgt_cc_data)(cell_idx);
+                    }
                     p_Eulerian_max_norm = std::max(p_Eulerian_max_norm, std::abs(p1 - p_ex_qp));
                     //  pressure_stream << x <<" "<< y << " " << p1 - p_ex_qp << endl;
                 }
@@ -863,12 +877,16 @@ pressure_convergence(Pointer<PatchHierarchy<NDIM> > patch_hierarchy,
     }
     SAMRAI_MPI::sumReduction(&N_max, 1);
     SAMRAI_MPI::sumReduction(&p_Eulerian_L2_norm, 1);
+    SAMRAI_MPI::sumReduction(&p_Eulerian_local_L2_norm, 1);
+
     SAMRAI_MPI::maxReduction(&p_Eulerian_max_norm, 1);
 
     p_Eulerian_L2_norm = sqrt(p_Eulerian_L2_norm);
+    p_Eulerian_local_L2_norm== sqrt(p_Eulerian_local_L2_norm);
     pressure_stream<< data_time << " " <<p_Eulerian_L2_norm << endl;
 
     pout << " p_Eulerian_L2_norm = " << p_Eulerian_L2_norm << "\n";
+    pout << " p_Eulerian_local_L2_norm = " << p_Eulerian_local_L2_norm << "\n";
     pout << " p_Eulerian_max_norm = " << p_Eulerian_max_norm << "\n\n";
     // pressure_stream.close();
     return;
